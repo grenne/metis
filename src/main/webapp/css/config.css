@@ -1,8 +1,0 @@
-input:required:invalid, input:focus:invalid {
-  color: red;
-  -moz-box-shadow: none;
-}
-
-.config-form {
-	padding: 30px !important;
-}

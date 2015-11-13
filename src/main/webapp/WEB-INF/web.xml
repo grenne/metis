@@ -7,8 +7,8 @@
   
   
 	<servlet-mapping>
-		<servlet-name>vistorias</servlet-name>
-		<url-pattern>/vistorias</url-pattern>
+		<servlet-name>metis</servlet-name>
+		<url-pattern>/metis</url-pattern>
 	</servlet-mapping>
   
 </web-app>
