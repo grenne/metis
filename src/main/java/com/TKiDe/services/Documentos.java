@@ -60,22 +60,22 @@ public class Documentos {
 	@Path("/lista")	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public JSONArray ObterLista(@QueryParam("usuario") String usuario) throws UnknownHostException, MongoException, ParseException {
+	public JSONArray ObterLista(@QueryParam("usuario") String usuario, @QueryParam("queryUsuario") String queryUsuario, @QueryParam("situacao") String situacao ) throws UnknownHostException, MongoException, ParseException {
 
-		System.out.println(" usuario "  + usuario );
 		Mongo mongo = new Mongo();
 		DB db = (DB) mongo.getDB("documento");
 
 		BasicDBObject setQuery = new BasicDBObject();
 		setQuery.put("documento.tipo", "dados");
-		setQuery.append("documento.situacao", "pendente");
-		setQuery.append("documento.usuarioAtual", usuario);
+		setQuery.append("documento.situacao", situacao);
+		String teste = "documento.usuarios.codigo";
+		setQuery.append(queryUsuario, usuario);
 		DBCollection collection = db.getCollection("documentos");
 		DBCursor cursor = collection.find(setQuery);
+		cursor.sort(new BasicDBObject("documento.header[0].valor", 1));
 		JSONArray documentos = new JSONArray();
 		
 		while (((Iterator<DBObject>) cursor).hasNext()) {
-			System.out.println("tem lista");
 			JSONObject jsonObject; 
 			JSONParser parser = new JSONParser(); 
 			BasicDBObject obj = (BasicDBObject) ((Iterator<DBObject>) cursor).next();
@@ -95,14 +95,16 @@ public class Documentos {
 	@Path("/modelos")	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public JSONArray ObterModelos() throws UnknownHostException, MongoException, ParseException {
+	public JSONArray ObterModelos(@QueryParam("tipoLista") String tipo) throws UnknownHostException, MongoException, ParseException {
 
 		Mongo mongo = new Mongo();
 		DB db = (DB) mongo.getDB("documento");
 
 		BasicDBObject setQuery = new BasicDBObject();
 		setQuery.put("documento.tipo", "modelo");
-		setQuery.append("documento.situacao", "valido");
+		if(tipo.equals("validos")){
+			setQuery.put("documento.situacao", "valido");	
+		};
 		DBCollection collection = db.getCollection("documentos");
 		DBCursor cursor = collection.find(setQuery);
 		JSONArray documentos = new JSONArray();
@@ -116,8 +118,8 @@ public class Documentos {
 			JSONObject jsonDocumento = new JSONObject();
 			jsonDocumento.put("_id", obj.getString("_id"));
 			jsonDocumento.put("modelo", jsonObject.get("modelo"));
+			jsonDocumento.put("situacao", jsonObject.get("situacao"));
 			documentos.add(jsonDocumento);
-			System.out.println("modelos:" + documentos);
 		};
 		mongo.close();
 		return documentos;
@@ -154,7 +156,6 @@ public class Documentos {
 		ObjectMapper mapper = new ObjectMapper();
 		mapJson = mapper.readValue(jsonDocumento, HashMap.class);
 		JSONObject documento = new JSONObject();
-		System.out.println(mapJson);
 		documento.putAll(mapJson);
 		BasicDBObject update = new BasicDBObject("$set", new BasicDBObject(documento));
 		BasicDBObject searchQuery = new BasicDBObject("_id",_id);
@@ -183,7 +184,6 @@ public class Documentos {
 		ObjectMapper mapper = new ObjectMapper();
 		mapJson = mapper.readValue(jsonDocumento, HashMap.class);
 		JSONObject documento = new JSONObject();
-		System.out.println(mapJson);
 		documento.putAll(mapJson);
 		DBObject insert = new BasicDBObject(documento);
 		collection.insert(insert);
@@ -191,4 +191,17 @@ public class Documentos {
 		return Response.status(200).entity(doc).build();
 	};
 	
+	@Path("/excluir")	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response ExcluirDocumento(@QueryParam("id") String id) throws UnknownHostException, MongoException {
+		ObjectId _id = new ObjectId(id);
+		Mongo mongo = new Mongo();
+		DB db = (DB) mongo.getDB("documento");
+		DBCollection collection = db.getCollection("documentos");
+		BasicDBObject searchQuery = new BasicDBObject("_id",_id);
+		collection.remove(searchQuery);
+		mongo.close();
+		return Response.status(200).entity(id).build();
+	};
 };

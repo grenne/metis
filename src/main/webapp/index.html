@@ -12,7 +12,7 @@
 <meta name="viewport"
 	content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 
-<link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css">
+<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
 <link rel="stylesheet" type="text/css" href="css/main.css" />
 <link rel="stylesheet" type="text/css" href="css/springboard.css" />
 <link rel="stylesheet" type="text/css" href="css/metis.css" />
@@ -30,7 +30,7 @@
 	rel="stylesheet" type="text/css">
 
 <script src="js/jquery.js"></script>
-<script src="js/jquery.mobile-1.4.2.min.js"></script>
+<script src="js/jquery.mobile-1.4.5.min.js"></script>
 <script src="js/jquery.mask.min.js"></script>
 <script src="js/main.js"></script>
 <script src="js/snap.js"></script>
@@ -43,261 +43,402 @@
 <script src="js/go.js"></script>
 
 <script id="code">
-  
   function init() {
-	var nomePerfil = "";
-	montaPopup();
-    jQuery("#select-carreiras").bind( "change", function(event, ui) {
-		nomePerfil =  jQuery("#select-carreiras").val();
-		jQuery( "#popupSkill_1" ).popup( "close" );
-    });
-    jQuery("#select-perfil").bind( "change", function(event, ui) {
-		nomePerfil =  jQuery("#select-carreiras").val();
-		jQuery( "#popupSkill_1" ).popup( "close" );
-    });
-    jQuery("#novo_perfil").bind( "click", function(event, ui) {
-		jQuery( "#popupII" ).hide();
-		jQuery( "#popupI" ).show();
-    });
+		var nomePerfil = "";
+		//montaPopup();
+	    jQuery("#select-carreiras").bind( "change", function(event, ui) {
+			nomePerfil =  jQuery("#select-carreiras").val();
+	    });
+	    jQuery("#select-perfil").bind( "change", function(event, ui) {
+			nomePerfil =  jQuery("#select-carreiras").val();
+	    });
+	    jQuery("#novoObjeto").bind( "click", function(event, ui) {
+			jQuery( "#nodeObjectChange" ).popup( "close" );
+			jQuery( "#newNodeObject" ).popup( "open" );
+	    });
 
-    jQuery(".close").bind( "click", function(event, ui) {
-		jQuery( "#popupSkill_1" ).popup( "close" );
-    });
+	    jQuery(".close").bind( "click", function(event, ui) {
+			jQuery( "#nodeObjectChange" ).popup( "close" );
+			jQuery( "#newNodeObject" ).popup( "close" );
+	    });
 
     if (window.goSamples) goSamples();  // init for these samples -- you don't need to call this
     var $ = go.GraphObject.make;  // for conciseness in defining templates
-
     myDiagram =
-      $(go.Diagram, "myDiagram",  // must name or refer to the DIV HTML element
+      $(go.Diagram, "myDiagram",  // create a Diagram for the DIV HTML element
         {
-          // start everything in the middle of the viewport
+          // position the graph in the middle of the diagram
           initialContentAlignment: go.Spot.Center,
-          // have mouse wheel events zoom in and out instead of scroll up and down
-          "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
-          // support double-click in background creating a new node
-          "clickCreatingTool.archetypeNodeData": { text: "new node" },
+          // allow double-click in background to create a new node
+          "clickCreatingTool.archetypeNodeData": { text: "Node", color: "white" },
+          // allow Ctrl-G to call groupSelection()
+          "commandHandler.archetypeGroupData": { text: "Group", isGroup: true, color: "blue" },
           // enable undo & redo
-          "undoManager.isEnabled": true
+          "undoManager.isEnabled": true,
+          "ChangedSelection": onSelectionChanged,
+          "TextEdited": onTextEdited
         });
-
-    // when the document is modified, add a "*" to the title and enable the "Save" button
-    myDiagram.addDiagramListener("Modified", function(e) {
-      var button = document.getElementById("SaveButton");
-      if (button) button.disabled = !myDiagram.isModified;
-      var idx = document.title.indexOf("*");
-      if (myDiagram.isModified) {
-        if (idx < 0) document.title += "*";
-      } else {
-        if (idx >= 0) document.title = document.title.substr(0, idx); 
+    // Define the appearance and behavior for Nodes:
+    // First, define the shared context menu for all Nodes, Links, and Groups.
+    // To simplify this code we define a function for creating a context menu button:
+    function makeButton(text, action, visiblePredicate) {
+      return $("ContextMenuButton",
+               $(go.TextBlock, text),
+               { click: action },
+               // don't bother with binding GraphObject.visible if there's no predicate
+               visiblePredicate ? new go.Binding("visible", "", visiblePredicate).ofObject() : {});
+    }
+    // a context menu is an Adornment with a bunch of buttons in them
+    var partContextMenu =
+      $(go.Adornment, "Vertical",
+          makeButton("Properties",
+                     function(e, obj) {  // OBJ is this Button
+                       var contextmenu = obj.part;  // the Button is in the context menu Adornment
+                       var part = contextmenu.adornedPart;  // the adornedPart is the Part that the context menu adorns
+                       // now can do something with PART, or with its data, or with the Adornment (the context menu)
+                       if (part instanceof go.Link) alert(linkInfo(part.data));
+                       else if (part instanceof go.Group) alert(groupInfo(contextmenu));
+                       else alert(nodeInfo(part.data));
+                     }),
+          makeButton("Cut",
+                     function(e, obj) {
+        	  e.diagram.commandHandler.cutSelection(); 
+        	  },
+                     function(o) {
+        		  return o.diagram.commandHandler.canCutSelection(); 
+        		  }),
+          makeButton("Copy",
+                     function(e, obj) {
+        	  e.diagram.commandHandler.copySelection(); 
+        	  },
+                     function(o) {
+        		  return o.diagram.commandHandler.canCopySelection();
+        		  }),
+          makeButton("Paste",
+                     function(e, obj) {
+        	  e.diagram.commandHandler.pasteSelection(e.diagram.lastInput.documentPoint);
+        	  },
+                     function(o) {
+        		  return o.diagram.commandHandler.canPasteSelection(); 
+        		  }),
+          makeButton("Delete",
+                     function(e, obj) {
+        	  e.diagram.commandHandler.deleteSelection(); 
+        	  },
+                     function(o) {
+        		  return o.diagram.commandHandler.canDeleteSelection(); 
+        		  }),
+          makeButton("Undo",
+                     function(e, obj) {
+        	  e.diagram.commandHandler.undo(); 
+        	  },
+                     function(o) {
+        		  return o.diagram.commandHandler.canUndo(); 
+        		  }),
+          makeButton("Redo",
+                     function(e, obj) {
+        	  e.diagram.commandHandler.redo(); 
+        	  },
+                     function(o) {
+        		  return o.diagram.commandHandler.canRedo();
+        		  }),
+          makeButton("Group",
+                     function(e, obj) {
+        	  e.diagram.commandHandler.groupSelection();
+        	  },
+                     function(o) {
+        		  return o.diagram.commandHandler.canGroupSelection(); 
+        		  }),
+          makeButton("Ungroup",
+                     function(e, obj) {
+        	  e.diagram.commandHandler.ungroupSelection(); 
+        	  },
+                     function(o) {
+        		  return o.diagram.commandHandler.canUngroupSelection(); 
+        		  })
+      );
+    function nodeInfo(d) {  // Tooltip info for a node data object
+      var str = "Node " + d.key + ": " + d.text + "\n";
+      if (d.group)
+        str += "member of " + d.group;
+      else
+        str += "top-level node";
+      return str;
+    }
+    
+    // when a node is double-clicked, add a child to it
+    function nodeDoubleClick(e, obj) {
+        var clicked = obj.part;
+        if (clicked !== null) {
+          var thisemp = clicked.data;
+          myDiagram.startTransaction("add employee");
+          var nextkey = (myDiagram.model.nodeDataArray.length + 1).toString();
+          var newemp = { key: nextkey, name: "(new person)", title: "", parent: thisemp.key };
+          myDiagram.model.addNodeData(newemp);
+          myDiagram.commitTransaction("add employee");
+        }    
+        }
+    
+    function onSelectionChanged(e) {
+    	jQuery( "#nodeObjectChange" ).popup( "open" );
+        var node = e.diagram.selection.first();
+        if (node instanceof go.Node) {
+          updateProperties(node.data);
+        } else {
+          updateProperties(null);
+        }
       }
-    });
+    // Update the HTML elements for editing the properties of the currently selected node, if any
+    function updateProperties(data) {
+      if (data === null) {
+        console.log ("click null");
+      } else {
+    	  console.log("key "  + data.key );
+    	  console.log("text " + data.text );
+    	  console.log("color " + data.color );
+    	  console.log("id " + data.id );
+      }
+    }
+    // This is called when the user has finished inline text-editing
+    function onTextEdited(e) {
+    	console.log ("text edited");
+      var tb = e.subject;
+      if (tb === null || !tb.name) return;
+      var node = tb.part;
+      if (node instanceof go.Node) {
+        updateProperties(node.data);
+      }
+    }
+ // Update the data fields when the text is changed
+    function updateData(text, field) {
+      var node = myDiagram.selection.first();
+      // maxSelectionCount = 1, so there can only be one Part in this collection
+      var data = node.data;
+      if (node instanceof go.Node && data !== null) {
+        var model = myDiagram.model;
+        model.startTransaction("modified " + field);
+        if (field === "name") {
+          model.setDataProperty(data, "name", text);
+        } else if (field === "title") {
+          model.setDataProperty(data, "title", text);
+        } else if (field === "comments") {
+          model.setDataProperty(data, "comments", text);
+        }
+        model.commitTransaction("modified " + field);
+      }
+    }
+ // Show the diagram's model in JSON format
+    function save() {
+      document.getElementById("mySavedModel").value = myDiagram.model.toJson();
+      myDiagram.isModified = false;
+    }
+    function load() {
+      myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
+    }
 
-    // define the Node template
+    // These nodes have text surrounded by a rounded rectangle
+    // whose fill color is bound to the node data.
+    // The user can drag a node by dragging its TextBlock label.
+    // Dragging from the Shape will start drawing a new link.
     myDiagram.nodeTemplate =
       $(go.Node, "Auto",
-        new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
-        // define the node's outer shape, which will surround the TextBlock
+        { locationSpot: go.Spot.Center },
         $(go.Shape, "RoundedRectangle",
           {
-            parameter1: 20,  // the corner has a large radius
-            fill: $(go.Brush, "Linear", { 0: "rgb(254, 201, 0)", 1: "rgb(254, 162, 0)" }),
-            stroke: "black",
-            portId: "",
-            fromLinkable: true,
-            fromLinkableSelfNode: true,
-            fromLinkableDuplicates: true,
-            toLinkable: true,
-            toLinkableSelfNode: true,
-            toLinkableDuplicates: true,
-            cursor: "pointer"
-          }),
+            fill: "white", // the default fill, if there is no data-binding
+            portId: "", cursor: "pointer",  // the Shape is the port, not the whole Node
+            // allow all kinds of links from and to this port
+            fromLinkable: true, fromLinkableSelfNode: true, fromLinkableDuplicates: true,
+            toLinkable: true, toLinkableSelfNode: true, toLinkableDuplicates: true
+          },
+          new go.Binding("fill", "color")),
         $(go.TextBlock,
           {
-            font: "bold 11pt helvetica, bold arial, sans-serif",
-            editable: true  // editing the text automatically updates the model data
+            font: "bold 14px sans-serif",
+            stroke: '#333',
+            margin: 6,  // make some extra space for the shape around the text
+            isMultiline: false,  // don't allow newlines in text
+            editable: true  // allow in-place editing by user
           },
-          new go.Binding("text", "text").makeTwoWay())
+          new go.Binding("text", "text").makeTwoWay()),  // the label shows the node data's text
+        { // this tooltip Adornment is shared by all nodes
+          toolTip:
+            $(go.Adornment, "Auto",
+              $(go.Shape, { fill: "#FFFFCC" }),
+              $(go.TextBlock, { margin: 4 },  // the tooltip shows the result of calling nodeInfo(data)
+                new go.Binding("text", "", nodeInfo))
+            ),
+          // this context menu Adornment is shared by all nodes
+          contextMenu: partContextMenu
+        }
       );
-    
-    var tool = myDiagram.toolManager.clickSelectingTool;
-    tool.standardMouseSelect = function() {
-  	  jQuery( "#popupII" ).hide();
-	  jQuery( "#popupI" ).show();
-
-        jQuery( "#popupSkill_1" ).popup( "open" );
-    	// otherwise, call the base functionality
-      go.ClickSelectingTool.prototype.standardMouseSelect.call(tool);
+    // Define the appearance and behavior for Links:
+    function linkInfo(d) {  // Tooltip info for a link data object
+      return "Link:\nfrom " + d.from + " to " + d.to;
     }
-    // unlike the normal selection Adornment, this one includes a Button
-    myDiagram.nodeTemplate.selectionAdornmentTemplate =
-      $(go.Adornment, "Spot",
-        $(go.Panel, "Auto",
-          $(go.Shape, { fill: null, stroke: "blue", strokeWidth: 2 }),
-          $(go.Placeholder)  // this represents the selected Node
-        ),
-        // the button to create a "next" node, at the top-right corner
-        $("Button",
-          {
-            alignment: go.Spot.TopRight,
-            click: addNodeAndLink
-          },
-          $(go.Shape, "PlusLine", { desiredSize: new go.Size(6, 6) })
-        ) // end button
-      ); // end Adornment
-      function testa() {
-    	  if (nomePerfil == ""){
-    		  nomePerfil = "grenne"
-    	  }else{
-    		  jQuery( "#popupSkill_1" ).popup( "open" );
-    	  };
-      };
-    // clicking the button inserts a new node to the right of the selected node,
-    // and adds a link to that new node
-    function addNodeAndLink(e, obj) {
-      var adorn = obj.part;
-      e.handled = true;
-      var diagram = adorn.diagram;
-      diagram.startTransaction("Add State");
-
-      // get the node data for which the user clicked the button
-      var fromNode = adorn.adornedPart;
-      var fromData = fromNode.data;
-
-      // create a new "State" data object, positioned off to the right of the adorned Node
-      var toData = { text: "novo skill" };
-
-      var p = fromNode.location.copy();
-      p.x += 200;
-      toData.loc = go.Point.stringify(p);  // the "loc" property is a string, not a Point object
-      // add the new node data to the model
-      var model = diagram.model;
-      model.addNodeData(toData);
-      
-      // create a link data from the old node data to the new node data
-      var linkdata = {
-        from: model.getKeyForNodeData(toData),  // or just: fromData.id
-        to: model.getKeyForNodeData(fromData),
-        text: ""
-      };
-      // and add the link data to the model
-      model.addLinkData(linkdata);
-      
-      // select the new Node
-      var newnode = diagram.findNodeForData(toData);
-      diagram.select(newnode);
-      
-      diagram.commitTransaction("Add State");
-      
-      // if the new node is off-screen, scroll the diagram to show the new node
-      diagram.scrollToRect(newnode.actualBounds);
-
-	  jQuery( "#popupI" ).hide();
-	  jQuery( "#popupII" ).show();
-      
-      jQuery( "#popupSkill_1" ).popup( "open" );
-    }
-
-    // replace the default Link template in the linkTemplateMap
+    // The link shape and arrowhead have their stroke brush data bound to the "color" property
     myDiagram.linkTemplate =
-      $(go.Link,  // the whole link panel
-        { curve: go.Link.Bezier, adjusting: go.Link.Stretch, reshapable: true },
-        new go.Binding("curviness", "curviness"),
-        new go.Binding("points").makeTwoWay(),
-        $(go.Shape,  // the link shape
-          { strokeWidth: 1.5 }),
-        $(go.Shape,  // the arrowhead
-          { toArrow: "standard", stroke: null }),
-        $(go.Panel, "Auto",
-          $(go.Shape,  // the link shape
-            {
-              fill: $(go.Brush, "Radial",
-                      { 0: "rgb(240, 240, 240)", 0.3: "rgb(240, 240, 240)", 1: "rgba(240, 240, 240, 0)" }),
-              stroke: null
-            }),
-          $(go.TextBlock, "",  // the label
-            {
-              textAlign: "center",
-              font: "10pt helvetica, arial, sans-serif",
-              stroke: "black",
-              margin: 4,
-              editable: true  // editing the text automatically updates the model data
-            },
-            new go.Binding("text", "text").makeTwoWay())
-        )
+      $(go.Link,
+        { relinkableFrom: true, relinkableTo: true },  // allow the user to relink existing links
+        $(go.Shape,
+          { strokeWidth: 2 },
+          new go.Binding("stroke", "color")),
+        $(go.Shape,
+          { toArrow: "Standard", stroke: null },
+          new go.Binding("fill", "color")),
+        { // this tooltip Adornment is shared by all links
+          toolTip:
+            $(go.Adornment, "Auto",
+              $(go.Shape, { fill: "#FFFFCC" }),
+              $(go.TextBlock, { margin: 4 },  // the tooltip shows the result of calling linkInfo(data)
+                new go.Binding("text", "", linkInfo))
+            ),
+          // the same context menu Adornment is shared by all links
+          contextMenu: partContextMenu
+        }
       );
-
-    // read in the JSON-format data from the "mySavedModel" element
-    load();
-  }
-
-  // Show the diagram's model in JSON format
-  function save() {
-    document.getElementById("mySavedModel").value = myDiagram.model.toJson();
-    myDiagram.isModified = false;
-  }
-  function load() {
-    myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
+    // Define the appearance and behavior for Groups:
+    function groupInfo(adornment) {  // takes the tooltip or context menu, not a group node data object
+      var g = adornment.adornedPart;  // get the Group that the tooltip adorns
+      var mems = g.memberParts.count;
+      var links = 0;
+      g.memberParts.each(function(part) {
+        if (part instanceof go.Link) links++;
+      });
+      return "Group " + g.data.key + ": " + g.data.text + "\n" + mems + " members including " + links + " links";
+    }
+    // Groups consist of a title in the color given by the group node data
+    // above a translucent gray rectangle surrounding the member parts
+    myDiagram.groupTemplate =
+      $(go.Group, "Vertical",
+        { selectionObjectName: "PANEL",  // selection handle goes around shape, not label
+          ungroupable: true },  // enable Ctrl-Shift-G to ungroup a selected Group
+        $(go.TextBlock,
+          {
+            font: "bold 19px sans-serif",
+            isMultiline: false,  // don't allow newlines in text
+            editable: true  // allow in-place editing by user
+          },
+          new go.Binding("text", "text").makeTwoWay(),
+          new go.Binding("stroke", "color")),
+        $(go.Panel, "Auto",
+          { name: "PANEL" },
+          $(go.Shape, "Rectangle",  // the rectangular shape around the members
+            { fill: "rgba(128,128,128,0.2)", stroke: "gray", strokeWidth: 3 }),
+          $(go.Placeholder, { padding: 10 })  // represents where the members are
+        ),
+        { // this tooltip Adornment is shared by all groups
+          toolTip:
+            $(go.Adornment, "Auto",
+              $(go.Shape, { fill: "#FFFFCC" }),
+              $(go.TextBlock, { margin: 4 },
+                // bind to tooltip, not to Group.data, to allow access to Group properties
+                new go.Binding("text", "", groupInfo).ofObject())
+            ),
+          // the same context menu Adornment is shared by all groups
+          contextMenu: partContextMenu
+        }
+      );
+    // Define the behavior for the Diagram background:
+    function diagramInfo(model) {  // Tooltip info for the diagram's model
+      return "Model:\n" + model.nodeDataArray.length + " nodes, " + model.linkDataArray.length + " links";
+    }
+    // provide a tooltip for the background of the Diagram, when not over any Part
+    myDiagram.toolTip =
+      $(go.Adornment, "Auto",
+        $(go.Shape, { fill: "#FFFFCC" }),
+        $(go.TextBlock, { margin: 4 },
+          new go.Binding("text", "", diagramInfo))
+      );
+    // provide a context menu for the background of the Diagram, when not over any Part
+    myDiagram.contextMenu =
+      $(go.Adornment, "Vertical",
+          makeButton("Paste",
+                     function(e, obj) { e.diagram.commandHandler.pasteSelection(e.diagram.lastInput.documentPoint); },
+                     function(o) { return o.diagram.commandHandler.canPasteSelection(); }),
+          makeButton("Undo",
+                     function(e, obj) { e.diagram.commandHandler.undo(); },
+                     function(o) { return o.diagram.commandHandler.canUndo(); }),
+          makeButton("Redo",
+                     function(e, obj) { e.diagram.commandHandler.redo(); },
+                     function(o) { return o.diagram.commandHandler.canRedo(); })
+      );
+    // Create the Diagram's Model:
+    var nodeDataArray = [
+      { key: 1, text: "Alpha", color: "lightblue", id : "agora 1" },
+      { key: 2, text: "Beta", color: "orange", id : "agora 2" },
+      { key: 3, text: "Gamma", color: "lightgreen", group: 5, id : "agora 3" },
+      { key: 4, text: "Delta", color: "pink", group: 5, id : "agora 4" },
+      { key: 5, text: "Epsilon", color: "green", isGroup: true, id : "agora 5" }
+    ];
+    var linkDataArray = [
+      { from: 1, to: 2, color: "blue" },
+      { from: 2, to: 2 },
+      { from: 3, to: 4, color: "green" },
+      { from: 3, to: 1, color: "purple" }
+    ];
+    myDiagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
   }
 </script>
 
 <title>Metis</title>
 </head>
 <body onload="init()">
-    <div data-role="popup" id="popupSkill_1" class="ui-content" data-theme="d" style="max-width:350px;">
+	    <div data-role="popup" id="nodeObjectChange" class="ui-content" data-theme="d" style="max-width:600px;">
+			<div id="popupI" class="tabela-detalhes">
+			  <h3>Novo Campo</h3>
+			   <div id="table-campos" >
+					<div id="div-input-' + labelId +  '" class="vistoria-detalhes ui-grid-a">
+						<label for="nomeCampo" class="labelInputAlign ui-block-a">Tipo</label>
+						    <select name="select-tipos" id="select-tipos" class="ui-block-b"  data-mini="true">
+								<option value="">Selecionar</option>
+								<option value="input_texto">Texto</option>
+								<option value="input_textarea">Texto Area</option>
+								<option value="input_inteiro">Numérico Inteiro</option>
+								<option value="input_decimal">Numérico Decimal</option>
+								<option value="input_data">Data</option>
+								<option value="input_cpf">CPF</option>
+								<option value="input_cnpj">CNPJ</option>
+								<option value="input_celular">Celular</option>
+								<option value="input_telefone">Telefone</option>
+								<option value="input_placa">Placa</option>
+								<option value="input_checkbox">Checkbox</option>
+								<option value="input_select">Seleção</option>
+								<option value="input_radio">Radio</option>
+								<option value="input_radio_inline">Radio mesma linha</option>
+						    </select>
+					</div>
+					<div id="div-input-nomeCampo" class="vistoria-detalhes ui-grid-a">
+						<label for="nomeCampo" class="labelInputAlign ui-block-a">Nome</label>
+						<div class="ui-block-b">
+                			<input type="text" name="nomeCampo" id="nomeCampo" value="" class="input-value " required  data-inline="true"/>
+                		</div>	
+					</div>
+			   </div>
+			   <fieldset id="div-Botoes" class="ui-grid-b">
+					<a href="#" id="confirmaAlteracao" data-role="button" data-inline="true" data-theme="a"  class="line-button ui-block-a">Confirmar</a>
+					<a href="#" id="cancelarAlteracao" data-role="button" data-inline="true" data-theme="a" class="line-button close ui-block-b">Cancelar</a>
+					<a href="#" id="novoObjeto" data-role="button" data-inline="true" data-theme="a" class="line-button close ui-block-c">Novo Perfil</a>
+				</fieldset>
+			</div>
+ 	   </div>
+	   <div data-role="popup" id="popupIncluiPainel" class="ui-content" data-theme="d" style="max-width:600px;">
 			<div id="popupII" class="tabela-detalhes">
-			  <h1>Dados do perfil</h1>
-			   <table id="table-campos-1" >
-					<tr>
-						<td for="textinput-' + labelId + '" class="ui-input-text">Carreiras</td>
-						<td id="td-textinput-01">
-							<div id="' + labelId + '" data-role="fieldcontain" class="fieldcontain" >
-								<select name="carreiras" id="select-carreiras" data-mini="true" required>
-									<option value="">Selecionar</option>
-									<option value="Finanças Corporativas">Finanças Corporativas</option>
-									<option value="Investimentos">Investimentos</option>
-									<option value="Gestão de recursos humanos">Gestão de recursos humanos</option>
-									<option value="Gestão de marketing">Gestão de marketing</option>
-									<option value="Inovação">Inovação</option>
-									<option value="Novos negócios">Novos negócios</option>
-									<option value="Inovação">Inovação</option>
-									<option value="Análises estratégicas">Análises estratégicas</option>
-									<option value="Decisão estratégica">Decisão estratégica</option>
-									<option value="Relacionamento com clientes">Relacionamento com clientes</option>
-								</select>
-							</div>
-						</td>
-					</tr>					
-					<tr>
-						<td for="textinput-' + labelId + '" class="ui-input-text">Perfil</td>
-						<td id="td-textinput-01">
-							<div id="' + labelId + '" data-role="fieldcontain" class="fieldcontain" >
-								<select name="perfil" id="select-perfil" data-mini="true" required>
-									<option value="">Selecionar</option>
-									<option value="Análise de demonstrativos financeiros">Análise de demonstrativos financeiros</option>
-									<option value="Análise de índices financeiros">Análise de índices financeiros</option>
-									<option value="Gestão de caixa">Gestão de caixa</option>
-									<option value="Teoria financeira">Teoria financeira</option>
-									<option value="Cálculo do custo de capital">Cálculo do custo de capital</option>
-									<option value="Avaliação de empresas (precificação de ações)">Avaliação de empresas (precificação de ações)</option>
-									<option value="Avaliação de opções reais">Avaliação de opções reais</option>
-									<option value="Determinação da estrutura de capital">Determinação da estrutura de capital</option>
-									<option value="Captação a mercado de dívida">Captação a mercado de dívida</option>
-									<option value="Captação a mercado via ações">Captação a mercado via ações</option>
-								</select>
-							</div>
-						</td>
-					</tr>					
-			   </table>
-				<a href="#" id="novo_perfil" data-role="button" data-inline="true" data-theme="b">Novo Perfil</a>
+				<h3>Painel</h3>
+				<div id="div-input-painel" class="vistoria-detalhes ui-grid-a">
+					<label for="nomePainel" class="labelInputAlign ui-block-a">Nome</label>
+					<div class="ui-block-b">
+	           			<input type="text" name="nomePainel" id="nomePainel" value="" class="input-value " required  data-inline="true"/>
+	           		</div>	
+				</div>	
+				<fieldset id="div-Botoes-Painel" class="ui-grid-b">
+					<a href="#" id="confirmaNovoPainel" data-role="button" data-inline="true" data-theme="a"  class="line-button ui-block-b">Confirmar</a>
+					<a href="#" id="cancelaNovoPainel" data-role="button" data-inline="true" data-theme="a" class="line-button close ui-block-c">Cancelar</a>
+				</fieldset>
 			</div>
-			<div id="popupI" class="tabela-detalhes" hidden> 
-			  <h1>Dados do perfil</h1>
-			   <table id="table-campos" >
-			   </table>
-				<a href="#" id="cancela_popup_2" data-role="button" data-inline="true" class="close">Cancel</a>
-				<a href="#" id="confirma_popup_2" data-role="button" data-inline="true" data-theme="b" class="close">Confirmar</a>
-			</div>
-    </div>
+ 	   </div>
+	<a id='lnkDialog' href="detalhe.html" data-rel="dialog"
+		data-transition="pop" style='display: none;' hidden></a>
 	<div id="conteudo-geral" data-theme="d">
 		<div data-role="header" data-position="fixed">
 			<h1 class="titulo-pagina">Metis</h1>
@@ -316,8 +457,7 @@
 						<div id="sample">
 							<!-- The DIV for the Diagram needs an explicit size or else we won't see anything.
        Also add a border to help see the edges. -->
-							<div id="myDiagram"
-								style=" width: 1300px; height: 600px"></div>
+							<div id="myDiagram" style="width: 1300px; height: 600px"></div>
 						</div>
 
 					</div>
@@ -342,16 +482,29 @@
 			</div>
 			<!-- main -->
 		</div>
-  <textarea id="mySavedModel" hidden style="width:100%;height:300px">
-{ "nodeKeyProperty": "id",
+ <textarea id="mySavedModel" style="width:100%;height:250px" hidden>
+{ "class": "go.TreeModel",
   "nodeDataArray": [
-    { "id": 0, "loc": "120 120", "text": "Finanças Corporativas" }
-  ],
-  "linkDataArray": [
-  ]
+{"key":"1", "name":"Stella Payne Diaz", "title":"CEO"},
+{"key":"2", "name":"Luke Warm", "title":"VP Marketing/Sales", "parent":"1"},
+{"key":"3", "name":"Meg Meehan Hoffa", "title":"Sales", "parent":"2"},
+{"key":"4", "name":"Peggy Flaming", "title":"VP Engineering", "parent":"1"},
+{"key":"5", "name":"Saul Wellingood", "title":"Manufacturing", "parent":"4"},
+{"key":"6", "name":"Al Ligori", "title":"Marketing", "parent":"2"},
+{"key":"7", "name":"Dot Stubadd", "title":"Sales Rep", "parent":"3"},
+{"key":"8", "name":"Les Ismore", "title":"Project Mgr", "parent":"5"},
+{"key":"9", "name":"April Lynn Parris", "title":"Events Mgr", "parent":"6"},
+{"key":"10", "name":"Xavier Breath", "title":"Engineering", "parent":"4"},
+{"key":"11", "name":"Anita Hammer", "title":"Process", "parent":"5"},
+{"key":"12", "name":"Billy Aiken", "title":"Software", "parent":"10"},
+{"key":"13", "name":"Stan Wellback", "title":"Testing", "parent":"10"},
+{"key":"14", "name":"Marge Innovera", "title":"Hardware", "parent":"10"},
+{"key":"15", "name":"Evan Elpus", "title":"Quality", "parent":"5"},
+{"key":"16", "name":"Lotta B. Essen", "title":"Sales Rep", "parent":"3"}
+ ]
 }
-</textarea></div>
-		<!-- conteudo-geral, snap-content -->
+    </textarea>	</div>
+	<!-- conteudo-geral, snap-content -->
 	</div>
 </body>
 </html>

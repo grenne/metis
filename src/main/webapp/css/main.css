@@ -69,6 +69,13 @@ body, .ui-btn {
     margin: 10px 0;
 }
 
+.separadorNavegacao {
+    clear: both;
+    margin-top: 30px;
+    margin-bottom: 40px;
+    width : 100%;
+}
+
 /* Celulares */
 /* .ui-btn-icon-left { */
 /*     padding-left: 3.5em !important; */
