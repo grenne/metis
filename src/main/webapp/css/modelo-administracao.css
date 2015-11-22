@@ -1,0 +1,148 @@
+/*precisa de padding pois o snap-drawers 'puxa' o conteúdo para cima */
+body {
+	padding-top: 30px !important;
+}
+
+.tabela-lista table {
+	display: table !important;
+}
+
+.vistoria-detalhes table {
+	width: 100%;
+}
+
+
+.cabecalho-dados-container table {
+	width: 100%;
+}
+
+.popup-acao {
+	width: 300px;
+	max-width: 80%;
+}
+
+.acao-esquerda, .acao-direita {
+	position: absolute;
+}
+
+.fun-carrega {
+	opacity: 0.7;
+	filter: alpha(opacity = 70); /* For IE8 and earlier */
+	margin-top: 50%;
+}
+
+.fun-carrega-direita {
+	text-align: right;
+	margin-right: 10px;
+}
+
+.fun-carrega-esquerda {
+	text-align: left;
+	margin-left: 10px;
+}
+
+.ui-collapsible-content {
+	padding: .5em !important;
+}
+
+.ui-content {
+	padding: .5em;
+}
+.ui-page-header-fixed {
+    padding: 0em !important;
+}
+.nome-detalhes {
+	display: inline;
+	margin-left: 10px;
+	position: absolute;
+	line-height: 20px;
+}
+
+.tabela-detalhes {
+	padding: .4em 0.5em !important;
+}
+
+#cabecalho-detalhes {
+	overflow: hidden;
+	margin-top: 15px;
+}
+
+.cabecalho-dados-container h3 {
+	margin: 0;
+	margin-bottom: 5px;
+}
+
+.tabela-detalhes td {
+	padding-left: 3px;
+}
+
+.tabela-detalhes .detalhes-label {
+	width: 30%;
+	text-align: right;
+}
+
+.detalhes-label {
+	font-weight: bold;
+}
+
+.pesfoto-detalhes-container {
+	text-align: center;
+	min-width: 120px;
+	min-height: 160px;
+}
+
+.dados-contato {
+	display: none;
+}
+.input-number-div {
+	width: 12em;
+	max-width: 80%;
+}
+.input-number {
+	text-align: right !important;
+}
+
+/* Telas pequenas */
+@media ( max-width : 768px) {
+	.ui-content span, .ui-content a:not (.ui-btn-icon-notext ), .ui-content td,
+		.ui-content th {
+		font-size: 11px;
+	}
+	.ui-content h3, .ui-content h3 span {
+		font-size: 13px;
+	}
+	.ui-btn-icon-left {
+		padding-left: 3.5em !important;
+	}
+	.pesfoto-detalhes {
+		width: 120px;
+	}
+	.cabecalho-dados-container {
+		max-width: 195px;
+		margin: auto;
+	}
+	.fundo {
+		background: url(images/vistoria.jpg);
+		background-size: 100%;
+		background-repeat: no-repeat;
+	}
+}
+/* Telas grandes */
+@media ( min-width : 768px) {
+	.cabecalho-dados-container {
+		max-width: 100%;
+		padding: 20px;
+		margin-left: 0px;
+	}
+	.ui-btn-icon-left {
+		padding-left: 2.5em !important;
+	}
+	.pesfoto-detalhes-container {
+		float: left;
+	}
+	.pesfoto-detalhes {
+		width: 140px;
+	}
+	.fundo {
+	}
+}
