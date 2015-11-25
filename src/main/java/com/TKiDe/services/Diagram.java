@@ -73,6 +73,7 @@ public class Diagram {
 			}
 
 			public static final class NodeDataArray {
+				public String loc;
                 public String key;
                 public String text;
                 public String color;
@@ -86,7 +87,8 @@ public class Diagram {
     			}
 
                 @JsonCreator
-                public NodeDataArray(String key, String text, String color, String group, String isGroup, String id){
+                public NodeDataArray(String loc, String key, String text, String color, String group, String isGroup, String id){
+                    this.loc = loc;
                     this.key = key;
                     this.text = text;
                     this.color = color;

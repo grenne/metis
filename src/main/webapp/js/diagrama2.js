@@ -33,6 +33,19 @@ function init() {
           "SelectionMoved" : selectionMove,
           "TextEdited": onTextEdited
         });
+     
+    // define several shared Brushes
+    var fill1 = "rgb(105,210,231)"
+    var brush1 = "rgb(65,180,181)";
+
+    var fill2 = "rgb(167,219,216)"
+    var brush2 = "rgb(127,179,176)";
+
+    var fill3 = "rgb(224,228,204)"
+    var brush3 = "rgb(184,188,164)";
+
+    var fill4 = "rgb(243,134,48)"
+    var brush4 = "rgb(203,84,08)";
     
     // Define the appearance and behavior for Nodes:
     // First, define the shared context menu for all Nodes, Links, and Groups.
@@ -133,6 +146,12 @@ function init() {
             toLinkable: true, toLinkableSelfNode: true, toLinkableDuplicates: true
           },
           new go.Binding("fill", "color")),
+          $(go.Shape, "Ellipse",
+                  { strokeWidth: 2, fill: fill1, name: "SHAPE" },
+                  new go.Binding("figure", "figure"),
+                  new go.Binding("fill", "fill"),
+                  new go.Binding("stroke", "stroke")
+                  ),
         $(go.TextBlock,
           {
             font: "bold 14px sans-serif",
@@ -233,7 +252,7 @@ function init() {
     // Create the Diagram's Model:
     jQuery(function(){
 		jQuery.ajax({
-            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/obter?id=56560a6250686216ac61b0ec",
+            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/obter?id=5655e87c50686216ac61b0eb",
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
             success: function(data) {
@@ -243,6 +262,41 @@ function init() {
             }
 		});
 	});
+    
+ // initialize the Palette that is in a floating, draggable HTML container
+    myPalette = new go.Palette("myPalette");  // must name or refer to the DIV HTML element
+    myPalette.nodeTemplateMap = myDiagram.nodeTemplateMap;
+    myPalette.model = new go.GraphLinksModel([
+      { text: "Lake", fill: fill1, stroke: brush1, figure: "Hexagon" },
+      { text: "Ocean", fill: fill2, stroke: brush2, figure: "Rectangle" },
+      { text: "Sand", fill: fill3, stroke: brush3, figure: "Diamond" },
+      { text: "Goldfish", fill: fill4, stroke: brush4, figure: "Octagon" }
+    ]);
+    myPalette.addDiagramListener("InitialLayoutCompleted", function(diagramEvent) {
+      var pdrag = document.getElementById("paletteDraggable");
+      var palette = diagramEvent.diagram;
+      var paddingHorizontal = palette.padding.left + palette.padding.right;
+      var paddingVertical = palette.padding.top + palette.padding.bottom;
+      pdrag.style.width = palette.documentBounds.width + 20  + "px";
+      pdrag.style.height = palette.documentBounds.height + 30 + "px";
+    });
+
+    jQuery(function() {
+    	jQuery("#paletteDraggable").draggable({handle: "#paletteDraggableHandle"}).resizable({
+          // After resizing, perform another layout to fit everything in the palette's viewport
+          stop: function(){ myPalette.layoutDiagram(true); }
+        });
+        var inspector = new Inspector('infoDraggable', myDiagram,
+          {
+            acceptButton: true,
+            resetButton: true,
+            propertyNames: {
+              "Node": ["location", "background", "scale", "angle", "isShadowed", "resizable"],
+              "#SHAPE": ["fill", "stroke", "strokeWidth", "figure"],
+              "#TEXT": ["text", "font"]
+            }
+          });
+        });
 	
   }
 
@@ -403,7 +457,7 @@ function save() {
 	objJson.documento.diagrama.linkDataArray = objDiagrama.linkDataArray;
 	$.ajax({
 		type: "POST",
-        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/atualizar?id=56560a6250686216ac61b0ec",
+        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/atualizar?id=5655e87c50686216ac61b0eb",
         contentType: "application/json; charset=utf-8",
         dataType: 'json',
         data : JSON.stringify(objJson),
