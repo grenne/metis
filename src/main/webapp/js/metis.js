@@ -8,23 +8,6 @@ $(document).ready(function() {
     document.onmouseup=new Function("isdrag=false");   
 });
 
-function montaPopup() {
-	var id = "5632a03e50686211d8374acf";
-	$(function(){
-		$.ajax({
-            url: "http://" + localStorage.urlServidor + ":8080/vistorias/rest/documento/obter?id=" + id,
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            success: function(data) {
-	            localStorage.setItem("dadosSaved", JSON.stringify(data));
-	        	$.each(data.documento.panel[0].fields, function(i, fields) {
-	        		montaCampos(i, fields);
-	        	});
-				inicializaWindow();
-            }
-		});
-		});
-};
 
 function montaCampos(i, item) {
 	var labelId = item.label.replace( /\s/g, '' ) +  "-" + i;

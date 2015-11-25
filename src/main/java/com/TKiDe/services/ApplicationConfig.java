@@ -18,6 +18,7 @@ package com.TKiDe.services;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,6 +27,6 @@ import java.util.Set;
 public class ApplicationConfig extends Application {
 
     public Set<Class<?>> getClasses() {
-        return new HashSet<Class<?>>(Arrays.asList( Documentos.class));
+        return new HashSet<Class<?>>(Arrays.asList( Documentos.class, Diagramas.class));
     }
 }
