@@ -73,6 +73,8 @@ public class Diagramas {
 		documento.putAll(mapJson);
 		BasicDBObject update = new BasicDBObject("$set", new BasicDBObject(documento));
 		BasicDBObject searchQuery = new BasicDBObject("_id",_id);
+		System.out.println("id -" + doc.documento.id.toString());
+		System.out.println("dado -" + doc.toString());
 		DBObject cursor = collection.findAndModify(searchQuery,
                 null,
                 null,

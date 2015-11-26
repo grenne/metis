@@ -36,7 +36,7 @@ $(document).ready(function() {
 		});
 		
 		$("#cancelarAlteracao" ).bind( "click", function(event, ui) {
-			window.location.reload();
+	    	$( "#popupIncluiInput" ).popup( "close" );
 		});	
 		$("#cancelaNovoPainel" ).bind( "click", function(event, ui) {
 			window.location.reload();

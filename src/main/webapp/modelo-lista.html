@@ -41,28 +41,27 @@
         
 	   <div data-role="popup" id="popupIncluiModelo" class="ui-content" data-theme="d" style="max-width:600px;">
 			<div id="popupII" class="tabela-detalhes">
-			  <h1>Modelo</h1>
-			   <table id="table-modelo" >
-					<tr id="tr-nomeModelo">
-						<td for="nomeModelo"  class="ui-input-text">Nome modelo</td>
-						<td id="td-nomeModelo">
-                			<input type="text" name="nomeModelo" id="nomeModelo" value="" class="input-value" required data-inline="true"/>
-						</td>
-					</tr>	
-					<tr>
-						<td for="td-selecao" class="ui-input-text">Situação</td>
-						<td id="td-selecao">
-							<div class="ui-field-contain">
-								<select name="select-situacao" id="select-situacao" data-mini="true" required class="selectOptions">
+			  <h3>Modelo</h3>
+			   <div id="table-modelo" >
+					<div id="div-input-nomeModelo" class="vistoria-detalhes ui-grid-a">
+						<label for="nomeModelo" class="labelInputAlign ui-block-a">Nome</label>
+						<div class="ui-block-b">
+                			<input type="text" name="nomeModelo" id="nomeModelo" value="" class="input-value " required  data-inline="true"/>
+                		</div>	
+					</div>
+					<div id="div-input-' + labelId +  '" class="vistoria-detalhes ui-grid-a">
+						<label for="table-modelo" class="labelInputAlign ui-block-a">Situação</label>
+						    <select name="select-situacao" id="select-situacao" class="ui-block-b"  data-mini="true" class="selectOptions">
 									<option value="">Selecionar</option>
 									<option value="valido">Valido</option>
 									<option value="inativo">Inativo</option>
-								</select>
-							</div>
-						</td>
-					</tr>					
-			   </table>
-				<a href="#" id="confirmaNovoModelo" data-role="button" data-inline="true" data-theme="a">Confirmar</a>
+						    </select>
+					</div>
+			   </div>
+			   <fieldset id="div-Botoes" class="ui-grid-b">
+					<a href="#" id="confirmaNovoModelo" data-role="button" data-inline="true" data-theme="a"  class="line-button ui-block-b">Confirmar</a>
+					<a href="#" id="cancelaNovoModelo" data-role="button" data-inline="true" data-theme="a" class="line-button ui-block-c">Cancelar</a>
+				</fieldset>
 			</div>
  	   </div>
         <div

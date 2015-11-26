@@ -52,7 +52,7 @@
 
 <title>Metis</title>
 </head>
-<body onload="init()">
+<body>
 	    <div data-role="popup" id="nodeNewObject" class="ui-content" data-theme="d" style="max-width:600px;">
 			<div id="popupI" class="tabela-detalhes">
 			  <h4>Selecione o tipo de habilidade</h4>
@@ -108,6 +108,21 @@
 				</fieldset>
 			</div>
  	   </div>
+	   <div data-role="popup" id="popupIncluiPainel" class="ui-content" data-theme="d" style="max-width:600px;">
+			<div id="popupII" class="tabela-detalhes">
+				<h3>Painel</h3>
+				<div id="div-input-painel" class="vistoria-detalhes ui-grid-a">
+					<label for="nomePainel" class="labelInputAlign ui-block-a">Nome</label>
+					<div class="ui-block-b">
+	           			<input type="text" name="nomePainel" id="nomePainel" value="" class="input-value " required  data-inline="true"/>
+	           		</div>	
+				</div>	
+				<fieldset id="div-Botoes-Painel" class="ui-grid-b">
+					<a href="#" id="confirmaNovoPainel" data-role="button" data-inline="true" data-theme="a"  class="line-button ui-block-b">Confirmar</a>
+					<a href="#" id="cancelaNovoPainel" data-role="button" data-inline="true" data-theme="a" class="line-button ui-block-c">Cancelar</a>
+				</fieldset>
+			</div>
+ 	   </div>
  	   
 	<div id="conteudo-geral" data-theme="d">
 		<div data-role="header" data-position="fixed">
@@ -123,26 +138,26 @@
 			<div id='swipe-acoes' class='swipe'>
 				<div class='swipe-wrap'>
 					<!-- content -->
-					<div id="skill-1" data-role="content" class="dragme dragmeRecepcao">
-						<div id="sample">
+					<div id="skill-0" data-role="content" class="dragme dragmeRecepcao">
+						<div id="sample0">
 							<div id="myDiagram" style="width: 1300px; height: 600px"></div>
 						</div>
 					</div>
 					<!-- content -->
-					<div id="skill-2" data-role="content" class="dragme dragmeRecepcao">
-						<div id="sample">
+					<div id="skill-1" data-role="content" class="dragme dragmeRecepcao">
+						<div id="sample1">
 							<div id="jbDiagram" style="width: 1300px; height: 600px"></div>
 						</div>
 					</div>
 					<!-- content -->
 					<div id="skill-2" data-role="content" class="dragme dragmeRecepcao">
-						<div id="sample">
+						<div id="sample2">
 							<div id="vwDiagram" style="width: 1300px; height: 600px"></div>
 						</div>
 					</div>
 					<!-- content -->
-					<div id="skill-2" data-role="content" class="dragme dragmeRecepcao">
-						<div id="sample">
+					<div id="skill-3" data-role="content" class="dragme dragmeRecepcao">
+						<div id="sample3">
 							<div id="planetDiagram" style="width: 1300px; height: 600px"></div>
 						</div>
 					</div>

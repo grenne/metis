@@ -1,13 +1,49 @@
 /* Funcion��rio Detalhes */
 $(document).ready(function() {    
-    // window.idFuncionario = $.parametroUrl("fun");
     iniciaSnapper();
     iniciaAcoes();  
     // carregaDetalhesDoFuncionario();
     document.onmousedown=selectmouse;
-    document.onmouseup=new Function("isdrag=false");   
+    document.onmouseup=new Function("isdrag=false");  
+	// montar telas de Popup
+	montaPopup();
+	
+	init ("myDiagram", 0, "5656570e50686216ac61b0ed");
+	init ("jbDiagram", 1, "5656571550686216ac61b0ee");
+	init ("vwDiagram", 2, "5656571c50686216ac61b0ef");
+//	init ("planetDiagram", 3);
 });
 
+
+function montaPopup(){
+    $("#atualizaCarreira").bind( "click", function(event, ui) {atualizaCarreira
+    	$("#table-campos").append(
+				'<div class= "ui-grid-a">' +
+					'<label class="ui-block-a">novo campo</label>' +
+            		'<input type="text" name="tesadadpe" id="teste" value="teste" class="input-value ui-block-b" required  data-inline="true" data-mini="true"/>' +
+            	'</div>'	
+		);
+    });
+    $("#confirmaSolicitacao").bind( "click", function(event, ui) {atualizaCarreira
+    	$("#div-select-tipos").hide();
+    	$("#atualizaCarreira").show();
+    	$("#table-campos").show();
+    	$("#confirmaSolicitacao").hide();
+    	$("#table-campos").append(
+				'<div class="ui-grid-a">' +
+					'<label class="ui-block-a">novo campo</label>' +
+            		'<input type="text" name="teste" id="teste" value="teste" class="input-value ui-block-b " required  data-inline="true" data-mini="true"/>' +
+            	'</div>'	
+		);
+    });
+    $("#cancelarSolicitacao").bind( "click", function(event, ui) {
+		$( "#nodeNewObject" ).popup( "close" );
+    });
+    $("#cancelarPropertiesCarreira").bind( "click", function(event, ui) {
+		$( "#nodePropertiesCarreira" ).popup( "close" );
+    });
+	
+}
 
 function montaCampos(i, item) {
 	var labelId = item.label.replace( /\s/g, '' ) +  "-" + i;
