@@ -2,95 +2,19 @@
  * 
  */
 
-function inicioPanel(panelId, panelLabel, i, panel, id, manutencao, inputDisabled) {
+function montaPanel(panelId, panelLabel, i, panel) {
 	var heightDetalhes = $(window).height() - 135 - $("#cabecalho-detalhes").height();
 	var montaScroll = 'style="overflow: scroll; width: 200px; height:' + heightDetalhes + 'px;"';
 	console.log ("height detalhes:" + heightDetalhes);
 	var linha = ''; 
 	linha = linha +
 		'<!-- ' + panel.label + ' -->' +			
-		'<div id="panel-' + panelId + '" ' + montaScroll + '">' +
-			'<h3 class="ui-bar ui-bar-d ui-corner-all">' + panel.label + '</h3>';
-	if (manutencao == "true"){
-		linha = linha +
-			'<div id="button-' + panelId + '">' +
-				'<a id="alteraNomeButton-' + panelId + '" data-role="button" data-inline="true" data-theme="a" data-icon="gear" data-mini="true" class="line-button">Altera Nome</a>' +
-				'<a id="incluirButton-' + panelId + '" data-role="button" data-inline="true" data-theme="a" data-icon="plus" data-mini="true" class="line-button">Novo Painel</a>' +
-				'<a id="excluirButton-' + panelId + '" data-role="button" data-inline="true" data-theme="a" data-icon="delete" data-mini="true" class="line-button">Excluir</a>' +
-			'</div>'
-	};
-	linha = linha +
-			'<div id="container-' + panelId + '" class=" ui-body ui-body-a ui-corner-all vistoria-detalhes">' +
-				'<div id="table-' + panelId + '">';
+		'<div id="skill-' + panel.label + '" data-role="content" class="dragme dragmeRecepcao">
+			'<div id="sample">
+				'<div id="myDiagram' + panel.label + '"	style=" width: 1300px; height: 600px"></div>
+			'</div>
+		'</div>
 	$("#paineis").append(linha);
-    $('#incluirButton-' + panelId).bind( "click", function(event, ui) {
-    	$("#popupIncluiPainel" ).popup( "open" );
-        $("#confirmaNovoPainel").unbind("click");
-    	$("#confirmaNovoPainel" ).bind( "click", function(event, ui) {
-    		var objJson = JSON.parse(localStorage.getItem("dadosSaved"));
-    		var new_painel = {'modelo' : 'swipe', 'label' : $('#nomePainel').val(),'fields' : [{'modelo' : '', 'label' : '', 'valor' : ''}]};
-    		if ((i + 1) == objJson.documento.panel.length){
-    			objJson.documento.panel.push(new_painel);	
-    		}else{
-    			objJson.documento.panel.splice(i+1, 0, new_painel);
-    		};
-    		objJson.documento.id = id;
-    		$.ajax({
-    			type: "POST",
-                url: "http://" + localStorage.urlServidor + ":8080/vistorias/rest/documento/atualizar",
-                contentType: "application/json; charset=utf-8",
-                dataType: 'json',
-                data : JSON.stringify(objJson),
-                success: function(data) {
-                	console.log ("terminou atualização id:" + id + " data:" + data);
-            		window.location.reload();
-                }
-    		});
-    	});	
-    });
-
-    $('#alteraNomeButton-' + panelId).bind( "click", function(event, ui) {
-		var objJson = JSON.parse(localStorage.getItem("dadosSaved"));
-    	$('#nomePainel').val(objJson.documento.panel[i].label)
-    	$( "#popupIncluiPainel" ).popup( "open" );
-        $("#confirmaNovoPainel").unbind("click");
-    	$("#confirmaNovoPainel" ).bind( "click", function(event, ui) {
-    		objJson.documento.panel[i].label = $('#nomePainel').val();
-    		objJson.documento.id = id;
-    		$.ajax({
-    			type: "POST",
-                url: "http://" + localStorage.urlServidor + ":8080/vistorias/rest/documento/atualizar",
-                contentType: "application/json; charset=utf-8",
-                dataType: 'json',
-                data : JSON.stringify(objJson),
-                success: function(data) {
-                	console.log ("terminou atualização id:" + id + " data:" + data);
-            		window.location.reload();
-                }
-    		});
-    	});	
-    });
-    
-    $('#excluirButton-' + panelId).bind( "click", function(event, ui) {
-		obj = JSON.parse(localStorage.getItem("dadosSaved"));
-		obj.documento.panel.splice(i, 1);
-        localStorage.setItem("dadosSaved", JSON.stringify(obj));   
-		var dataSaved = localStorage.getItem("dadosSaved");
-		var objJson = JSON.parse(dataSaved);
-		objJson.documento.id = id;
-		$.ajax({
-			type: "POST",
-            url: "http://" + localStorage.urlServidor + ":8080/vistorias/rest/documento/atualizar",
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            data : JSON.stringify(objJson),
-            success: function(data) {
-            	console.log ("terminou atualização id:" + id + " data:" + data);
-        		window.location.reload();
-            }
-		});
-    });
-	
 };
 
 function montaCabecalho(header, id, manutencao, inputDisabled ) {
@@ -100,15 +24,6 @@ function montaCabecalho(header, id, manutencao, inputDisabled ) {
 		var labelId = header.label.replace( /\s/g, '' ) + 1 + "-" + i;
 		montaCampos(i, "cabecalho", 999, header, "cabecalho", id, manutencao, inputDisabled)
 	});
-};
-
-function finalPanel(panelId, panelLabel, i, panel, manutencao, inputDisabled) {
-	$("#paineis").append(
-			'</div>' +
-		'</div>' +
-		'<!-- ' + panel.label + ' -->' +
-	'</div>'
-	);
 };
 
 function montaCampos(i, panelId, z, item, origem, id, manutencao, inputDisabled) {

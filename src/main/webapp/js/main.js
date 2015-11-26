@@ -101,6 +101,10 @@ function colocaPainelEsquerda() {
                     'rel="external"' +
                     'data-transition="flip">Novo Modelo de Skill</a></li>' +
                 '<li><a ' +
+                    'href="dialog-modelo-lista.html?index.html"' +
+                    'rel="external"' +
+                    'data-transition="flip">Novo Skill</a></li>' +
+                '<li><a ' +
                     'href="config.html"' +
                     'rel="external"' +
                     'data-transition="flip">Configurações</a></li>' +
@@ -247,10 +251,12 @@ function colocaPainelEsquerda() {
 })
 
 function inicializaWindow() {	
+	// formata campos texto
 	$('input[type="text"]').textinput().trigger('create');
-	$('[type=checkbox]').checkboxradio().trigger('create');
-	$('.controlgroup').controlgroup().trigger('create');
+	// formata campos select
 	$('.fieldcontain').fieldcontain().trigger('create');
+	// formata campos botoes
+	$('.line-button').button().trigger('create');
 	$('.mesano').mask('00/0000');
 	$('.data').mask('00/00/0000');
 	$('.cpf').mask('000.000.000-00');

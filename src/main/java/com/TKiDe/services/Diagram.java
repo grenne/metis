@@ -30,6 +30,8 @@ public class Diagram {
 	public static final class Documento {
 
 		public String id;
+		public String tipo;
+		
 		public Diagrama diagrama;
 
 
@@ -38,8 +40,9 @@ public class Diagram {
 		}
 
 		@JsonCreator
-		public Documento(String id, Diagrama diagrama) {
+		public Documento(String id, String tipo, Diagrama diagrama) {
 			this.id = id;
+			this.tipo = tipo;
 			this.diagrama = diagrama;
 		}
 
@@ -49,6 +52,14 @@ public class Diagram {
 
 		public String getId() {
 			return this.id;
+		}
+
+		public void setTipo(String tipo) {
+			this.tipo = tipo;
+		}
+
+		public String getTipo() {
+			return this.tipo;
 		}
 
 		@Override

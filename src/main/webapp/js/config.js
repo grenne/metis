@@ -61,14 +61,14 @@ function executaLogin(urlServidor, cpfUsuario, senha) {
 
 	var urlFinal = urlServidor + metodoLogin + "?cpf=" + cpfUsuario + "&senha="
 			+ senha;
-
+	console.log ("executando login");
 	var resultado = "";
 	$('.msg-sucesso, .msg-erro').remove();
-	
 	$(function(){
 		$.ajax({
 			url : "http://" + localStorage.urlServidor + ":8080/vistorias/rest/documento/login?usuario=" + cpfUsuario + "&senha=" + senha,
 			contentType : "application/json; charset=utf-8",
+			async: false,
 			dataType : 'json',
 			success : function(data) {
 						console.info("Login executado com sucesso!");
@@ -79,6 +79,7 @@ function executaLogin(urlServidor, cpfUsuario, senha) {
 						localStorage.nomeUsuario = data.usu.nome;
 						localStorage.usuAdm = data.usu.administrador;
 						localStorage.usuDistribuidor = data.usu.distribuidor;
+						
 						resultado = "true";
 						$('#configForm')
 								.append(
@@ -91,6 +92,7 @@ function executaLogin(urlServidor, cpfUsuario, senha) {
 						$('#configForm')
 								.append(
 										"<span class='msg-erro'>Não foi possível realizar o login com as informações digitadas</span>");
+						document.location.replace("config.html");
 						resultado = "false";
 					});
 	});

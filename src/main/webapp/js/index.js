@@ -58,7 +58,7 @@ function redirecionar() {
 		document.location.replace("config.html");
 	} else {
 		console.log('encontrou: ');
-		document.location.replace("vistorias.html?usu="
-				+ localStorage.usu);
+		document.location.replace("metis.html?usu="
+				+ localStorage.cpf);
 	}
 }
