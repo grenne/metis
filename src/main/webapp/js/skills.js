@@ -2,7 +2,32 @@
  * 
  */
 
+		
+function incluiSkill(nomeSkill, idDiagrama){
+	var objJson = JSON.parse(localStorage.getItem("skills"));
+	var new_skill = {'tipo' : 'pessoal', 'label' : nomeSkill,'id' : idDiagrama};
+	objJson.skill.skills.push(new_skill);	
+	$.ajax({
+		type: "POST",
+        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/skill/atualizar",
+        contentType: "application/json; charset=utf-8",
+        dataType: 'json',
+        data : JSON.stringify(objJson),
+	})
+	 .done(function( data ) {
+      	console.log ("inclusão skill saiu por done");
+	  })
+     .fail(function(data) {
+  	   console.log ("inclusão skill saiu por fail");
+     })
+     .always(function(data) {
+   	   console.log ("inclusão skill saiu por always");
+     });
+};	
+
 function montaPanel(panelId, panelLabel, i, panel, id) {
+
+	var widthDetalhes = $(window).width();
 	var heightDetalhes = $(window).height() - 135 - $("#cabecalho-detalhes").height();
 	var montaScroll = 'style="overflow: scroll; width: 200px; height:' + heightDetalhes + 'px;"';
 	console.log ("height detalhes:" + heightDetalhes);
@@ -11,7 +36,7 @@ function montaPanel(panelId, panelLabel, i, panel, id) {
 		'<!-- ' + panelLabel + ' -->' +			
 		'<div id="skill-' + panelId + '" data-role="content" class="dragme dragmeRecepcao">' +
 			'<div id="sample">' +
-				'<div id="myDiagram-' + panelId + '"	style=" width: 1300px; height: 600px"></div>' +
+				'<div id="myDiagram-' + panelId + '"	style=" width: ' + widthDetalhes + 'px; height: ' + heightDetalhes + 'px"></div>' +
 			'</div>' +
 		'</div>';
 	$("#paineis").append(linha);

@@ -49,6 +49,7 @@ $(document).ready(function() {
 				'{' +
 					'"id":"",' +
 					'"tipo":"' + $("#select-tipos-painel").val() + '",' +
+					'"label":"' + $("#nomePainel" ).val() + '",' +
 					'"diagrama":' +
 					'{' +
 						'"nodeDataArray":[{"loc":"50 50","key":"1","text":"' + $("#nomePainel" ).val() + '","color":"lightblue","id":"121212"}]' +
@@ -74,28 +75,5 @@ $(document).ready(function() {
 	        	   window.location.reload(true);
 	              });
 	});
-		
-	function incluiSkill(nomeSkill, idDiagrama){
-		var objJson = JSON.parse(localStorage.getItem("skills"));
-		console.log ("skill - " + JSON.stringify(objJson));
-		var new_skill = {'tipo' : 'pessoal', 'label' : nomeSkill,'id' : idDiagrama};
-		objJson.skill.skills.push(new_skill);	
-		$.ajax({
-			type: "POST",
-	        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/skill/atualizar",
-	        contentType: "application/json; charset=utf-8",
-	        dataType: 'json',
-	        data : JSON.stringify(objJson),
-		})
-		 .done(function( data ) {
-          	console.log ("inclusão skill saiu por done");
-		  })
-         .fail(function(data) {
-      	   console.log ("inclusão skill saiu por fail");
-         })
-         .always(function(data) {
-       	   console.log ("inclusão skill saiu por always");
-         });
-	};	
 
 });

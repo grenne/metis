@@ -146,5 +146,37 @@ public class Diagramas {
 		return "fail";
 		
 	};
+
+	
+	@Path("/lista")	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONArray ObterModelos(@QueryParam("tipoLista") String tipo) throws UnknownHostException, MongoException, ParseException {
+
+		Mongo mongo = new Mongo();
+		DB db = (DB) mongo.getDB("documento");
+
+		BasicDBObject setQuery = new BasicDBObject();
+		setQuery.put("documento.tipo", tipo);
+		DBCollection collection = db.getCollection("diagrams");
+		DBCursor cursor = collection.find(setQuery);
+		JSONArray documentos = new JSONArray();
+		
+		while (((Iterator<DBObject>) cursor).hasNext()) {
+			JSONObject jsonObject; 
+			JSONParser parser = new JSONParser(); 
+			BasicDBObject obj = (BasicDBObject) ((Iterator<DBObject>) cursor).next();
+			String documento = obj.getString("documento");
+			jsonObject = (JSONObject) parser.parse(documento);
+			JSONObject jsonDocumento = new JSONObject();
+			jsonDocumento.put("_id", obj.getString("_id"));
+			jsonDocumento.put("tipo", jsonObject.get("tipo"));
+			jsonDocumento.put("label", jsonObject.get("label"));
+			documentos.add(jsonDocumento);
+		};
+		mongo.close();
+		return documentos;
+	};
+
 	
 };

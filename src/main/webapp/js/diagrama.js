@@ -7,7 +7,6 @@ function init(diagrama, panelReceive, idReceive) {
 
 	id = idReceive;
 	panel = panelReceive;
-	console.log ("id - " + id + " - panel - " + panel);
 	var $ = go.GraphObject.make;  // for conciseness in defining templates
 	
     myDiagram[panel]  =
@@ -256,8 +255,7 @@ function init(diagrama, panelReceive, idReceive) {
             async: false,
             success: function(data) {
             	localStorage.setItem("diagrama-" + panel, JSON.stringify(data));
-            	console.log ("acabou de salvar - panel - " + panel + " dado - " + localStorage.getItem("diagrama-" + panel));
-    		   myDiagram[panel].model = new go.GraphLinksModel(data.documento.diagrama.nodeDataArray, data.documento.diagrama.linkDataArray);
+            	myDiagram[panel].model = new go.GraphLinksModel(data.documento.diagrama.nodeDataArray, data.documento.diagrama.linkDataArray);
             }
 		});
 //	});
@@ -307,7 +305,7 @@ function nodeInfo(d) {  // Tooltip info for a node data object
 
   // when a node is double-clicked, add a child to it
   function selectionMove(e, obj) {
-  	var node = e.diagram.selection.first();
+	var node = e.diagram.selection.first();
   	var p = node.location.copy();
   	node.location = p;
   	save(e);
@@ -320,7 +318,6 @@ function nodeInfo(d) {  // Tooltip info for a node data object
       } else {
         updateProperties(null);
       }
-      save(e);
     }
   // Update the HTML elements for editing the properties of the currently selected node, if any
   function updateProperties(data) {
@@ -341,7 +338,6 @@ function onTextEdited(e) {
   	if (node instanceof go.Node) {
     	updateProperties(node.data);
   	}
-  	console.log ("mudou texto - " + node.data.text)
   	save(e);
 }
 // Define the appearance and behavior for Links:
@@ -383,8 +379,8 @@ function updateData(text, field, panel) {
 
 // Save the diagram's model in DB
 function save(e) {
-	if (myDiagram[panel].isModified) {
-		var objJson = JSON.parse(localStorage.getItem("diagrama-" + e.diagram.panel));
+
+	var objJson = JSON.parse(localStorage.getItem("diagrama-" + e.diagram.panel));
 		var objDiagrama = JSON.parse(e.diagram.model.toJson());
 		objJson.documento.diagrama.nodeDataArray = objDiagrama.nodeDataArray;
 		objJson.documento.diagrama.linkDataArray = objDiagrama.linkDataArray;
@@ -398,7 +394,6 @@ function save(e) {
 	        	console.log ("terminou atualização id:" + e.diagram.id + " panel:" + e.diagram.panel + " data:" + JSON.stringify(data));
 	        }
 		});
-	};
 	myDiagram[panel].isModified = false;
 }
 

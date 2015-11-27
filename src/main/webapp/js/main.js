@@ -99,18 +99,18 @@ function colocaPainelEsquerda() {
                 '<li><a ' +
                     'href="modelo-lista.html?modelo-administracao.html"' +
                     'rel="external"' +
-                    'data-transition="flip">Novo Modelo de Skill</a></li>' +
+                    'data-transition="flip">Habilidades</a></li>' +
                 '<li><a ' +
                 	'href="#popupIncluiPainel" data-rel="popup"'	 +  
                     'data-transition="flip">Novo Skill</a></li>' +
                 '<li><a ' +
-                    'href="carreira-lista.html?index.html"' +
+                    'href="dialog-skill-lista.html?carreira"' +
                     'rel="external"' +
-                    'data-transition="flip">Novo Modelo de Skill</a></li>' +
+                    'data-transition="flip">Carreiras</a></li>' +
                 '<li><a ' +
-                    'href="badget-lista.html?index.html"' +
+                	'href="dialog-skill-lista.html?badget"' +
                     'rel="external"' +
-                    'data-transition="flip">Habildades</a></li>' +
+                    'data-transition="flip">Badgets</a></li>' +
                 '<li><a ' +
                     'href="config.html"' +
                     'rel="external"' +
