@@ -61,10 +61,10 @@
 						<label for="select-tipo" class="labelInputAlign ui-block-a">Tipo</label>
 						    <select name="select-tipos" id="select-tipos" class="ui-block-b"  data-mini="true">
 								<option value="">Selecionar</option>
-								<option value="input_texto">Carreira</option>
-								<option value="input_textarea">Curso</option>
-								<option value="input_inteiro">Badger</option>
-								<option value="input_decimal">Habilidade</option>
+								<option value="carreira">Carreira</option>
+								<option value="curso">Curso</option>
+								<option value="badget">Badget</option>
+								<option value="habilidade">Habilidade</option>
 						    </select>
 					</div>
 				   	<div id="table-campos" >
@@ -111,13 +111,22 @@
  	   </div>
 	   <div data-role="popup" id="popupIncluiPainel" class="ui-content" data-theme="d" style="max-width:600px;">
 			<div id="popupII" class="tabela-detalhes">
-				<h3>Painel</h3>
+				<h3>Skill</h3>
 				<div id="div-input-painel" class="vistoria-detalhes ui-grid-a">
 					<label for="nomePainel" class="labelInputAlign ui-block-a">Nome</label>
 					<div class="ui-block-b">
 	           			<input type="text" name="nomePainel" id="nomePainel" value="" class="input-value " required  data-inline="true"/>
 	           		</div>	
 				</div>	
+				<div id="div-select-tipos-painel" class="vistoria-detalhes ui-grid-a">
+					<label for="select-tipo-painel" class="labelInputAlign ui-block-a">Tipo</label>
+					    <select name="select-tipos-painel" id="select-tipos-painel" class="ui-block-b"  data-mini="true">
+							<option value="">Selecionar</option>
+							<option value="carreira">Carreira</option>
+							<option value="badget">Badget</option>
+							<option value="pessoal">Pessoal</option>
+					    </select>
+				</div>
 				<fieldset id="div-Botoes-Painel" class="ui-grid-b">
 					<a href="#" id="confirmaNovoPainel" data-role="button" data-inline="true" data-theme="a"  class="line-button ui-block-b">Confirmar</a>
 					<a href="#" id="cancelaNovoPainel" data-role="button" data-inline="true" data-theme="a" class="line-button ui-block-c">Cancelar</a>
@@ -145,7 +154,8 @@
 
 				<div id='swipe-acoes' class='swipe'>
 					<!-- montagem dos paineis -vistoria-detalhe.js/montaPagina() -->
-					<div class='swipe-wrap' id='paineis'></div>
+					<div class='swipe-wrap' id='paineis'>
+					</div>
 					<!-- swipe-wrap -->
 				</div>
 				<!-- swipe-acoes -->

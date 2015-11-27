@@ -170,7 +170,6 @@ public class Documentos {
 		return Response.status(200).entity(doc).build();
 	};
 
-	
 	@Path("/incluir")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)

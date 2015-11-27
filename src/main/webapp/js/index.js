@@ -58,7 +58,6 @@ function redirecionar() {
 		document.location.replace("config.html");
 	} else {
 		console.log('encontrou: ');
-		document.location.replace("metis.html?usu="
-				+ localStorage.cpf);
+		document.location.replace("metis.html");
 	}
 }

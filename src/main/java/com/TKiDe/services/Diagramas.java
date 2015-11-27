@@ -73,8 +73,6 @@ public class Diagramas {
 		documento.putAll(mapJson);
 		BasicDBObject update = new BasicDBObject("$set", new BasicDBObject(documento));
 		BasicDBObject searchQuery = new BasicDBObject("_id",_id);
-		System.out.println("id -" + doc.documento.id.toString());
-		System.out.println("dado -" + doc.toString());
 		DBObject cursor = collection.findAndModify(searchQuery,
                 null,
                 null,
@@ -84,6 +82,69 @@ public class Diagramas {
                 false);
 		mongo.close();
 		return Response.status(200).entity(doc).build();
+	};
+
+	 
+	@Path("/incluir")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String IncluirDocumento(Diagram doc)  {
+		Mongo mongo;
+		try {
+			mongo = new Mongo();
+			DB db = (DB) mongo.getDB("documento");
+			DBCollection collection = db.getCollection("diagrams");
+			Gson gson = new Gson();
+			String jsonDocumento = gson.toJson(doc);
+			Map<String,String> mapJson = new HashMap<String,String>();
+			ObjectMapper mapper = new ObjectMapper();
+			mapJson = mapper.readValue(jsonDocumento, HashMap.class);
+			JSONObject documento = new JSONObject();
+			documento.putAll(mapJson);
+			DBObject insert = new BasicDBObject(documento);
+			collection.insert(insert);
+			//
+			// 			atualiza o id interno até eu descobrir como não precisar dele
+			//
+			doc.documento.id = insert.get("_id").toString();
+			ObjectId _id = new ObjectId(insert.get("_id").toString());
+			jsonDocumento = gson.toJson(doc);
+			mapJson = mapper.readValue(jsonDocumento, HashMap.class);
+			documento.putAll(mapJson);
+			BasicDBObject update = new BasicDBObject("$set", new BasicDBObject(documento));
+			BasicDBObject searchQuery = new BasicDBObject("_id",_id);
+			DBObject cursor = collection.findAndModify(searchQuery,
+	                null,
+	                null,
+	                false,
+	                update,
+	                true,
+	                false);
+			mongo.close();
+			return insert.get("_id").toString();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			System.out.println("UnknownHostException");
+			e.printStackTrace();
+		} catch (MongoException e) {
+			// TODO Auto-generated catch block
+			System.out.println("MongoException");
+			e.printStackTrace();
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			System.out.println("JsonParseException");
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			System.out.println("JsonMappingException");
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("IOException");
+			e.printStackTrace();
+		}
+		return "fail";
+		
 	};
 	
 };

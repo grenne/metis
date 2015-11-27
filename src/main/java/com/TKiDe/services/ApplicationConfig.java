@@ -27,6 +27,6 @@ import java.util.Set;
 public class ApplicationConfig extends Application {
 
     public Set<Class<?>> getClasses() {
-        return new HashSet<Class<?>>(Arrays.asList( Documentos.class, Diagramas.class));
+        return new HashSet<Class<?>>(Arrays.asList( Documentos.class, Diagramas.class, Skills.class));
     }
 }

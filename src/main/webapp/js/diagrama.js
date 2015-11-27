@@ -7,9 +7,10 @@ function init(diagrama, panelReceive, idReceive) {
 
 	id = idReceive;
 	panel = panelReceive;
-
+	console.log ("id - " + id + " - panel - " + panel);
 	var $ = go.GraphObject.make;  // for conciseness in defining templates
-    myDiagram [panel]=
+	
+    myDiagram[panel]  =
       $(go.Diagram, diagrama,  // create a Diagram for the DIV HTML element
         {
     	  // must be true to accept drops from the Palette
@@ -25,19 +26,19 @@ function init(diagrama, panelReceive, idReceive) {
           "ChangedSelection": onSelectionChanged,
           "ObjectDoubleClicked" : nodeDoubleClick,
           "PartCreated" : partCreated,
-          "LinkDrawn" : load,
-          "LinkRelinked" : load,
+          "LinkDrawn" : save,
+          "LinkRelinked" : save,
           "Modified" : save,
-          "PartRotated" : load,
-          "SelectionDeleted" : load,
-          "SelectionGrouped" : load,
+          "PartRotated" : save,
+          "SelectionDeleted" : save,
+          "SelectionGrouped" : save,
           "SelectionMoved" : selectionMove,
           "TextEdited": onTextEdited
         });
     
     // salvar variaveis
-    myDiagram [panel].id = id;
-    myDiagram [panel].panel = panel;
+   myDiagram[panel].id = id;
+   myDiagram[panel].panel = panel;
       
       // Define the appearance and behavior for Nodes:
     // First, define the shared context menu for all Nodes, Links, and Groups.
@@ -123,7 +124,7 @@ function init(diagrama, panelReceive, idReceive) {
     // whose fill color is bound to the node data.
     // The user can drag a node by dragging its TextBlock label.
     // Dragging from the Shape will start drawing a new link.
-    myDiagram[panel].nodeTemplate =
+   myDiagram[panel].nodeTemplate =
     	
       $(go.Node, "Auto",
     		  // salvar a posicao alterada, automaticamente altera o json
@@ -160,7 +161,7 @@ function init(diagrama, panelReceive, idReceive) {
       );
 
     // The link shape and arrowhead have their stroke brush data bound to the "color" property
-    myDiagram[panel].linkTemplate =
+   myDiagram[panel].linkTemplate =
       $(go.Link,
         { relinkableFrom: true, relinkableTo: true },  // allow the user to relink existing links
         $(go.Shape,
@@ -183,7 +184,7 @@ function init(diagrama, panelReceive, idReceive) {
 
     // Groups consist of a title in the color given by the group node data
     // above a translucent gray rectangle surrounding the member parts
-    myDiagram[panel].groupTemplate =
+   myDiagram[panel].groupTemplate =
       $(go.Group, "Vertical",
         { selectionObjectName: "PANEL",  // selection handle goes around shape, not label
           ungroupable: true },  // enable Ctrl-Shift-G to ungroup a selected Group
@@ -214,14 +215,14 @@ function init(diagrama, panelReceive, idReceive) {
         }
       );
     // provide a tooltip for the background of the Diagram, when not over any Part
-    myDiagram[panel].toolTip =
+   myDiagram[panel].toolTip =
       $(go.Adornment, "Auto",
         $(go.Shape, { fill: "#FFFFCC" }),
         $(go.TextBlock, { margin: 4 },
           new go.Binding("text", "", diagramInfo))
       );
     // provide a context menu for the background of the Diagram, when not over any Part
-    myDiagram[panel].contextMenu =
+   myDiagram[panel].contextMenu =
       $(go.Adornment, "Vertical",
           makeButton("Colar",
                      function(e, obj) { e.diagram.commandHandler.pasteSelection(e.diagram.lastInput.documentPoint); },
@@ -245,7 +246,7 @@ function init(diagrama, panelReceive, idReceive) {
               { from: 3, to: 2 },
               { from: 4, to: 2 }
             ];
-//    myDiagram[panel].model = new go.GraphLinksModel(a, b);
+//   myDiagram[panel].model = new go.GraphLinksModel(a, b);
     // Create the Diagram's Model:
 //    jQuery(function(){
     	jQuery.ajax({
@@ -256,7 +257,7 @@ function init(diagrama, panelReceive, idReceive) {
             success: function(data) {
             	localStorage.setItem("diagrama-" + panel, JSON.stringify(data));
             	console.log ("acabou de salvar - panel - " + panel + " dado - " + localStorage.getItem("diagrama-" + panel));
-    		    myDiagram[panel].model = new go.GraphLinksModel(data.documento.diagrama.nodeDataArray, data.documento.diagrama.linkDataArray);
+    		   myDiagram[panel].model = new go.GraphLinksModel(data.documento.diagrama.nodeDataArray, data.documento.diagrama.linkDataArray);
             }
 		});
 //	});
@@ -284,11 +285,11 @@ function nodeInfo(d) {  // Tooltip info for a node data object
 //      var clicked = obj.part;
 //      if (clicked !== null) {
 //        var thisemp = clicked.data;
-//        myDiagram.startTransaction("add employee");
-//        var nextkey = (myDiagram.model.nodeDataArray.length + 1).toString();
+//        myDiagram[panel].startTransaction("add employee");
+//        var nextkey = (myDiagram[panel].model.nodeDataArray.length + 1).toString();
 //        var newemp = { key: nextkey, name: "(new person)", title: "", parent: thisemp.key };
-//        myDiagram.model.addNodeData(newemp);
-//        myDiagram.commitTransaction("add employee");
+//        myDiagram[panel].model.addNodeData(newemp);
+//        myDiagram[panel].commitTransaction("add employee");
   };
   
   // when a node is double-clicked, add a child to it
@@ -319,6 +320,7 @@ function nodeInfo(d) {  // Tooltip info for a node data object
       } else {
         updateProperties(null);
       }
+      save(e);
     }
   // Update the HTML elements for editing the properties of the currently selected node, if any
   function updateProperties(data) {
@@ -362,11 +364,11 @@ function diagramInfo(model) {  // Tooltip info for the diagram's model
 }
 // Update the data fields when the text is changed
 function updateData(text, field, panel) {
-  var node = myDiagram[panel].selection.first();
+  var node =myDiagram[panel].selection.first();
   // maxSelectionCount = 1, so there can only be one Part in this collection
   var data = node.data;
   if (node instanceof go.Node && data !== null) {
-    var model = myDiagram[panel].model;
+    var model =myDiagram[panel].model;
     model.startTransaction("modified " + field);
     if (field === "name") {
       model.setDataProperty(data, "name", text);
@@ -381,23 +383,23 @@ function updateData(text, field, panel) {
 
 // Save the diagram's model in DB
 function save(e) {
-	console.log ("id save - " + e.diagram.id);
-	var objJson = JSON.parse(localStorage.getItem("diagrama-" + e.diagram.panel));
-	var objDiagrama = JSON.parse(e.diagram.model.toJson());
-	objJson.documento.diagrama.nodeDataArray = objDiagrama.nodeDataArray;
-	objJson.documento.diagrama.linkDataArray = objDiagrama.linkDataArray;
-	console.log ("panel save - " + e.diagram.panel + " - dado salvo - " + objJson);
-	$.ajax({
-		type: "POST",
-        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/atualizar?id=" + e.diagram.id,
-        contentType: "application/json; charset=utf-8",
-        dataType: 'json',
-        data : JSON.stringify(objJson),
-        success: function(data) {
-        	console.log ("terminou atualização id:" + e.diagram.id + " panel:" + e.diagram.panel + " data:" + JSON.stringify(data));
-        }
-	});
-  myDiagram[panel].isModified = false;
+	if (myDiagram[panel].isModified) {
+		var objJson = JSON.parse(localStorage.getItem("diagrama-" + e.diagram.panel));
+		var objDiagrama = JSON.parse(e.diagram.model.toJson());
+		objJson.documento.diagrama.nodeDataArray = objDiagrama.nodeDataArray;
+		objJson.documento.diagrama.linkDataArray = objDiagrama.linkDataArray;
+		$.ajax({
+			type: "POST",
+	        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/atualizar?id=" + e.diagram.id,
+	        contentType: "application/json; charset=utf-8",
+	        dataType: 'json',
+	        data : JSON.stringify(objJson),
+	        success: function(data) {
+	        	console.log ("terminou atualização id:" + e.diagram.id + " panel:" + e.diagram.panel + " data:" + JSON.stringify(data));
+	        }
+		});
+	};
+	myDiagram[panel].isModified = false;
 }
 
 function load() {

@@ -101,9 +101,16 @@ function colocaPainelEsquerda() {
                     'rel="external"' +
                     'data-transition="flip">Novo Modelo de Skill</a></li>' +
                 '<li><a ' +
-                    'href="dialog-modelo-lista.html?index.html"' +
-                    'rel="external"' +
+                	'href="#popupIncluiPainel" data-rel="popup"'	 +  
                     'data-transition="flip">Novo Skill</a></li>' +
+                '<li><a ' +
+                    'href="carreira-lista.html?index.html"' +
+                    'rel="external"' +
+                    'data-transition="flip">Novo Modelo de Skill</a></li>' +
+                '<li><a ' +
+                    'href="badget-lista.html?index.html"' +
+                    'rel="external"' +
+                    'data-transition="flip">Habildades</a></li>' +
                 '<li><a ' +
                     'href="config.html"' +
                     'rel="external"' +

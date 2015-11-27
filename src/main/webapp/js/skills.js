@@ -2,18 +2,18 @@
  * 
  */
 
-function montaPanel(panelId, panelLabel, i, panel) {
+function montaPanel(panelId, panelLabel, i, panel, id) {
 	var heightDetalhes = $(window).height() - 135 - $("#cabecalho-detalhes").height();
 	var montaScroll = 'style="overflow: scroll; width: 200px; height:' + heightDetalhes + 'px;"';
 	console.log ("height detalhes:" + heightDetalhes);
 	var linha = ''; 
 	linha = linha +
-		'<!-- ' + panel.label + ' -->' +			
-		'<div id="skill-' + panel.label + '" data-role="content" class="dragme dragmeRecepcao">
-			'<div id="sample">
-				'<div id="myDiagram' + panel.label + '"	style=" width: 1300px; height: 600px"></div>
-			'</div>
-		'</div>
+		'<!-- ' + panelLabel + ' -->' +			
+		'<div id="skill-' + panelId + '" data-role="content" class="dragme dragmeRecepcao">' +
+			'<div id="sample">' +
+				'<div id="myDiagram-' + panelId + '"	style=" width: 1300px; height: 600px"></div>' +
+			'</div>' +
+		'</div>';
 	$("#paineis").append(linha);
 };
 
