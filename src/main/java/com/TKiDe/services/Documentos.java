@@ -186,6 +186,23 @@ public class Documentos {
 		documento.putAll(mapJson);
 		DBObject insert = new BasicDBObject(documento);
 		collection.insert(insert);
+		//
+		// 			atualiza o id interno até eu descobrir como não precisar dele
+		//
+		doc.documento.id = insert.get("_id").toString();
+		ObjectId _id = new ObjectId(insert.get("_id").toString());
+		jsonDocumento = gson.toJson(doc);
+		mapJson = mapper.readValue(jsonDocumento, HashMap.class);
+		documento.putAll(mapJson);
+		BasicDBObject update = new BasicDBObject("$set", new BasicDBObject(documento));
+		BasicDBObject searchQuery = new BasicDBObject("_id",_id);
+		DBObject cursor = collection.findAndModify(searchQuery,
+                null,
+                null,
+                false,
+                update,
+                true,
+                false);
 		mongo.close();
 		return Response.status(200).entity(doc).build();
 	};
