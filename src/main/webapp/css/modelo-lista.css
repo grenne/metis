@@ -1,0 +1,65 @@
+#tabela-funcionarios {
+    cursor:pointer;
+}
+
+.listaModelos ui-block-b {
+    align:right;
+}
+
+.textoQuebrado  {
+	text-align:justify;	
+	text-indent:15px;	
+	}
+
+#listaModelos table {
+	width: 100%;
+}
+
+.icone-acao {
+    float:left;
+}
+
+.pesfoto-detalhes-container {
+    text-align:center;
+    min-width: 120px;
+    min-height: 160px;
+}
+
+/* Celulares */
+.ui-btn-icon-left {
+    padding-left: 3.5em !important;
+}
+
+.pesfoto {
+    width: 40px;
+    height: auto;
+}
+.dadoVistoria {
+    color: #000000;
+    padding-left: 2em !important;
+    font-weight: normal;
+    font-size: 0.8em;
+}
+.labelModelo {
+    color: blue;
+    font-weight: normal;
+	font-size: 0.9em;
+}
+.labelValue {
+    color: #000000 !important;
+    padding-left: 1em !important;
+    font-weight: normal;
+	font-size: 0.8em;
+}
+
+/* Tablets */
+@media (min-width: 768px) {    
+    .pesfoto {
+        width: 60px;
+    }    
+    
+    .ui-btn-icon-left {
+        padding-left: 2.5em !important;
+    }      
+}
+ 

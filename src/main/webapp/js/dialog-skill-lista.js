@@ -20,7 +20,6 @@ $(document).ready(function() {
 				});
 				inicializaWindow();
 				$('ul').listview('refresh');
-				$('a').listview('refresh');
 			}
 		});
 	});
@@ -33,9 +32,26 @@ function montaLinha(i, skills, id, nextPage) {
 	var linha = 
         '<li class="ui-body">' +
 	    	'<a id="item-' + labelId + '"href="#" rel="external" data-transition="flip">' +
-	    	'<h2>' + skills.label + '</h2>' +
-	    	'<p><strong>' + skills.tipo + '</p></a>' + 			
-		'</li>';
+	    	'<h2>' + skills.label + '</h2>';
+	if (skills.documento.header != null){
+		$.each(skills.documento.header, function(i, header) {
+			console.log ("header - " + header.label + ' : ' + header.valor);
+			linha = linha + 
+				'<p class="textoQuebrado">' + header.label + ' : ' + header.valor + '</p>';
+		});
+	};
+	if (skills.documento.panel != null){
+		$.each(skills.documento.panel, function(i, panel) {
+			if (panel.fields != null){
+				$.each(panel.fields, function(i, fields) {
+					console.log ("fields - " + fields.label + ' : ' + fields.valor);
+					linha = linha + 
+						'<p class="textoQuebrado">' + fields.label + ' : ' + fields.valor + '</p>';
+				});	
+			};
+		});	
+	};
+	linha = linha +	'</a></li>';
 	$("#table-skills").append(linha);
     $('#item-' + labelId).bind( "click", function(event, ui) {
     	incluiSkill (skills.label, id);

@@ -66,7 +66,7 @@ public class Diagram {
 
 		@Override
 		public String toString() {
-			return new StringBuffer(" Id : ").append(this.id).append(" Diagrama : ").append(this.diagrama).toString();
+			return new StringBuffer(" Id : ").append(this.id).append(" tipo : ").append(this.tipo).toString();
 		}
 
 
@@ -93,6 +93,7 @@ public class Diagram {
                 public String group;
                 public String isGroup;
                 public String id;
+                public String principal;
        
 
                 public NodeDataArray() {
@@ -100,7 +101,7 @@ public class Diagram {
     			}
 
                 @JsonCreator
-                public NodeDataArray(String loc, String key, String text, String color, String group, String isGroup, String id){
+                public NodeDataArray(String loc, String key, String text, String color, String group, String isGroup, String id, String principal){
                     this.loc = loc;
                     this.key = key;
                     this.text = text;
@@ -108,6 +109,7 @@ public class Diagram {
                     this.group = group;
                     this.isGroup = isGroup;
                     this.id = id;
+                    this.principal = principal;
                 }
             }
 
@@ -128,7 +130,6 @@ public class Diagram {
                     this.color = color;
                 }
             }
-
 		}
 	}
 }

@@ -2,8 +2,11 @@ package com.TKiDe.services;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Singleton;
@@ -151,7 +154,7 @@ public class Diagramas {
 	@Path("/lista")	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public JSONArray ObterModelos(@QueryParam("tipoLista") String tipo) throws UnknownHostException, MongoException, ParseException {
+	public JSONArray ObterModelos(@QueryParam("tipoLista") String tipo) throws UnknownHostException, MongoException, ParseException, IOException {
 
 		Mongo mongo = new Mongo();
 		DB db = (DB) mongo.getDB("documento");
@@ -172,6 +175,37 @@ public class Diagramas {
 			jsonDocumento.put("_id", obj.getString("_id"));
 			jsonDocumento.put("tipo", jsonObject.get("tipo"));
 			jsonDocumento.put("label", jsonObject.get("label"));
+			String diagrama = jsonObject.get("diagrama").toString();
+			System.out.println("diagrama - " + " - " + diagrama);
+			JSONObject jsonDiagrama;
+			jsonDiagrama = (JSONObject) parser.parse(diagrama);
+			List nodes = (List) jsonDiagrama.get("nodeDataArray");
+			Iterator itr = nodes.iterator();
+			itr = nodes.iterator();
+		    while(itr.hasNext()) {
+		    	Object element = itr.next();
+		        JSONObject jsonNode;
+		        jsonNode = (JSONObject) parser.parse(element.toString());
+		        try {
+		        	String principal = jsonNode.get("principal").toString();
+		        	if (principal.equals("true")) {
+		        		try {
+		        			String idDocumento = jsonNode.get("id").toString();
+		        			ObjectId _id = new ObjectId(idDocumento);
+		        			DBCollection docCollection = db.getCollection("documentos");
+		        			BasicDBObject searchQuery = new BasicDBObject("_id",_id);
+		        			DBObject docCursor = docCollection.findOne(searchQuery);
+		        			JSONObject docDocumento = new JSONObject();
+		        			BasicDBObject docObj = (BasicDBObject) docCursor.get("documento");
+		        			jsonDocumento.put("documento", docObj);
+		        			System.out.println(principal + " - " + docObj);
+				        }catch (Exception e) {
+					 		
+				        }
+		        	 }
+		         }catch (Exception e) {
+		 		}
+		      }
 			documentos.add(jsonDocumento);
 		};
 		mongo.close();

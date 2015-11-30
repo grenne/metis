@@ -52,7 +52,7 @@ $(document).ready(function() {
 					'"label":"' + $("#nomePainel" ).val() + '",' +
 					'"diagrama":' +
 					'{' +
-						'"nodeDataArray":[{"loc":"50 50","key":"1","text":"' + $("#nomePainel" ).val() + '","color":"lightblue","id":"121212"}]' +
+						'"nodeDataArray":[{"loc":"50 50","key":"1","text":"' + $("#nomePainel" ).val() + '","color":"lightblue","id":"121212", "principal": "true" }]' +
 					'}' +
 					'}' +
 			'}';
