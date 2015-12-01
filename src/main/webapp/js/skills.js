@@ -25,6 +25,32 @@ function incluiSkill(nomeSkill, idDiagrama){
      });
 };	
 
+function inicioPanel(panelId, panelLabel, i, panel, id, manutencao, inputDisabled) {
+	var heightDetalhes = $(window).height() - 135 - $("#cabecalho-detalhes").height();
+	var montaScroll = '';
+	console.log ("height detalhes:" + heightDetalhes);
+	var linha = ''; 
+	linha = linha +
+		'<!-- ' + panel.label + ' -->' +			
+		'<div id="panel-' + panelId + '" ' + montaScroll + '">' +
+			'<h3 class="ui-bar ui-bar-d ui-corner-all">' + panel.label + '</h3>';
+	linha = linha +
+			'<div id="container-' + panelId + '" class=" ui-body ui-body-a ui-corner-all vistoria-detalhes">' +
+				'<div id="table-' + panelId + '">';
+	$("#tabela-paineis").append(linha);
+	
+};
+
+
+function finalPanel(panelId, panelLabel, i, panel, manutencao, inputDisabled) {
+	$("#paineis").append(
+			'</div>' +
+		'</div>' +
+		'<!-- ' + panel.label + ' -->' +
+	'</div>'
+	);
+};
+
 function montaPanel(panelId, panelLabel, i, panel, id) {
 
 	var widthDetalhes = $(window).width();
@@ -47,7 +73,7 @@ function montaCabecalho(header, id, manutencao, inputDisabled ) {
 	$.each(header, 
 			function(i, header) {
 		var labelId = header.label.replace( /\s/g, '' ) + 1 + "-" + i;
-		montaCampos(i, "cabecalho", 999, header, "cabecalho", id, manutencao, inputDisabled)
+		montaCampos(i, "cabecalho-documento", 999, header, "cabecalho", id, manutencao, inputDisabled)
 	});
 };
 

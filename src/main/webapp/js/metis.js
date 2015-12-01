@@ -1,6 +1,6 @@
 /* Documento Detalhes */
 $(document).ready(function() {
-    executaLogin(localStorage.urlServidor, localStorage.cpfUsuario, localStorage.senha);
+	executaLogin(localStorage.urlServidor, localStorage.cpfUsuario, localStorage.senha);
 
     // acertar o tamanha da tela
 	console.log ("$(window).height:()" + $(window).height());
@@ -10,6 +10,7 @@ $(document).ready(function() {
 	var tipoDevice = mobileDetect();
 	console.log('You are using a mobile device!:' + tipoDevice);
 	var url   = window.location.search.replace();
+	
 	
 	$(function(){
 		$.ajax({
@@ -43,7 +44,6 @@ $(document).ready(function() {
 	});
 
 	$( "#confirmaNovoPainel" ).bind( "click", function(event, ui) {
-
 		var new_diagrama = 
 			'{"documento" :' + 
 				'{' +
@@ -52,7 +52,7 @@ $(document).ready(function() {
 					'"label":"' + $("#nomePainel" ).val() + '",' +
 					'"diagrama":' +
 					'{' +
-						'"nodeDataArray":[{"loc":"50 50","key":"1","text":"' + $("#nomePainel" ).val() + '","color":"lightblue","id":"121212", "principal": "true" }]' +
+						'"nodeDataArray":[{"loc":"50 50","key":"1","text":"' + $("#nomePainel" ).val() + '","color":"lightblue","id":"565c9773a7db84fcf579f9d1", "principal": "true" }]' +
 					'}' +
 					'}' +
 			'}';
@@ -75,5 +75,7 @@ $(document).ready(function() {
 	        	   window.location.reload(true);
 	              });
 	});
-
+	$("#cancelaNovoPainel").bind( "click", function(event, ui) {
+    	$("#popupIncluiPainel").popup( "close" );
+	});
 });

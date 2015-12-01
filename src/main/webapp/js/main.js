@@ -99,7 +99,7 @@ function colocaPainelEsquerda() {
                 '<li><a ' +
                     'href="modelo-lista.html?modelo-administracao.html"' +
                     'rel="external"' +
-                    'data-transition="flip">Modelos de habilidades</a></li>' +
+                    'data-transition="flip">Modelos</a></li>' +
                 '<li><a ' +
                 	'href="#popupIncluiPainel" data-rel="popup"'	 +  
                     'data-transition="flip">Novo Skill</a></li>' +

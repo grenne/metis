@@ -51,15 +51,18 @@ function init(diagrama, panelReceive, idReceive) {
     };
     // a context menu is an Adornment with a bunch of buttons in them
     var partContextMenu =
-      $(go.Adornment, "Vertical",
+      $(go.Adornment,"Vertical",
           makeButton("Propriedades",
                      function(e, obj) {  // OBJ is this Button
                        var contextmenu = obj.part;  // the Button is in the context menu Adornment
                        var part = contextmenu.adornedPart;  // the adornedPart is the Part that the context menu adorns
                        // now can do something with PART, or with its data, or with the Adornment (the context menu)
-                       if (part instanceof go.Link) alert(linkInfo(part.data));
-                       else if (part instanceof go.Group) alert(groupInfo(contextmenu));
-                       else alert(nodeInfo(part.data));
+                       if (part instanceof go.Link) 
+                    	   alert(linkInfo(part.data));
+                       else 
+                    	   if (part instanceof go.Group) alert(groupInfo(contextmenu));
+                       else 
+                    	   alert(nodeInfo(part.data));
                      }),
           makeButton("Cortar",
                      function(e, obj) {
@@ -275,11 +278,7 @@ function nodeInfo(d) {  // Tooltip info for a node data object
   // when a node is double-clicked, add a child to it
   function nodeDoubleClick(e, obj) {
   	var node = e.diagram.selection.first();
-  	jQuery("#key").val(node.data.key);
-  	jQuery("#text").val(node.data.text);
-  	jQuery("#color").val(node.data.color);
-  	jQuery("#id").val(node.data.id);
-  	jQuery( "#nodePropertiesCarreira" ).popup( "open" );
+  	montaNodeDocumento(node.data.id);
 //      var clicked = obj.part;
 //      if (clicked !== null) {
 //        var thisemp = clicked.data;
@@ -391,7 +390,6 @@ function save(e) {
 	        dataType: 'json',
 	        data : JSON.stringify(objJson),
 	        success: function(data) {
-	        	console.log ("terminou atualização id:" + e.diagram.id + " panel:" + e.diagram.panel + " data:" + JSON.stringify(data));
 	        }
 		});
 	myDiagram[panel].isModified = false;
@@ -399,4 +397,32 @@ function save(e) {
 
 function load() {
 }
+
+function montaNodeDocumento(id){
+	$.ajax({
+        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/obter?id=" + id,
+        contentType: "application/json; charset=utf-8",
+        dataType: 'json',
+        success: function(data) {
+            localStorage.setItem("dadosSaved", JSON.stringify(data));
+    		montaCabecalho(data.documento.header, id, "false", "disabled");
+			var heightCabecalho = $("#cabecalho-detalhes").height();
+			var panelLabelList = [];
+			$.each(data.documento.panel, function(i, panel){
+				var panelId = panel.label.replace( /\s/g, '' ) + i;
+				var panelLabel = panel.label;
+				panelLabelList[i] = panel.label;
+				inicioPanel(panelId, panelLabel, i, panel);
+				$.each(panel.fields, function(z, item){
+					montaCampos(i, panelId, z, item, "detalhes", id, "false", "");
+				});
+				finalPanel(panelId, panelLabel, i, panel);
+			});
+			inicializaWindow();
+			console.log("entrou monta node documento");
+			$("#open-detalhe").click()
+
+        }
+	});
+};
 

@@ -61,7 +61,6 @@
 						<label for="select-tipo" class="labelInputAlign ui-block-a">Tipo</label>
 						    <select name="select-tipos" id="select-tipos" class="ui-block-b"  data-mini="true">
 								<option value="">Selecionar</option>
-								<option value="carreira">Carreira</option>
 								<option value="curso">Curso</option>
 								<option value="badget">Badget</option>
 								<option value="habilidade">Habilidade</option>
@@ -76,38 +75,18 @@
 				</fieldset>
 			</div>
  	   </div>
-	   <div data-role="popup" id="nodePropertiesCarreira" class="ui-content" data-theme="d" style="max-width:600px;">
-			<div id="popupII" class="tabela-detalhes">
-				<h3>Painel</h3>
-				<div id="div-input-node" class="detalhes ui-grid-a">
-					<label for="key" class="labelInputAlign ui-block-a">Nome</label>
-					<div class="ui-block-b">
-	           			<input type="text" name="key" id="key" value="" class="input-value " required  data-inline="true"/>
-	           		</div>	
-				</div>	
-				<div id="div-input-node" class="detalhes ui-grid-a">
-					<label for="text" class="labelInputAlign ui-block-a">Nome</label>
-					<div class="ui-block-b">
-	           			<input type="text" name="text" id="text" value="" class="input-value " required  data-inline="true"/>
-	           		</div>	
-				</div>	
-				<div id="div-input-node" class="detalhes ui-grid-a">
-					<label for="color" class="labelInputAlign ui-block-a">Nome</label>
-					<div class="ui-block-b">
-	           			<input type="text" name="color" id="color" value="" class="input-value " required  data-inline="true"/>
-	           		</div>	
-				</div>	
-				<div id="div-input-node" class="detalhes ui-grid-a">
-					<label for="id" class="labelInputAlign ui-block-a">Nome</label>
-					<div class="ui-block-b">
-	           			<input type="text" name="id" id="id" value="" class="input-value " required  data-inline="true"/>
-	           		</div>	
-				</div>	
-				<fieldset id="div-Botoes-Painel" class="ui-grid-b">
-					<a href="#" id="confirmarPropertiesCarreira" data-role="button" data-inline="true" data-theme="a"  class="line-button ui-block-a">Confirmar</a>
-					<a href="#" id="cancelarPropertiesCarreira" data-role="button" data-inline="true" data-theme="a" class="line-button close ui-block-b">Cancelar</a>
-				</fieldset>
+	   <div data-role="popup" id="nodePropertiesCarreira" class="ui-content" data-theme="d" style="max-width:800px; ">
+			<div id="popupII" class="tabela-detalhes"  style="max-width:800px; overflow: scroll;">
+				<div id="tabela-detalhes-documento" class="tabela-detalhes">
+				</div>
+				<hr class="separador" />
+				<div id="tabela-paineis" class="tabela-detalhes">
+				</div>
 			</div>
+			<fieldset id="div-Botoes-Painel" class="ui-grid-b">
+				<a href="#" id="confirmarPropertiesCarreira" data-role="button" data-inline="true" data-theme="a"  class="line-button ui-block-a">Confirmar</a>
+				<a href="#" id="cancelarPropertiesCarreira" data-role="button" data-inline="true" data-theme="a" class="line-button close ui-block-b">Cancelar</a>
+			</fieldset>
  	   </div>
 	   <div data-role="popup" id="popupIncluiPainel" class="ui-content" data-theme="d" style="max-width:600px;">
 			<div id="popupII" class="tabela-detalhes">
@@ -133,7 +112,7 @@
 				</fieldset>
 			</div>
  	   </div>
- 	   
+ 	   <a href="detalhe.html?" + idDocumento + '&' + tipoPagina + '&' + pathPage + '$' + parametrosDaUrl + '" rel="external" data-transition="flip" data-rel="dialog">'Open dialog</a>
 	<div id="conteudo-geral" data-theme="d">
 		<div data-role="header" data-position="fixed">
 			<h1 class="titulo-pagina">Seu Skill</h1>

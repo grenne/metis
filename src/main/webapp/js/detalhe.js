@@ -8,7 +8,7 @@ $(function() {
 	console.log ("$(window).width():" + $(window).width());
 	console.log ("$(document).width():" + $(document).width());
 	var tipoDevice = mobileDetect();
-	alert('You are using a mobile device!:' + tipoDevice);
+	console.log('You are using a mobile device!:' + tipoDevice);
 	var url   = window.location.search.replace();
 	var parametrosDaUrl = url.split("?")[1];
 	var id = parametrosDaUrl.split("&")[0];
@@ -24,7 +24,7 @@ $(function() {
 	
 	$(function(){
 		$.ajax({
-            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/obter?id=564d9c27a7dbe81d32fdb99c",
+            url: "http://" + localStorage.urlServidor + ":8080/vistorias/rest/documento/obter?id=" + id,
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
             success: function(data) {
@@ -45,7 +45,6 @@ $(function() {
 			    iniciaSnapper();
 			    iniciaAcoes(panelLabelList);        
 				inicializaWindow();
-				$('a').listview('refresh');
             }
 		});
 	});
@@ -60,7 +59,7 @@ $(function() {
 		console.log (JSON.stringify(objJson));
 		$.ajax({
 			type: "POST",
-            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/atualizar",
+            url: "http://" + localStorage.urlServidor + ":8080/vistorias/rest/documento/atualizar",
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
             data : JSON.stringify(objJson),
