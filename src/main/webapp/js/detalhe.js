@@ -11,13 +11,15 @@ $(function() {
 	console.log('You are using a mobile device!:' + tipoDevice);
 	var url   = window.location.search.replace();
 	var parametrosDaUrl = url.split("?")[1];
-	var id = parametrosDaUrl.split("&")[0];
-	var tipoPagina = parametrosDaUrl.split("&")[1];
-	var urlBack = parametrosDaUrl.split("&")[2].split("$")[0] + '?' + parametrosDaUrl.split("$")[1]; 
+	var id = localStorage.getItem("idDocumento");
+	var tipoPagina = "manutencao";
+	var urlBack = "index.html" 
 	var inputDisabled = ""; 
 	if (tipoPagina =="consulta"){
 		inputDisabled = "disabled";;
 	};
+
+	var id = localStorage.getItem("idDocumento");
 
 	// setar barra superior para voltar para pagina correta 
 	montaBarHeader(urlBack);	

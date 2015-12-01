@@ -398,7 +398,10 @@ function save(e) {
 function load() {
 }
 
+
 function montaNodeDocumento(id){
+	$('.cabecalho').remove();
+	$('.painel').remove();
 	$.ajax({
         url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/obter?id=" + id,
         contentType: "application/json; charset=utf-8",
@@ -420,8 +423,7 @@ function montaNodeDocumento(id){
 			});
 			inicializaWindow();
 			console.log("entrou monta node documento");
-			$("#open-detalhe").click()
-
+            $("#popupDetalhes").popup( "open" );
         }
 	});
 };

@@ -25,25 +25,26 @@ function incluiSkill(nomeSkill, idDiagrama){
      });
 };	
 
+
 function inicioPanel(panelId, panelLabel, i, panel, id, manutencao, inputDisabled) {
 	var heightDetalhes = $(window).height() - 135 - $("#cabecalho-detalhes").height();
 	var montaScroll = '';
-	console.log ("height detalhes:" + heightDetalhes);
+	console.log ("height detalhes painel:" + heightDetalhes);
 	var linha = ''; 
 	linha = linha +
 		'<!-- ' + panel.label + ' -->' +			
-		'<div id="panel-' + panelId + '" ' + montaScroll + '">' +
+		'<div id="panel-' + panelId + '" ' + montaScroll + '" class="painel">' +
 			'<h3 class="ui-bar ui-bar-d ui-corner-all">' + panel.label + '</h3>';
 	linha = linha +
-			'<div id="container-' + panelId + '" class=" ui-body ui-body-a ui-corner-all vistoria-detalhes">' +
+			'<div id="container-' + panelId + '" class=" ui-body ui-body-a ui-corner-all ">' +
 				'<div id="table-' + panelId + '">';
-	$("#tabela-paineis").append(linha);
+	$("#paineis-popup").append(linha);
 	
 };
 
 
 function finalPanel(panelId, panelLabel, i, panel, manutencao, inputDisabled) {
-	$("#paineis").append(
+	$("#paineis-popup").append(
 			'</div>' +
 		'</div>' +
 		'<!-- ' + panel.label + ' -->' +
@@ -56,7 +57,6 @@ function montaPanel(panelId, panelLabel, i, panel, id) {
 	var widthDetalhes = $(window).width();
 	var heightDetalhes = $(window).height() - 135 - $("#cabecalho-detalhes").height();
 	var montaScroll = 'style="overflow: scroll; width: 200px; height:' + heightDetalhes + 'px;"';
-	console.log ("height detalhes:" + heightDetalhes);
 	var linha = ''; 
 	linha = linha +
 		'<!-- ' + panelLabel + ' -->' +			
@@ -70,11 +70,22 @@ function montaPanel(panelId, panelLabel, i, panel, id) {
 
 function montaCabecalho(header, id, manutencao, inputDisabled ) {
 
+	var linha = ''; 
+		linha = linha +
+			'<!-- cabecalho -->' +			
+			'<div id="table-cabecalho-popup" class="cabecalho  ui-body ui-body-a ui-corner-all ">';
+	$("#cabecalho-detalhes-popup").append(linha);
+
 	$.each(header, 
 			function(i, header) {
 		var labelId = header.label.replace( /\s/g, '' ) + 1 + "-" + i;
-		montaCampos(i, "cabecalho-documento", 999, header, "cabecalho", id, manutencao, inputDisabled)
+		montaCampos(i, "cabecalho-popup", 999, header, "cabecalho", id, manutencao, inputDisabled)
 	});
+
+	linha = '</div>' +
+			'<!-- cabecalho -->';			
+	$("#cabecalho-detalhes-popup").append(linha);
+	
 };
 
 function montaCampos(i, panelId, z, item, origem, id, manutencao, inputDisabled) {
@@ -82,6 +93,8 @@ function montaCampos(i, panelId, z, item, origem, id, manutencao, inputDisabled)
 	var label = item.label;
 	var labelRadioId = "";
 
+	console.log ("campo : " + label);
+	
 	var tipoGrid = "ui-grid-a";
 
 	if (manutencao == "true"){
