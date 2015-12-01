@@ -121,9 +121,10 @@ function montaCampos(i, panelId, z, item, origem, id, manutencao, inputDisabled)
 	}else if(item.modelo == 'input_textarea') {
 		$("#div-input-" + labelId).append(
 					'<div class="ui-block-b">' +
-						'<textarea type="text" name="' + labelId + '" id="' + labelId + '" value="' + item.valor + '" class="input-value" required ' + inputDisabled + ' data-inline="true"/>' +
+						'<textarea type="text" name="' + labelId + '" id="' + labelId + '" value="" class="input-value" required ' + inputDisabled + 'data-autosize-on="true" data-inline="true" cols="50">' + item.valor + '</textarea>' +
 					'</div>'	
 		);
+		autosize($("#" + labelId));
 	}else if(item.modelo == 'input_decimal') {
 		$("#div-input-" + labelId).append(
 					'<div class="ui-block-b">' +

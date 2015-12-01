@@ -1,0 +1,215 @@
+/*precisa de padding pois o snap-drawers 'puxa' o conteúdo para cima */
+body {
+	padding-top: 30px !important;
+}
+
+.skills {
+	background-color: #FFFFFF !important;
+	color:#000000 !important;
+}
+
+.tabela-lista table {
+	display: table !important;
+}
+
+.tabela-detalhes table {
+	width: 100%;
+}
+
+.popup-acao {
+	width: 300px;
+	max-width: 80%;
+}
+
+.acao-esquerda, .acao-direita {
+	position: absolute;
+}
+
+.fun-carrega {
+	opacity: 0.7;
+	filter: alpha(opacity = 70); /* For IE8 and earlier */
+	margin-top: 50%;
+}
+
+.fun-carrega-direita {
+	text-align: right;
+	margin-right: 10px;
+}
+
+.fun-carrega-esquerda {
+	text-align: left;
+	margin-left: 10px;
+}
+
+.ui-collapsible-content {
+	padding: .5em !important;
+}
+
+.ui-content {
+	padding: .5em;
+}
+
+.nome-detalhes {
+	display: inline;
+	margin-left: 10px;
+	position: absolute;
+	line-height: 20px;
+}
+
+.tabela-detalhes {
+	padding: .4em 0.5em !important;
+}
+
+#cabecalho-detalhes {
+	overflow: hidden;
+	margin-top: 15px;
+}
+
+.cabecalho-dados-container h3 {
+	margin: 0;
+	margin-bottom: 5px;
+}
+
+.tabela-detalhes td {
+	padding-left: 3px;
+}
+
+.tabela-detalhes .detalhes-label {
+	width: 30%;
+	text-align: right;
+}
+
+.detalhes-label {
+	font-weight: bold;
+}
+
+.pesfoto-detalhes-container {
+	text-align: center;
+	min-width: 120px;
+	min-height: 160px;
+}
+
+.dados-contato {
+	display: none;
+}
+/* popup
+
+
+*, *:after, *:before {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  background: url(https://cdn.mediacru.sh/WkaUlplLEqUQ.jpg) fixed center black;
+  font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', 'Helvetica', 'Arial', 'Lucida Grande', sans-serif;
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+.confirm {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  min-width: 280px;
+  max-width: 500px;
+  height: auto;
+  background: #E2E2E2;
+  border-radius: 10px;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid white;
+  animation: fade 1s ease 1 forwards;
+}
+.confirm h1 {
+  text-align: center;
+  font-size: 1.2rem;
+  margin: 1.5rem 1rem 0.5rem;
+}
+.confirm p {
+  text-align: center;
+  font-size: 1rem;
+  margin: 0 2rem 4.5rem;
+}
+.confirm button {
+  background: transparent;
+  border: none;
+  color: #1678E5;
+  height: 3rem;
+  font-size: 1rem;
+  width: 50%;
+  position: absolute;
+  bottom: 0;
+  cursor: pointer;
+}
+.confirm button:nth-of-type(1) {
+  border-top: 1px solid #B4B4B4;
+  border-right: 1px solid #B4B4B4;
+  left: 0;
+  border-radius: 0 0 0 10px;
+}
+.confirm button:nth-of-type(2) {
+  border-top: 1px solid #B4B4B4;
+  right: 0;
+  border-radius: 0 0 10px 0;
+}
+.confirm button:focus,
+.confirm button:hover {
+  font-weight: bold;
+  background: #EFEFEF;
+}
+.confirm button:active {
+  background: #D6D6D6;
+}
+
+/* Telas pequenas */
+@media ( max-width : 768px) {
+	.ui-content span, .ui-content a:not (.ui-btn-icon-notext ), .ui-content td,
+		.ui-content th {
+		font-size: 11px;
+	}
+	.ui-content h3, .ui-content h3 span {
+		font-size: 13px;
+	}
+	.ui-btn-icon-left {
+		padding-left: 3.5em !important;
+	}
+	.pesfoto-detalhes {
+		width: 120px;
+	}
+	.cabecalho-dados-container {
+		max-width: 195px;
+		margin: auto;
+	}
+	.ui-page {
+		background: url(images/vistoria.jpg) !important;
+		background-size: 100% !important;
+		background-repeat: no-repeat !important;
+	}
+}
+/* Telas grandes */
+@media ( min-width : 768px) {
+	.cabecalho-dados-container {
+		max-width: 100%;
+		padding: 20px;
+		margin-left: 150px;
+	}
+	.ui-btn-icon-left {
+		padding-left: 2.5em !important;
+	}
+	.pesfoto-detalhes-container {
+		float: left;
+	}
+	.pesfoto-detalhes {
+		width: 140px;
+	}
+}
