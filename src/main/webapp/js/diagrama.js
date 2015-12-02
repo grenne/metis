@@ -16,8 +16,9 @@ function init(diagrama, panelReceive, idReceive) {
     	  allowDrop: true, 
           // position the graph in the middle of the diagram
           initialContentAlignment: go.Spot.Center,
+    	  initialAutoScale: go.Diagram.Uniform,
           // allow double-click in background to create a new node
-          "clickCreatingTool.archetypeNodeData": { text: "", color: "orange" },
+          "clickCreatingTool.archetypeNodeData": { text: "", color: "white" },
           // allow Ctrl-G to call groupSelection()
           "commandHandler.archetypeGroupData": { text: "Group", isGroup: true, color: "blue" },
           // enable undo & redo
@@ -62,8 +63,12 @@ function init(diagrama, panelReceive, idReceive) {
                        else 
                     	   if (part instanceof go.Group) alert(groupInfo(contextmenu));
                        else 
-                    	   alert(nodeInfo(part.data));
+                    	   nodeDoubleClick(e, obj);
                      }),
+          makeButton("Associar novo skill",
+                             function(e, obj) {
+        	  			nodeDoubleClick(e, obj); 
+               		  }),
           makeButton("Cortar",
                      function(e, obj) {
         	  e.diagram.commandHandler.cutSelection(); 
@@ -226,6 +231,8 @@ function init(diagrama, panelReceive, idReceive) {
     // provide a context menu for the background of the Diagram, when not over any Part
    myDiagram[panel].contextMenu =
       $(go.Adornment, "Vertical",
+          makeButton("Incluir novo skill",
+                      function(e, obj) { partCreated(e, obj) }),
           makeButton("Colar",
                      function(e, obj) { e.diagram.commandHandler.pasteSelection(e.diagram.lastInput.documentPoint); },
                      function(o) { return o.diagram.commandHandler.canPasteSelection(); }),
@@ -236,32 +243,17 @@ function init(diagrama, panelReceive, idReceive) {
                      function(e, obj) { e.diagram.commandHandler.redo(); },
                      function(o) { return o.diagram.commandHandler.canRedo(); })
       );
-    var a =  [
-              { key:1, text: "Alpha", color: "lightblue" },
-              { key:2, text:  "Beta", color: "orange" },
-              { key:3, text:  "Gamma", color: "lightgreen" },
-              { key:4, text:  "Delta", color: "pink" }
-            ];
-
-    var b = [
-              { from: 1, to: 2 },
-              { from: 3, to: 2 },
-              { from: 4, to: 2 }
-            ];
-//   myDiagram[panel].model = new go.GraphLinksModel(a, b);
     // Create the Diagram's Model:
-//    jQuery(function(){
-    	jQuery.ajax({
-            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/obter?id=" + id,
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            async: false,
-            success: function(data) {
-            	localStorage.setItem("diagrama-" + panel, JSON.stringify(data));
-            	myDiagram[panel].model = new go.GraphLinksModel(data.documento.diagrama.nodeDataArray, data.documento.diagrama.linkDataArray);
-            }
-		});
-//	});
+	jQuery.ajax({
+        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/obter?id=" + id,
+        contentType: "application/json; charset=utf-8",
+        dataType: 'json',
+        async: false,
+        success: function(data) {
+        	localStorage.setItem("diagrama-" + panel, JSON.stringify(data));
+        	myDiagram[panel].model = new go.GraphLinksModel(data.documento.diagrama.nodeDataArray, data.documento.diagrama.linkDataArray);
+        }
+	});
 }
 
 
@@ -292,13 +284,8 @@ function nodeInfo(d) {  // Tooltip info for a node data object
   // when a node is double-clicked, add a child to it
   function partCreated(e, obj) {
   	var node = e.diagram.selection.first();
-  	jQuery("#key").val(node.data.key);
-  	jQuery("#atualizaCarreira").hide();
-  	jQuery("#table-campos").hide();
-  	jQuery("#confirmaSolicitacao").show();
-  	jQuery("#div-select-tipos").show();
+  	montaModeloLista(node.data.id) 
   	jQuery("#nodeNewObject").popup( "open" );
-  	jQuery("#nodeNewObject").popup("reposition", {positionTo: 'origin'});
   	save(e);
   };
 
@@ -428,3 +415,25 @@ function montaNodeDocumento(id){
 	});
 };
 
+function montaModeloLista(id) {	
+	$(function() {
+		$.ajax({
+			url : "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/modelos?tipoLista=validos",
+			contentType : "application/json; charset=utf-8",
+			dataType : 'json',
+			success : function(data) {
+				var dados = JSON.stringify(data);
+				$(".linha-modelo").remove();
+				console.log ("monta modelo linhas");
+				$.each(data, function(i, modelos, id) {
+					var obj = JSON.stringify(modelos);
+					var id = modelos._id;
+					console.log ("item:" + obj);
+					montaLinhaModelos(i, modelos, id);
+				});
+				inicializaWindow();
+				$('ul').listview('refresh');
+			}
+		});
+	});
+};

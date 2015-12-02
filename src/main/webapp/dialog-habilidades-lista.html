@@ -33,30 +33,28 @@
         <script src="js/jquery.mobile-1.4.5.min.js"></script>
 		<script src="js/jquery.mask.min.js"></script>
         <script src="js/main.js"></script>
-        <script src="js/dialog-modelo-lista.js"></script>
+        <script src="js/dialog-habilidades-lista.js"></script>
+        <script src="js/skills.js"></script>
         <script src="js/config.js"></script>
-        <title>Lista de modelos</title>
+        <title>Lista</title>
     </head>
     <body>
         
        <div data-role="page" data-dialog="true"> 
-	        <div
-	            data-role="header"
-	            data-position="fixed"
-	            data-theme="d">
-	            <h1>Modelos</h1>
-	        </div><!-- /header -->        
-	        <div
-	            role="main"
-	            class="ui-content jqm-content jqm-fullwidth">        
-	            <form>
-	                <input id="filtraTabela-input" data-type="search">
-	            </form>    
-	            <div id="listaModelos"  class="ui-responsive" >
-		            <ul id="tabela-modelos" data-role="listview" data-filter="true" data-filter-placeholder="Pesquisar..."   data-inset="true" >
-	   		        </ul>
-	           </div>
-	        </div><!--main -->      
+        <div
+            data-role="header"
+            data-position="fixed"
+            data-theme="d">
+            <h1>Skills</h1>
+        </div><!-- /header -->        
+        <div
+            role="main"
+            class="ui-content jqm-content jqm-fullwidth">        
+            <div id="listaHabilidades"  class="ui-responsive" >
+	            <ul id="table-habilidades" data-role="listview" data-filter="true" data-filter-placeholder="Pesquisar..."   data-inset="true" >
+   		        </ul>
+           </div>
+        </div><!--main -->      
         </div>
     </body>
 </html>

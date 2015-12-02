@@ -60,16 +60,14 @@ public class Documentos {
 	@Path("/lista")	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public JSONArray ObterLista(@QueryParam("usuario") String usuario, @QueryParam("queryUsuario") String queryUsuario, @QueryParam("situacao") String situacao ) throws UnknownHostException, MongoException, ParseException {
+	public JSONArray ObterLista( @QueryParam("modelo") String modelo ) throws UnknownHostException, MongoException, ParseException {
 
 		Mongo mongo = new Mongo();
 		DB db = (DB) mongo.getDB("documento");
 
 		BasicDBObject setQuery = new BasicDBObject();
+		setQuery.put("documento.modelo", modelo);
 		setQuery.put("documento.tipo", "dados");
-		setQuery.append("documento.situacao", situacao);
-		String teste = "documento.usuarios.codigo";
-		setQuery.append(queryUsuario, usuario);
 		DBCollection collection = db.getCollection("documentos");
 		DBCursor cursor = collection.find(setQuery);
 		cursor.sort(new BasicDBObject("documento.header[0].valor", 1));
@@ -79,13 +77,12 @@ public class Documentos {
 			JSONObject jsonObject; 
 			JSONParser parser = new JSONParser(); 
 			BasicDBObject obj = (BasicDBObject) ((Iterator<DBObject>) cursor).next();
-			String _id = obj.getString("_id");
 			String documento = obj.getString("documento");
 			jsonObject = (JSONObject) parser.parse(documento);
-			JSONArray header = (JSONArray) jsonObject.get("header");
+			String _id = obj.getString("_id");
 			JSONObject jsonDocumento = new JSONObject();
 			jsonDocumento.put("_id", _id);
-			jsonDocumento.put("header", header);
+			jsonDocumento.put("documento", jsonObject.get("documento"));
 			documentos.add(jsonDocumento);
 		};
 		mongo.close();
@@ -118,6 +115,7 @@ public class Documentos {
 			JSONObject jsonDocumento = new JSONObject();
 			jsonDocumento.put("_id", obj.getString("_id"));
 			jsonDocumento.put("modelo", jsonObject.get("modelo"));
+			jsonDocumento.put("tipo", jsonObject.get("tipo"));
 			jsonDocumento.put("situacao", jsonObject.get("situacao"));
 			documentos.add(jsonDocumento);
 		};

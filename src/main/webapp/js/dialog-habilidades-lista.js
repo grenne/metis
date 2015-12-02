@@ -3,20 +3,22 @@
 $(document).ready(function() {
     executaLogin(localStorage.urlServidor, localStorage.cpfUsuario, localStorage.senha);
 	var url   = window.location.search.replace();
-	var tipoLista = url.split("?")[1];
+	var parametrosUrl = url.split("?")[1];
+	var id = parametrosUrl.split("&")[0];
+	var modelo = parametrosUrl.split("&")[1];
 	$(function() {
 		$.ajax({
-			url : "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/lista?tipoLista=" + tipoLista,
+			url : "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/lista?modelo=" + modelo,
 			contentType : "application/json; charset=utf-8",
 			dataType : 'json',
 			success : function(data) {
 				var dados = JSON.stringify(data);
-				console.log ("dados:" + dados);
-				$.each(data, function(i, skills) {
-					var obj = JSON.stringify(skills);
-					var id = skills._id;
+//				console.log ("dados:" + dados);
+				$.each(data, function(i, habilidades) {
+					var obj = JSON.stringify(habilidades);
+					var id = habilidades._id;
 					console.log ("item:" + obj);
-					montaLinha(i, skills, id);
+					montaLinha(i, habilidades, id);
 				});
 				inicializaWindow();
 				$('ul').listview('refresh');
@@ -27,22 +29,22 @@ $(document).ready(function() {
 
 });
 
-function montaLinha(i, skills, id, nextPage) {
-	var labelId = skills.label.replace( /\s/g, '' ) + "-" + i;
+function montaLinha(i, habilidades, id) {
+	console.log ("habilidades - " + habilidades);
 	var linha = 
         '<li class="ui-body">' +
-	    	'<a id="item-' + labelId + '"href="#" rel="external" data-transition="flip">' +
-	    	'<h2  class="ui-bar ui-bar-d ui-corner-all">' + skills.label + '</h2>' +
+	    	'<a id="item-' + i + '"href="#" rel="external" data-transition="flip">' +
+	    	'<h2  class="ui-bar ui-bar-d ui-corner-all">' + habilidades.modelo + '</h2>' +
 			'<div class="ui-body">';
-	if (skills.documento.header != null){
-		$.each(skills.documento.header, function(i, header) {
+	if (habilidades.header != null){
+		$.each(habilidades.documento.header, function(i, header) {
 			console.log ("header - " + header.label + ' : ' + header.valor);
 			linha = linha +
 					'<p>' + header.label + ' : ' + header.valor + '</p>'
 		});
 	};
-	if (skills.documento.panel != null){
-		$.each(skills.documento.panel, function(i, panel) {
+	if (habilidades.documento.panel != null){
+		$.each(habilidades.documento.panel, function(i, panel) {
 			if (panel.fields != null){
 				$.each(panel.fields, function(i, fields) {
 					console.log ("fields - " + fields.label + ' : ' + fields.valor);
@@ -55,9 +57,9 @@ function montaLinha(i, skills, id, nextPage) {
 	linha = linha +	'</a>' +
 					'</li>' +
 					'</div>';
-	$("#table-skills").append(linha);
-    $('#item-' + labelId).bind( "click", function(event, ui) {
-    	incluiSkill (skills.label, id);
+	$("#table-habilidades").append(linha);
+    $('#item-' + i).bind( "click", function(event, ui) {
+    	incluiSkill (habilidades.label, id);
     	document.location.replace("metis.html");
     });
 };
