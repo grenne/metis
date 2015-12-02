@@ -13,7 +13,6 @@ $(document).ready(function() {
 			dataType : 'json',
 			success : function(data) {
 				var dados = JSON.stringify(data);
-//				console.log ("dados:" + dados);
 				$.each(data, function(i, habilidades) {
 					var obj = JSON.stringify(habilidades);
 					var id = habilidades._id;
@@ -30,36 +29,35 @@ $(document).ready(function() {
 });
 
 function montaLinha(i, habilidades, id) {
-	console.log ("habilidades - " + habilidades);
 	var linha = 
         '<li class="ui-body">' +
 	    	'<a id="item-' + i + '"href="#" rel="external" data-transition="flip">' +
-	    	'<h2  class="ui-bar ui-bar-d ui-corner-all">' + habilidades.modelo + '</h2>' +
-			'<div class="ui-body">';
-	if (habilidades.header != null){
+	    	'<h2  class="ui-bar ui-bar-d ui-corner-all">'; 
+	if (habilidades.documento.header != null){
 		$.each(habilidades.documento.header, function(i, header) {
-			console.log ("header - " + header.label + ' : ' + header.valor);
 			linha = linha +
 					'<p>' + header.label + ' : ' + header.valor + '</p>'
 		});
 	};
+	linha = linha +	
+					'</h2>';
+					'<div class="ui-body">';
 	if (habilidades.documento.panel != null){
 		$.each(habilidades.documento.panel, function(i, panel) {
 			if (panel.fields != null){
 				$.each(panel.fields, function(i, fields) {
-					console.log ("fields - " + fields.label + ' : ' + fields.valor);
 					linha = linha +
 							'<p>' + fields.label + ' : ' + fields.valor + '</p>'
 				});	
 			};
 		});	
 	};
-	linha = linha +	'</a>' +
-					'</li>' +
-					'</div>';
+	linha = linha +	
+					'</div>' +
+					'</a>' +
+					'</li>';
 	$("#table-habilidades").append(linha);
     $('#item-' + i).bind( "click", function(event, ui) {
-    	incluiSkill (habilidades.label, id);
     	document.location.replace("metis.html");
     });
 };

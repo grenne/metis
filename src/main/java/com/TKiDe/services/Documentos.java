@@ -78,11 +78,12 @@ public class Documentos {
 			JSONParser parser = new JSONParser(); 
 			BasicDBObject obj = (BasicDBObject) ((Iterator<DBObject>) cursor).next();
 			String documento = obj.getString("documento");
+			System.out.println(documento);
 			jsonObject = (JSONObject) parser.parse(documento);
 			String _id = obj.getString("_id");
 			JSONObject jsonDocumento = new JSONObject();
 			jsonDocumento.put("_id", _id);
-			jsonDocumento.put("documento", jsonObject.get("documento"));
+			jsonDocumento.put("documento", jsonObject);
 			documentos.add(jsonDocumento);
 		};
 		mongo.close();
