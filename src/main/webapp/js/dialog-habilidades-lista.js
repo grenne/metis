@@ -7,8 +7,8 @@ $(document).ready(function() {
 	var idModelo = parametrosUrl.split("&")[0];
 	var modelo = parametrosUrl.split("&")[1];
 	var key = parametrosUrl.split("&")[2];
-	var idDiagrama = parametrosUrl.split("&")[2];
-	var diagrama = parametrosUrl.split("&")[2];
+	var idDiagrama = parametrosUrl.split("&")[3];
+	var diagrama = parametrosUrl.split("&")[4];
 	$(function() {
 		$.ajax({
 			url : "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/lista?modelo=" + modelo,
