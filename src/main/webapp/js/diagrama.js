@@ -283,8 +283,8 @@ function nodeInfo(d) {  // Tooltip info for a node data object
   
   // when a node is double-clicked, add a child to it
   function partCreated(e, obj) {
-  	var node = e.diagram.selection.first();
-  	montaModeloLista(node.data.id) 
+	var node = e.diagram.selection.first();
+  	montaModeloLista(node.data.key, myDiagram[panel].id, e.diagram.panel) 
   	jQuery("#nodeNewObject").popup( "open" );
   	save(e);
   };
@@ -367,18 +367,18 @@ function updateData(text, field, panel) {
 function save(e) {
 
 	var objJson = JSON.parse(localStorage.getItem("diagrama-" + e.diagram.panel));
-		var objDiagrama = JSON.parse(e.diagram.model.toJson());
-		objJson.documento.diagrama.nodeDataArray = objDiagrama.nodeDataArray;
-		objJson.documento.diagrama.linkDataArray = objDiagrama.linkDataArray;
-		$.ajax({
-			type: "POST",
-	        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/atualizar?id=" + e.diagram.id,
-	        contentType: "application/json; charset=utf-8",
-	        dataType: 'json',
-	        data : JSON.stringify(objJson),
-	        success: function(data) {
-	        }
-		});
+	var objDiagrama = JSON.parse(e.diagram.model.toJson());
+	objJson.documento.diagrama.nodeDataArray = objDiagrama.nodeDataArray;
+	objJson.documento.diagrama.linkDataArray = objDiagrama.linkDataArray;
+	$.ajax({
+		type: "POST",
+	       url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/atualizar",
+	       contentType: "application/json; charset=utf-8",
+	       dataType: 'json',
+	       data : JSON.stringify(objJson),
+	       success: function(data) {
+	       }
+	});
 	myDiagram[panel].isModified = false;
 }
 
@@ -409,13 +409,12 @@ function montaNodeDocumento(id){
 				finalPanel(panelId, panelLabel, i, panel);
 			});
 			inicializaWindow();
-			console.log("entrou monta node documento");
             $("#popupDetalhes").popup( "open" );
         }
 	});
 };
 
-function montaModeloLista(id) {	
+function montaModeloLista(key, idDiagrama, diagrama) {	
 	$(function() {
 		$.ajax({
 			url : "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/modelos?tipoLista=validos",
@@ -424,16 +423,24 @@ function montaModeloLista(id) {
 			success : function(data) {
 				var dados = JSON.stringify(data);
 				$(".linha-modelo").remove();
-				console.log ("monta modelo linhas");
 				$.each(data, function(i, modelos, id) {
 					var obj = JSON.stringify(modelos);
-					var id = modelos._id;
-					console.log ("item:" + obj);
-					montaLinhaModelos(i, modelos, id);
+					var idModelo = modelos._id;
+					montaLinhaModelos(i, modelos, key, idDiagrama, idModelo, diagrama);
 				});
 				inicializaWindow();
 				$('ul').listview('refresh');
 			}
 		});
 	});
+};
+
+function montaLinhaModelos(i, modelos, key, idDiagrama, idModelo, diagrama) {
+	var linha = '' + 
+				'<li class="ui-body linha-modelo">' +
+					'<a id="item-' + i + '"href="dialog-habilidades-lista.html?' + idModelo + '&' + modelos.modelo + '&' + key + '&' + idDiagrama + '&' + diagrama + '" rel="external" data-transition="flip">' +
+					'<h2>' + modelos.modelo + '</h2>' +
+					'</a></li>';
+					
+	$("#tabela-modelos").append(linha);
 };
