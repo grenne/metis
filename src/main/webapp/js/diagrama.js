@@ -270,7 +270,8 @@ function nodeInfo(d) {  // Tooltip info for a node data object
   // when a node is double-clicked, add a child to it
   function nodeDoubleClick(e, obj) {
   	var node = e.diagram.selection.first();
-  	montaNodeDocumento(e, node.data.id, "8080/metis/rest/documento/atualizar");
+  	localStorage.setItem("diagrama-" + e.diagram.id, e.diagram.model.toJson());
+  	montaNodeDocumento(e, node.data.id, "8080/metis/rest/documento/atualizar", node.data.key, e.diagram.id, e.diagram.panel);
 //      var clicked = obj.part;
 //      if (clicked !== null) {
 //        var thisemp = clicked.data;
@@ -387,7 +388,7 @@ function load() {
 }
 
 
-function montaNodeDocumento(e, id, acao){
+function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
 	$('.cabecalho').remove();
 	$('.painel').remove();
 	
@@ -400,15 +401,15 @@ function montaNodeDocumento(e, id, acao){
     		montaCabecalho(data.documento.header, id, "false", "");
 			var heightCabecalho = $("#cabecalho-detalhes").height();
 			var panelLabelList = [];
-			$.each(data.documento.panel, function(i, panel){
-				var panelId = panel.label.replace( /\s/g, '' ) + i;
-				var panelLabel = panel.label;
-				panelLabelList[i] = panel.label;
-				inicioPanel(panelId, panelLabel, i, panel);
-				$.each(panel.fields, function(z, item){
+			$.each(data.documento.panel, function(i, panelDocumento){
+				var panelId = panelDocumento.label.replace( /\s/g, '' ) + i;
+				var panelLabel = panelDocumento.label;
+				panelLabelList[i] = panelDocumento.label;
+				inicioPanel(panelId, panelLabel, i, panelDocumento);
+				$.each(panelDocumento.fields, function(z, item){
 					montaCampos(i, panelId, z, item, "detalhes", id, "false", "");
 				});
-				finalPanel(panelId, panelLabel, i, panel);
+				finalPanel(panelId, panelLabel, i, panelDocumento);
 			});
 			inicializaWindow();
             $("#popupDetalhes").popup( "open" );
@@ -440,9 +441,12 @@ function montaNodeDocumento(e, id, acao){
     	   console.log ("inclusão diagrama saiu por fail");
        	  })
        	.always(function(data) {
-    	   incluiSkill ($("#nomePainel" ).val(), data.responseText);
+       		incluiSkill ($("#nomePainel" ).val(), data.responseText);
+       		atualizaNode(data.responseText, key, idDiagrama, panel, objJson.documento.header[0].valor, objJson.documento.header[1].valor);
           });
 		$("#popupDetalhes" ).popup( "close" );
+		setTimeout('history.go()',1000);
+		windows.location.reload();
 	});	
 };
 
@@ -474,7 +478,7 @@ function montaLinhaModelos(i, modelos, key, idDiagrama, idModelo, panel) {
 					'<h2>' + modelos.modelo + '</h2>' +
 					'</li>';
     $('#nova_habilidade-' + i).bind( "click", function(event, ui) {
-    	montaNodeDocumento(idModelo, "8080/metis/rest/documento/incluir");
+    	montaNodeDocumento(idModelo, "8080/metis/rest/documento/incluir", key, idDiagrama, panel);
     });
 					
 	$("#tabela-modelos").append(linha);

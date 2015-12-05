@@ -144,7 +144,7 @@ public class Documentos {
 	@Path("/atualizar")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response AtualizarDocumento(Document doc) throws MongoException, JsonParseException, JsonMappingException, IOException {
+	public String AtualizarDocumento(Document doc) throws MongoException, JsonParseException, JsonMappingException, IOException {
 		ObjectId _id = new ObjectId(doc.documento.id.toString());
 		Mongo mongo = new Mongo();
 		DB db = (DB) mongo.getDB("documento");
@@ -166,7 +166,7 @@ public class Documentos {
                 true,
                 false);
 		mongo.close();
-		return Response.status(200).entity(doc).build();
+		return cursor.get("_id").toString();
 	};
 
 	@Path("/incluir")

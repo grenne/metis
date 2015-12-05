@@ -6,7 +6,7 @@ $(document).ready(function() {
 	var nextPage = url.split("?")[1];
 	$(function() {
 		$.ajax({
-			url : "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/modelos?tipoLista=todas",
+			url : "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/modelos?tipoLista=validos",
 			contentType : "application/json; charset=utf-8",
 			dataType : 'json',
 			success : function(data) {
