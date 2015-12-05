@@ -14,8 +14,8 @@ function montaBarHeader(urlBack) {
 };
 
 function inicioPanel(panelId, panelLabel, i, panel, id, manutencao, inputDisabled) {
-	var heightDetalhes = $(window).height() - 135 - $("#cabecalho-detalhes").height();
-	var montaScroll = 'style="overflow: scroll; width: 200px; height:' + heightDetalhes + 'px;"';
+	var heightDetalhes = $(window).height() - 300 - $("#cabecalho-detalhes").height();
+	var montaScroll = 'style="overflow: scroll;  height:' + heightDetalhes + 'px;"';
 	console.log ("height detalhes:" + heightDetalhes);
 	var linha = ''; 
 	linha = linha +
@@ -48,15 +48,18 @@ function inicioPanel(panelId, panelLabel, i, panel, id, manutencao, inputDisable
     		objJson.documento.id = id;
     		$.ajax({
     			type: "POST",
-                url: "http://" + localStorage.urlServidor + ":8080/vistorias/rest/documento/atualizar",
+                url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/atualizar",
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
+                asybc : false,
                 data : JSON.stringify(objJson),
                 success: function(data) {
-                	console.log ("terminou atualização id:" + id + " data:" + data);
-            		window.location.reload();
+                	console.log ("terminou atualiza painel id:" + id + " data:" + data);
                 }
     		});
+        	$("#popupIncluiPainel" ).popup( "close" );
+        	setTimeout('history.go()',1000);
+    		window.location.reload();
     	});	
     });
 
@@ -70,15 +73,18 @@ function inicioPanel(panelId, panelLabel, i, panel, id, manutencao, inputDisable
     		objJson.documento.id = id;
     		$.ajax({
     			type: "POST",
-                url: "http://" + localStorage.urlServidor + ":8080/vistorias/rest/documento/atualizar",
+                url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/atualizar",
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
+                asybc : false,
                 data : JSON.stringify(objJson),
                 success: function(data) {
                 	console.log ("terminou atualização id:" + id + " data:" + data);
-            		window.location.reload();
                 }
     		});
+        	$("#popupIncluiPainel" ).popup( "close" );
+        	setTimeout('history.go()',1000);
+    		window.location.reload();
     	});	
     });
     
@@ -91,17 +97,18 @@ function inicioPanel(panelId, panelLabel, i, panel, id, manutencao, inputDisable
 		objJson.documento.id = id;
 		$.ajax({
 			type: "POST",
-            url: "http://" + localStorage.urlServidor + ":8080/vistorias/rest/documento/atualizar",
+            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/atualizar",
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
+            asybc : false,
             data : JSON.stringify(objJson),
             success: function(data) {
             	console.log ("terminou atualização id:" + id + " data:" + data);
-        		window.location.reload();
             }
 		});
-    });
-	
+		setTimeout('history.go()',1000);
+		window.location.reload();
+    });	
 };
 
 function montaCabecalho(header, id, manutencao, inputDisabled ) {
@@ -371,7 +378,7 @@ function montaCampos(i, panelId, z, item, origem, id, manutencao, inputDisabled)
 			}else{
 				obj.documento.header.splice(i+1, 0, new_field);
 				i++;
-			}
+			};
 	        localStorage.setItem("dadosSaved", JSON.stringify(obj));   
 	        salvaConteudo(i, z, "nomeCampo", origem, id);
 	    });
@@ -387,15 +394,17 @@ function montaCampos(i, panelId, z, item, origem, id, manutencao, inputDisabled)
 			objJson.documento.id = id;
 			$.ajax({
 				type: "POST",
-	            url: "http://" + localStorage.urlServidor + ":8080/vistorias/rest/documento/atualizar",
+	            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/atualizar",
 	            contentType: "application/json; charset=utf-8",
 	            dataType: 'json',
+	            asybc : false,
 	            data : JSON.stringify(objJson),
 	            success: function(data) {
-	            	console.log ("terminou atualização id:" + id + " data:" + data);
-	        		window.location.reload();
+	            	console.log ("terminou exclusão id:" + id + " data:" + data);
 	            }
 			});
+			setTimeout('history.go()',1000);
+    		window.location.reload();
 	    });
 	    var tipo = item.modelo;
 	    $('#alterarButton-' + labelId).bind( "click", function(event, ui) {
@@ -453,15 +462,18 @@ function salvaConteudo(i, z, labelId, origem, id) {
 			objJson.documento.id = id;
 			$.ajax({
 				type: "POST",
-	            url: "http://" + localStorage.urlServidor + ":8080/vistorias/rest/documento/atualizar",
+	            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/atualizar",
 	            contentType: "application/json; charset=utf-8",
 	            dataType: 'json',
+	            asybc : false,
 	            data : JSON.stringify(objJson),
 	            success: function(data) {
 	            	console.log ("terminou atualização id:" + id + " data:" + data);
-	        		window.location.reload();
 	            }
 			});
+        	$("#popupIncluiInput" ).popup( "close" );
+        	setTimeout('history.go()',1000);
+    		window.location.reload();
 		});	
 	}else{
 		$("#nomeCampo").unbind("blur");
@@ -497,15 +509,18 @@ function salvaConteudo(i, z, labelId, origem, id) {
 			objJson.documento.id = id;
 			$.ajax({
 				type: "POST",
-	            url: "http://" + localStorage.urlServidor + ":8080/vistorias/rest/documento/atualizar",
+	            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/atualizar",
 	            contentType: "application/json; charset=utf-8",
 	            dataType: 'json',
+	            asybc : false,
 	            data : JSON.stringify(objJson),
 	            success: function(data) {
 	            	console.log ("terminou atualização id:" + id + " data:" + data);
-	        		window.location.reload();
 	            }
 			});
+        	$("#popupIncluiInput" ).popup( "close" );
+        	setTimeout('history.go()',1000);
+    		window.location.reload();
 		});	
 	};
 	// setar acao para botao submit

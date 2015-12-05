@@ -172,7 +172,7 @@ public class Documentos {
 	@Path("/incluir")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response IncluirDocumento(Document doc) throws MongoException, JsonParseException, JsonMappingException, IOException {
+	public String IncluirDocumento(Document doc) throws MongoException, JsonParseException, JsonMappingException, IOException {
 		Mongo mongo = new Mongo();
 		DB db = (DB) mongo.getDB("documento");
 		DBCollection collection = db.getCollection("documentos");
@@ -203,7 +203,8 @@ public class Documentos {
                 true,
                 false);
 		mongo.close();
-		return Response.status(200).entity(doc).build();
+		return insert.get("_id").toString();
+
 	};
 	
 	@Path("/excluir")	

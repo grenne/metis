@@ -39,6 +39,7 @@ $(document).ready(function() {
 	    	$( "#popupIncluiInput" ).popup( "close" );
 		});	
 		$("#cancelaNovoPainel" ).bind( "click", function(event, ui) {
+			$( "#popupIncluiInput" ).popup( "close" );
 			window.location.reload();
 		});	
 

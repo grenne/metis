@@ -270,7 +270,7 @@ function nodeInfo(d) {  // Tooltip info for a node data object
   // when a node is double-clicked, add a child to it
   function nodeDoubleClick(e, obj) {
   	var node = e.diagram.selection.first();
-  	montaNodeDocumento(node.data.id);
+  	montaNodeDocumento(e, node.data.id, "8080/metis/rest/documento/atualizar");
 //      var clicked = obj.part;
 //      if (clicked !== null) {
 //        var thisemp = clicked.data;
@@ -284,7 +284,8 @@ function nodeInfo(d) {  // Tooltip info for a node data object
   // when a node is double-clicked, add a child to it
   function partCreated(e, obj) {
 	var node = e.diagram.selection.first();
-  	montaModeloLista(node.data.key, myDiagram[panel].id, e.diagram.panel) 
+	localStorage.setItem("diagrama-" + e.diagram.id, e.diagram.model.toJson());
+  	montaModeloLista(node.data.key, e.diagram.id, e.diagram.panel); 
   	jQuery("#nodeNewObject").popup( "open" );
   	save(e);
   };
@@ -386,16 +387,17 @@ function load() {
 }
 
 
-function montaNodeDocumento(id){
+function montaNodeDocumento(e, id, acao){
 	$('.cabecalho').remove();
 	$('.painel').remove();
+	
 	$.ajax({
         url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/obter?id=" + id,
         contentType: "application/json; charset=utf-8",
         dataType: 'json',
         success: function(data) {
             localStorage.setItem("dadosSaved", JSON.stringify(data));
-    		montaCabecalho(data.documento.header, id, "false", "disabled");
+    		montaCabecalho(data.documento.header, id, "false", "");
 			var heightCabecalho = $("#cabecalho-detalhes").height();
 			var panelLabelList = [];
 			$.each(data.documento.panel, function(i, panel){
@@ -412,9 +414,39 @@ function montaNodeDocumento(id){
             $("#popupDetalhes").popup( "open" );
         }
 	});
+	// setar acao para botao submit
+	$( ".submitButton" ).unbind( "click");
+	$( ".submitButton" ).bind( "click", function(event, ui) {
+		var dataSaved = localStorage.getItem("dadosSaved");
+		var objJson = JSON.parse(dataSaved);
+		objJson.documento.id = id;
+		objJson.documento.usuarioAtual = localStorage.cpfUsuario;
+		objJson.documento.tipo = "dados";
+		objJson.documento.situacao = "ativo";
+		objJson.documento.usuarios[0].codigo = localStorage.cpfUsuario;
+		console.log (dataSaved);
+		console.log (JSON.stringify(objJson));
+		$.ajax({
+			type: "POST",
+            url: "http://" + localStorage.urlServidor + ":" + acao,
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data : JSON.stringify(objJson)
+		})
+	  	.done(function( data ) {
+		  console.log ("inclusão diagrama saiu por done");
+        	})
+        .fail(function(data) {
+    	   console.log ("inclusão diagrama saiu por fail");
+       	  })
+       	.always(function(data) {
+    	   incluiSkill ($("#nomePainel" ).val(), data.responseText);
+          });
+		$("#popupDetalhes" ).popup( "close" );
+	});	
 };
 
-function montaModeloLista(key, idDiagrama, diagrama) {	
+function montaModeloLista(key, idDiagrama, panel) {	
 	$(function() {
 		$.ajax({
 			url : "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/modelos?tipoLista=validos",
@@ -426,7 +458,7 @@ function montaModeloLista(key, idDiagrama, diagrama) {
 				$.each(data, function(i, modelos, id) {
 					var obj = JSON.stringify(modelos);
 					var idModelo = modelos._id;
-					montaLinhaModelos(i, modelos, key, idDiagrama, idModelo, diagrama);
+					montaLinhaModelos(i, modelos, key, idDiagrama, idModelo, panel);
 				});
 				inicializaWindow();
 				$('ul').listview('refresh');
@@ -435,12 +467,15 @@ function montaModeloLista(key, idDiagrama, diagrama) {
 	});
 };
 
-function montaLinhaModelos(i, modelos, key, idDiagrama, idModelo, diagrama) {
+function montaLinhaModelos(i, modelos, key, idDiagrama, idModelo, panel) {
 	var linha = '' + 
 				'<li class="ui-body linha-modelo">' +
-					'<a id="item-' + i + '"href="dialog-habilidades-lista.html?' + idModelo + '&' + modelos.modelo + '&' + key + '&' + idDiagrama + '&' + diagrama + '" rel="external" data-transition="flip">' +
+					'<a id="item-' + i + '"href="dialog-habilidades-lista.html?' + idModelo + '&' + modelos.modelo + '&' + key + '&' + idDiagrama + '&' + panel + '" rel="external" data-transition="flip">' +
 					'<h2>' + modelos.modelo + '</h2>' +
-					'</a></li>';
+					'</li>';
+    $('#nova_habilidade-' + i).bind( "click", function(event, ui) {
+    	montaNodeDocumento(idModelo, "8080/metis/rest/documento/incluir");
+    });
 					
 	$("#tabela-modelos").append(linha);
 };

@@ -74,7 +74,6 @@ public class Diagramas {
 		mapJson = mapper.readValue(jsonDocumento, HashMap.class);
 		JSONObject documento = new JSONObject();
 		documento.putAll(mapJson);
-		System.out.println("atualizou diagrama");
 		BasicDBObject update = new BasicDBObject("$set", new BasicDBObject(documento));
 		BasicDBObject searchQuery = new BasicDBObject("_id",_id);
 		DBObject cursor = collection.findAndModify(searchQuery,
@@ -177,7 +176,6 @@ public class Diagramas {
 			jsonDocumento.put("tipo", jsonObject.get("tipo"));
 			jsonDocumento.put("label", jsonObject.get("label"));
 			String diagrama = jsonObject.get("diagrama").toString();
-			System.out.println("diagrama - " + " - " + diagrama);
 			JSONObject jsonDiagrama;
 			jsonDiagrama = (JSONObject) parser.parse(diagrama);
 			List nodes = (List) jsonDiagrama.get("nodeDataArray");

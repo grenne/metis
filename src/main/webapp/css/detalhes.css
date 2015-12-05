@@ -3,6 +3,10 @@ body {
 	padding-top: 30px !important;
 }
 
+.capitalize 
+{
+    text-transform:capitalize;
+}
 
 .tabela-lista table {
 	display: table !important;
@@ -128,7 +132,7 @@ body {
 		width : 30% !important;
 	}
 	.ui-block-b {
-		width : 70% !important;
+		width : 60% !important;
 	}
 	.labelInput {
 		text-align: right;
@@ -161,7 +165,10 @@ body {
 		max-width : 30em !important;
 	}
 	.ui-block-a {
-		width : 20% !important;
+		width : 30% !important;
+	}
+	.ui-block-b {
+		width : 60% !important;
 	}
 	.labelInput {
 		text-align: right;
