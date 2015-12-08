@@ -73,7 +73,7 @@ function montaLinha(i, habilidades, idDocumento, key, idDiagrama, panel) {
 					'</li>';
 	$("#table-habilidades").append(linha);
     $('#item-' + i).bind( "click", function(event, ui) {
-    	if (habilidades.documento.tipo == "badget"){
+    	if (habilidades.documento.modelo == "Badget"){
     		atualizaGroup(idDocumento, key, idDiagrama, panel, text, color);
     	}else{ 
     		atualizaNode(idDocumento, key, idDiagrama, panel, text, color);

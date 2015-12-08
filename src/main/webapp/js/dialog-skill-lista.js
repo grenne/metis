@@ -11,11 +11,9 @@ $(document).ready(function() {
 			dataType : 'json',
 			success : function(data) {
 				var dados = JSON.stringify(data);
-				console.log ("dados:" + dados);
 				$.each(data, function(i, skills) {
 					var obj = JSON.stringify(skills);
 					var id = skills._id;
-					console.log ("item:" + obj);
 					montaLinha(i, skills, id);
 				});
 				inicializaWindow();
@@ -31,30 +29,38 @@ function montaLinha(i, skills, id, nextPage) {
 	var labelId = skills.label.replace( /\s/g, '' ) + "-" + i;
 	var linha = 
         '<li class="ui-body">' +
-	    	'<a id="item-' + labelId + '"href="#" rel="external" data-transition="flip">' +
-	    	'<h2  class="ui-bar ui-bar-d ui-corner-all">' + skills.label + '</h2>' +
-			'<div class="ui-body">';
+	    	'<a id="item-' + i + '" href="#" rel="external" data-transition="flip">' +
+	    	'<h2  class="ui-bar ui-bar-d ui-corner-all">'; 
 	if (skills.documento.header != null){
 		$.each(skills.documento.header, function(i, header) {
-			console.log ("header - " + header.label + ' : ' + header.valor);
+			if (i == 0){
+				text = header.valor;
+			}else{
+				if (i == 1){
+					color = header.valor;					
+				};
+			};
 			linha = linha +
 					'<p>' + header.label + ' : ' + header.valor + '</p>'
 		});
 	};
+	linha = linha +	
+					'</h2>';
+					'<div class="ui-body">';
 	if (skills.documento.panel != null){
 		$.each(skills.documento.panel, function(i, panel) {
 			if (panel.fields != null){
 				$.each(panel.fields, function(i, fields) {
-					console.log ("fields - " + fields.label + ' : ' + fields.valor);
 					linha = linha +
 							'<p>' + fields.label + ' : ' + fields.valor + '</p>'
 				});	
 			};
 		});	
 	};
-	linha = linha +	'</a>' +
-					'</li>' +
-					'</div>';
+	linha = linha +	
+					'</div>' +
+					'</a>' +
+					'</li>';
 	$("#table-skills").append(linha);
     $('#item-' + labelId).bind( "click", function(event, ui) {
     	incluiSkill (skills.label, id);

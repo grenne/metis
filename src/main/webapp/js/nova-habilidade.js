@@ -57,11 +57,8 @@ $(document).ready(function() {
 		var objJson = JSON.parse(dataSaved);
 		objJson.documento.usuarioAtual = localStorage.cpfUsuario;
 		objJson.documento.tipo = "dados";
-		objJson.documento.situacao = "pendente";
+		objJson.documento.situacao = "ativo";
 		objJson.documento.usuarios[0].codigo = localStorage.cpfUsuario;
-		console.log (dataSaved);
-		console.log (JSON.stringify(objJson));
-		
 		$.ajax({
 			type: "POST",
             url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/incluir",
@@ -78,7 +75,7 @@ $(document).ready(function() {
        	.always(function(data) {
     	   atualizaNode(data.responseText, key, idDiagrama, panel, objJson.documento.header[0].valor, objJson.documento.header[1].valor);
     	   $(window.document.location).attr('href','metis.html');
-          });
+       	});
 	});	
 });
 

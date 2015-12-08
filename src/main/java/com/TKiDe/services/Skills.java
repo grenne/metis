@@ -65,6 +65,7 @@ public class Skills {
 		DBCollection collection = db.getCollection("skills");
 		Gson gson = new Gson();
 		String jsonDocumento = gson.toJson(doc);
+		System.out.println("Atualizar - " + jsonDocumento);
 		Map<String,String> mapJson = new HashMap<String,String>();
 		ObjectMapper mapper = new ObjectMapper();
 		mapJson = mapper.readValue(jsonDocumento, HashMap.class);

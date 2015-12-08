@@ -58,7 +58,7 @@ function inicioPanel(panelId, panelLabel, i, panel, id, manutencao, inputDisable
                 }
     		});
         	$("#popupIncluiPainel" ).popup( "close" );
-        	setTimeout('history.go()',1000);
+        	setTimeout('history.go()',200);
     		window.location.reload();
     	});	
     });
@@ -83,7 +83,7 @@ function inicioPanel(panelId, panelLabel, i, panel, id, manutencao, inputDisable
                 }
     		});
         	$("#popupIncluiPainel" ).popup( "close" );
-        	setTimeout('history.go()',1000);
+        	setTimeout('history.go()',200);
     		window.location.reload();
     	});	
     });
@@ -106,7 +106,7 @@ function inicioPanel(panelId, panelLabel, i, panel, id, manutencao, inputDisable
             	console.log ("terminou atualização id:" + id + " data:" + data);
             }
 		});
-		setTimeout('history.go()',1000);
+		setTimeout('history.go()',200);
 		window.location.reload();
     });	
 };
@@ -403,7 +403,7 @@ function montaCampos(i, panelId, z, item, origem, id, manutencao, inputDisabled)
 	            	console.log ("terminou exclusão id:" + id + " data:" + data);
 	            }
 			});
-			setTimeout('history.go()',1000);
+			setTimeout('history.go()',200);
     		window.location.reload();
 	    });
 	    var tipo = item.modelo;
@@ -472,7 +472,7 @@ function salvaConteudo(i, z, labelId, origem, id) {
 	            }
 			});
         	$("#popupIncluiInput" ).popup( "close" );
-        	setTimeout('history.go()',1000);
+        	setTimeout('history.go()',200);
     		window.location.reload();
 		});	
 	}else{
@@ -519,7 +519,7 @@ function salvaConteudo(i, z, labelId, origem, id) {
 	            }
 			});
         	$("#popupIncluiInput" ).popup( "close" );
-        	setTimeout('history.go()',1000);
+        	setTimeout('history.go()',200);
     		window.location.reload();
 		});	
 	};

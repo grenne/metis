@@ -15,13 +15,13 @@ function incluiSkill(nomeSkill, idDiagrama){
         data : JSON.stringify(objJson),
 	})
 	 .done(function( data ) {
-      	console.log ("inclusão skill saiu por done");
+      	console.log ("inclusão skill saiu por done - " + JSON.stringify(data));
 	  })
      .fail(function(data) {
-  	   console.log ("inclusão skill saiu por fail");
+  	   console.log ("inclusão skill saiu por fail - " + JSON.stringify(data));
      })
      .always(function(data) {
-   	   console.log ("inclusão skill saiu por always");
+   	   console.log ("inclusão skill saiu por always - " + JSON.stringify(data));
      });
 };	
 

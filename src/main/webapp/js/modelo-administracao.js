@@ -40,6 +40,7 @@ $(document).ready(function() {
 		});	
 		$("#cancelaNovoPainel" ).bind( "click", function(event, ui) {
 			$( "#popupIncluiInput" ).popup( "close" );
+			setTimeout('history.go()', 300);
 			window.location.reload();
 		});	
 

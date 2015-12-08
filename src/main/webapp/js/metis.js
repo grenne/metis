@@ -44,36 +44,76 @@ $(document).ready(function() {
 	});
 
 	$( "#confirmaNovoPainel" ).bind( "click", function(event, ui) {
-		var new_diagrama = 
-			'{"documento" :' + 
-				'{' +
-					'"id":"",' +
-					'"tipo":"' + $("#select-tipos-painel").val() + '",' +
-					'"label":"' + $("#nomePainel" ).val() + '",' +
-					'"diagrama":' +
-					'{' +
-						'"nodeDataArray":[{"loc":"50 50","key":"1","text":"' + $("#nomePainel" ).val() + '","color":"lightblue","id":"565c9773a7db84fcf579f9d1", "principal": "true" }]' +
-					'}' +
-					'}' +
-			'}';
-		objJson = JSON.parse(new_diagrama);
 		$.ajax({
-			type: "POST",
-            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/incluir",
+            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/obter/modelo?modelo=" + $("#select-tipos-painel" ).val(),
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
-            data : JSON.stringify(objJson)
+            async:false
 		})
-			  	.done(function( data ) {
-				  console.log ("inclusão diagrama saiu por done");
-	            	})
-	            .fail(function(data) {
-	        	   console.log ("inclusão diagrama saiu por fail");
-	           	  })
-	           	.always(function(data) {
-	        	   incluiSkill ($("#nomePainel" ).val(), data.responseText);
-	        	   window.location.reload(true);
-	              });
+		.done(function( data ) {
+			console.log ("inclusão diagrama saiu por done");
+		})
+		.fail(function(data) {
+			console.log ("inclusão diagrama saiu por fail");
+		})
+		.always(function(data) {
+            localStorage.setItem("dadosSaved", JSON.stringify(data));
+    		var dataSaved = localStorage.getItem("dadosSaved");
+    		var objJson = JSON.parse(dataSaved);
+    		objJson.documento.usuarioAtual = localStorage.cpfUsuario;
+    		objJson.documento.tipo = "dados";
+    		objJson.documento.header[0].valor = $("#nomePainel" ).val();
+    		objJson.documento.situacao = "ativo";
+    		objJson.documento.usuarios[0].codigo = localStorage.cpfUsuario;
+    		$.ajax({
+    			type: "POST",
+                url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/incluir",
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                data : JSON.stringify(objJson)
+    		})
+    	  	.done(function( data ) {
+    		  console.log ("inclusão diagrama saiu por done");
+            	})
+            .fail(function(data) {
+        	   console.log ("inclusão diagrama saiu por fail");
+           	  })
+           	.always(function(data) {
+       			var idDocumento = data.responseText;
+           		var new_diagrama = 
+					'{"documento" :' + 
+						'{' +
+							'"id":"",' +
+							'"tipo":"' + $("#select-tipos-painel").val() + '",' +
+							'"label":"' + $("#nomePainel" ).val() + '",' +
+							'"diagrama":' +
+							'{' +
+								'"nodeDataArray":[{"loc":"50 50","key":"1","text":"' + $("#nomePainel" ).val() + '","color":"' + objJson.documento.header[1].valor + '","id":"' + idDocumento + '", "principal": "true" }]' +
+							'}' +
+							'}' +
+					'}';
+				objJson = JSON.parse(new_diagrama);
+				$.ajax({
+					type: "POST",
+		            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/incluir",
+		            contentType: "application/json; charset=utf-8",
+		            dataType: 'json',
+		            data : JSON.stringify(objJson)
+				})
+				.done(function( data ) {
+					console.log ("inclusão diagrama saiu por done");
+				})
+				.fail(function(data) {
+					console.log ("inclusão diagrama saiu por fail");
+				})
+				.always(function(data) {
+					incluiSkill ($("#nomePainel" ).val(), data.responseText);
+					$("#popupIncluiPainel").popup( "close" );
+					setTimeout('history.go()',200);
+					window.location.reload(true);
+				});
+           	});
+		});
 	});
 	$("#cancelaNovoPainel").bind( "click", function(event, ui) {
     	$("#popupIncluiPainel").popup( "close" );

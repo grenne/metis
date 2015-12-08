@@ -6,7 +6,7 @@ $(document).ready(function() {
 	var nextPage = url.split("?")[1];
 	$(function() {
 		$.ajax({
-			url : "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/modelos?tipoLista=validos",
+			url : "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/modelos?tipoLista=todos",
 			contentType : "application/json; charset=utf-8",
 			dataType : 'json',
 			success : function(data) {
@@ -43,11 +43,7 @@ $(document).ready(function() {
     						'"panel": [{"modelo" : "swipe", "label" : "novo", "fields" : [{"modelo" : "", "label" : "", "valor" : ""}]}]' +
     						'}' +
     						'}';
-
     		objJson = JSON.parse(new_modelo);
-
-    		console.log (JSON.stringify(objJson));
-    		
     		$.ajax({
     			type: "POST",
                 url: "http://" + localStorage.urlServidor + ":8080/vistorias/rest/documento/incluir",
@@ -55,6 +51,8 @@ $(document).ready(function() {
                 dataType: 'json',
                 data : JSON.stringify(objJson),
                 success: function(data) {
+                	$( "#popupIncluiModelo" ).popup( "close" );
+                	setTimeout('history.go()', 300);
                 	window.location.reload();
                 }
     		});
@@ -74,8 +72,13 @@ function montaLinha(i, modelos, id, nextPage) {
         '<li class="ui-body ui-body-b">' +
 			'<fieldset class="ui-grid-b">' +
 		    	'<a href="' + nextPage + '?id=' + id + '" rel="external" data-transition="flip" class="ui-block-a">' +
-		    	'<h2>' + modelos.modelo + '</h2>' +
-		    	'<p>' + modelos.situacao + '</p></a>' + 			
+		    	'<h2>' + modelos.modelo + '</h2>';
+	var situacao = "Disponível para uso de perfil";
+	if (modelos.situacao == "inativo"){
+		situacao = "Não disponivel para uso de perfil"
+	};
+	linha = linha +
+		    	'<p>' + situacao + '</p></a>' + 			
 				'<a id="alterarNomeButton-' + labelId + '-' + i + '" data-role="button" data-inline="true" data-theme="a" data-icon="gear" data-mini="true" class="ui-block-b line-button" style="float:right">Alterar Nome</a>' +
 				'<a id="excluirButton-' + labelId + '-' + i + '" data-role="button" data-inline="true" data-theme="a" data-icon="delete" data-mini="true" class="ui-block-c line-button" style="float:right">Exclui</a>' +
             '</fieldset>' +
@@ -100,7 +103,8 @@ function montaLinha(i, modelos, id, nextPage) {
     	   console.log ("exclusão modelo saiu por fail");
        	  })
        	.always(function(data) {
-    	   window.location.reload(true);
+       		setTimeout('history.go()', 300);
+       		window.location.reload(true);
           });
     });
     $('#alterarNomeButton-' + labelId + '-' + i).bind( "click", function(event, ui) {
@@ -117,7 +121,8 @@ function montaLinha(i, modelos, id, nextPage) {
                 dataType: 'json',
                 data : JSON.stringify(objJson),
                 success: function(data) {
-                	console.log ("terminou atualização id:" + id + " data:" + data);
+                	$( "#popupIncluiModelo" ).popup( "close" );
+                	setTimeout('history.go()', 300);
             		window.location.reload();
                 }
     		});
