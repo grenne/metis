@@ -62,7 +62,7 @@ function montaLinha(i, skills, id, nextPage) {
 					'</a>' +
 					'</li>';
 	$("#table-skills").append(linha);
-    $('#item-' + labelId).bind( "click", function(event, ui) {
+    $('#item-' + i).bind( "click", function(event, ui) {
     	incluiSkill (skills.label, id);
     	document.location.replace("metis.html");
     });
