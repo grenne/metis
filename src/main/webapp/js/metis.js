@@ -118,4 +118,17 @@ $(document).ready(function() {
 	$("#cancelaNovoPainel").bind( "click", function(event, ui) {
     	$("#popupIncluiPainel").popup( "close" );
 	});
+	$("#volta-documento").bind( "click", function(event, ui) {
+    	$("#popupDetalhes").popup( "close" );
+	});
+	$("#volta-inlcui-painel").bind( "click", function(event, ui) {
+    	$("#popupIncluiPainel").popup( "close" );
+	});
+	$("#volta-carreira").bind( "click", function(event, ui) {
+    	$("#nodePropertiesCarreira").popup( "close" );
+	});
+	$("#volta-modelos").bind( "click", function(event, ui) {
+    	$("#nodeNewObject").popup( "close" );
+		window.location.reload(true);
+	});
 });

@@ -26,6 +26,10 @@ $(document).ready(function() {
 			}
 		});
 	});
+	$("#volta-skills").bind( "click", function(event, ui) {
+    	document.location.replace("metis.html");
+    });
+
 
 
 });

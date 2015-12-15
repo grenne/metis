@@ -251,6 +251,11 @@ function init(diagrama, panelReceive, idReceive) {
         async: false,
         success: function(data) {
         	localStorage.setItem("diagrama-" + panel, JSON.stringify(data));
+        	jQuery.each(data.documento.diagrama.nodeDataArray, function(i, node) {
+        		if (node.text == "") {
+        			data.documento.diagrama.nodeDataArray.splice(i, 1);			
+        		}
+        	});
         	myDiagram[panel].model = new go.GraphLinksModel(data.documento.diagrama.nodeDataArray, data.documento.diagrama.linkDataArray);
         }
 	});
@@ -370,6 +375,12 @@ function save(e) {
 
 	var objJson = JSON.parse(localStorage.getItem("diagrama-" + e.diagram.panel));
 	var objDiagrama = JSON.parse(e.diagram.model.toJson());
+	$.each(objJson.documento.diagrama.nodeDataArray, function(i, node) {
+		if (node.text == "") {
+			objJson.documento.diagrama.nodeDataArray.splice(i, 1);			
+		}
+	});
+	
 	objJson.documento.diagrama.nodeDataArray = objDiagrama.nodeDataArray;
 	objJson.documento.diagrama.linkDataArray = objDiagrama.linkDataArray;
 	$.ajax({
@@ -381,6 +392,7 @@ function save(e) {
 	       success: function(data) {
 	       }
 	});
+	
 	myDiagram[panel].isModified = false;
 }
 

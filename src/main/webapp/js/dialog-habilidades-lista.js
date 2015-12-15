@@ -30,8 +30,9 @@ $(document).ready(function() {
 			}
 		});
 	});
-
-
+	$("#volta-habilidades").bind( "click", function(event, ui) {
+    	document.location.replace("metis.html");
+    });
 });
 
 function montaLinha(i, habilidades, idDocumento, key, idDiagrama, panel) {
