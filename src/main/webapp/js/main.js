@@ -104,11 +104,11 @@ function colocaPainelEsquerda() {
                 	'href="#popupIncluiPainel" data-rel="popup"'	 +  
                     'data-transition="flip">Novo Skill</a></li>' +
                 '<li><a ' +
-                    'href="dialog-skill-lista.html?Carreira"' +
+                    'href="dialog-skill-lista.html?Carreira&diagrama&0"' +
                     'rel="external"' +
                     'data-transition="flip">Carreiras</a></li>' +
                 '<li><a ' +
-                	'href="dialog-skill-lista.html?Badget"' +
+                	'href="dialog-skill-lista.html?Badget&diagrama&0"' +
                     'rel="external"' +
                     'data-transition="flip">Badgets</a></li>' +
                 '<li><a ' +

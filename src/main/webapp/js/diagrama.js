@@ -387,7 +387,6 @@ function save(e) {
 function load() {
 }
 
-
 function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
 	$('.cabecalho').remove();
 	$('.painel').remove();
@@ -471,18 +470,16 @@ function montaModeloLista(key, idDiagrama, panel) {
 	});
 };
 
-
-
 function montaLinhaModelos(i, modelos, key, idDiagrama, idModelo, panel) {
 	var linha = '' + 
 				'<li class="ui-body linha-modelo">';
 	
 	if (modelos.modelo == "Badget"){
 		linha = linha +
-					'<a id="item-' + i + '"href="dialog-skill-lista.html?carreira" rel="external" data-transition="flip">'
+					'<a id="item-' + i + '"href="dialog-skill-lista.html?Badget&group' + '&' + idDiagrama + '&' + panel + '&' + key + '&' +'" rel="external" data-transition="flip" data-close-btn-text="Cancel">'
 	}else {
 		linha = linha +
-					'<a id="item-' + i + '"href="dialog-habilidades-lista.html?' + idModelo + '&' + modelos.modelo + '&' + key + '&' + idDiagrama + '&' + panel + '" rel="external" data-transition="flip">'
+					'<a id="item-' + i + '"href="dialog-habilidades-lista.html?' + idModelo + '&' + modelos.modelo + '&' + key + '&' + idDiagrama + '&' + panel + '" rel="external" data-transition="flip" data-close-btn-text="Cancel">'
 	};
 	linha = linha +
 			'<h2>' + modelos.modelo + '</h2>' +
@@ -493,3 +490,54 @@ function montaLinhaModelos(i, modelos, key, idDiagrama, idModelo, panel) {
 					
 	$("#tabela-modelos").append(linha);
 };
+
+function incluiGroup (label, id, idDiagramaOriginal, panel, key) {
+    // Create the Diagram's Model:
+	jQuery.ajax({
+        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/obter?id=" + id,
+        contentType: "application/json; charset=utf-8",
+        dataType: 'json',
+        async: false,
+        success: function(dataNovo) {
+        	jQuery.ajax({
+                url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/obter?id=" + idDiagramaOriginal,
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                async: false,
+                success: function(dataOriginal) {
+                	var keyGroup = 0;
+                	var label = dataNovo.documento.label.replace( /\s/g, '' ) + "-";
+//                	var nodeGroup = JSON.parse('{"key":"' + label + keyGroup + '","text":"' + dataNovo.documento.label + '","color":"blue","isGroup":"true"}');
+    				$.each(dataOriginal.documento.diagrama.nodeDataArray, function(i, nodeOriginal, id, key) {
+    					if (nodeOriginal.text == ""){
+    						nodeOriginal.key = label + keyGroup;
+    						nodeOriginal.text = dataNovo.documento.label;
+    						nodeOriginal.color = "blue";
+    						nodeOriginal.isGroup = "true"; 
+    					};
+    				});
+    				$.each(dataNovo.documento.diagrama.nodeDataArray, function(i, nodeNovo, id) {
+                    	var node = JSON.parse('{"key":"' + label + nodeNovo.key + '","text":"' + nodeNovo.text + '","color":"' + nodeNovo.color + '","group":"' + label + keyGroup + '","id":"' + nodeNovo.id + '"}');
+                    	dataOriginal.documento.diagrama.nodeDataArray.push(node);
+    				});
+    				$.each(dataNovo.documento.diagrama.linkDataArray, function(i, linkNovo, id) {
+                    	var link = JSON.parse('{"from":"' + label + linkNovo.from + '","to":"' +  label + linkNovo.to + '"}');
+                    	dataOriginal.documento.diagrama.linkDataArray.push(link);
+    				});                	
+                	console.log ("badget" + JSON.stringify(dataNovo.documento.diagrama.nodeDataArray));
+                	console.log ("original" + JSON.stringify(dataOriginal.documento.diagrama.nodeDataArray));
+                	$.ajax({
+                		type: "POST",
+                	       url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/atualizar",
+                	       contentType: "application/json; charset=utf-8",
+                	       dataType: 'json',
+                	       data : JSON.stringify(dataOriginal),
+                	       success: function(data) {
+                	       }
+                	});
+                }
+        	});
+        }
+	});
+	
+}

@@ -1,7 +1,6 @@
 /**
  * 
  */
-
 		
 function incluiSkill(nomeSkill, idDiagrama){
 	var objJson = JSON.parse(localStorage.getItem("skills"));
@@ -24,7 +23,6 @@ function incluiSkill(nomeSkill, idDiagrama){
     	 console.log ("inclusão skill saiu por always - " + JSON.stringify(data));
      });
 };	
-
 
 function inicioPanel(panelId, panelLabel, i, panel, id, manutencao, inputDisabled) {
 	var heightDetalhes = $(window).height() - 135 - $("#cabecalho-detalhes").height();

@@ -2,8 +2,13 @@
 
 $(document).ready(function() {
     executaLogin(localStorage.urlServidor, localStorage.cpfUsuario, localStorage.senha);
-	var url   = window.location.search.replace();
-	var tipoLista = url.split("?")[1];
+    var url   = window.location.search.replace();
+	var parametrosUrl = url.split("?")[1];
+	var tipoLista = parametrosUrl.split("&")[0];    
+	var tipoAcao = parametrosUrl.split("&")[1];
+	var idDiagramaOriginal = parametrosUrl.split("&")[2];
+	var panel = parametrosUrl.split("&")[3];
+	var key = parametrosUrl.split("&")[4];
 	$(function() {
 		$.ajax({
 			url : "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/lista?tipoLista=" + tipoLista,
@@ -14,7 +19,7 @@ $(document).ready(function() {
 				$.each(data, function(i, skills) {
 					var obj = JSON.stringify(skills);
 					var id = skills._id;
-					montaLinha(i, skills, id);
+					montaLinha(i, skills, id, idDiagramaOriginal, panel, tipoAcao, key);
 				});
 				inicializaWindow();
 				$('ul').listview('refresh');
@@ -25,7 +30,7 @@ $(document).ready(function() {
 
 });
 
-function montaLinha(i, skills, id, nextPage) {
+function montaLinha(i, skills, id, idDiagramaOriginal, panel, tipoAcao, key) {
 	var labelId = skills.label.replace( /\s/g, '' ) + "-" + i;
 	var linha = 
         '<li class="ui-body">' +
@@ -63,7 +68,11 @@ function montaLinha(i, skills, id, nextPage) {
 					'</li>';
 	$("#table-skills").append(linha);
     $('#item-' + i).bind( "click", function(event, ui) {
-    	incluiSkill (skills.label, id);
+    	if (tipoAcao == "group") {
+    		incluiGroup (skills.label, id, idDiagramaOriginal, panel, key);
+    	}else{
+    		incluiSkill (skills.label, id);
+    	};
     	document.location.replace("metis.html");
     });
 };
