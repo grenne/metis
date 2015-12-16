@@ -3,7 +3,7 @@
  */
 
 
-function init(diagrama, panelReceive, idReceive) {
+function init(diagrama, panelReceive, idReceive, diagramaDesc) {
 
 	id = idReceive;
 	panel = panelReceive;
@@ -246,24 +246,29 @@ function init(diagrama, panelReceive, idReceive) {
                      function(o) { return o.diagram.commandHandler.canRedo(); })
       );
     // Create the Diagram's Model:
-	jQuery.ajax({
-        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/obter?id=" + id,
-        contentType: "application/json; charset=utf-8",
-        dataType: 'json',
-        async: false,
-        success: function(data) {
-        	localStorage.setItem("diagrama-" + panel, JSON.stringify(data));
-        	var i = 0;
-        	while (i < data.documento.diagrama.nodeDataArray.length) {
-        		if (data.documento.diagrama.nodeDataArray[i].text == "") {
-        			data.documento.diagrama.nodeDataArray.splice(i, 1);	
-        			i = i - 1;
-        		};
-        		i++;
-        	};
-        	myDiagram[panel].model = new go.GraphLinksModel(data.documento.diagrama.nodeDataArray, data.documento.diagrama.linkDataArray);
-       }
-	});
+
+   if (diagramaDesc){
+	   myDiagram[panel].model = new go.GraphLinksModel(diagramaDesc.documento.diagrama.nodeDataArray, diagramaDesc.documento.diagrama.linkDataArray);
+   }else{
+	   jQuery.ajax({
+	        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/obter?id=" + id,
+	        contentType: "application/json; charset=utf-8",
+	        dataType: 'json',
+	        async: false,
+	        success: function(data) {
+	        	localStorage.setItem("diagrama-" + panel, JSON.stringify(data));
+	        	var i = 0;
+	        	while (i < data.documento.diagrama.nodeDataArray.length) {
+	        		if (data.documento.diagrama.nodeDataArray[i].text == "") {
+	        			data.documento.diagrama.nodeDataArray.splice(i, 1);	
+	        			i = i - 1;
+	        		};
+	        		i++;
+	        	};
+	        	myDiagram[panel].model = new go.GraphLinksModel(data.documento.diagrama.nodeDataArray, data.documento.diagrama.linkDataArray);
+	       }
+		});
+   };
 }
 
 

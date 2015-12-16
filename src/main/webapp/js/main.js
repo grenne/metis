@@ -104,6 +104,9 @@ function colocaPainelEsquerda() {
                 	'href="#popupIncluiPainel" data-rel="popup"'	 +  
                     'data-transition="flip">Novo Skill</a></li>' +
                 '<li><a ' +
+                	'href="#popupSkillsCompara" data-rel="popup"'	 +  
+                    'data-transition="flip">Compara skill</a></li>' +
+                '<li><a ' +
                     'href="dialog-skill-lista.html?Carreira&diagrama&0"' +
                     'rel="external"' +
                     'data-transition="flip">Carreiras</a></li>' +

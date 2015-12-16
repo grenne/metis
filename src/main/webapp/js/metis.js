@@ -36,9 +36,12 @@ $(document).ready(function() {
 					var panelId = panel.tipo.replace( /\s/g, '' ) + i;
 					var panelLabel = panel.label;
 					var id = panel.id;
-					panelLabelList[i] = panel.label;
+					if (i != 0 ){
+						montaComparacao(panelId, panelLabel, i, panel, id, panelLabelList);
+					};
 					init("myDiagram-" + panelId, i, id )
 				});
+				$('ul').listview('refresh');
 	        	var panel = localStorage.getItem("panel");
 	        	var i = 0;
 	        	while (i < panel) {
@@ -145,3 +148,56 @@ $(document).ready(function() {
 		}
 	});
 });
+
+	function montaComparacao(panelId, panelLabel, i, panel, id, panelLabelList) {
+		var linha = '' + 
+					'<li class="ui-body linha-compara">';
+		
+		linha = linha +
+				'<a id="itemCompara-' + i + '" data-transition="flip" data-close-btn-text="Cancel">';
+		linha = linha +
+				'<h2>' + panelLabel + '</h2>' +
+				'</li>';
+		$("#tabela-compara").append(linha);
+		$( "#itemCompara-" + i ).bind( "click", function(event, ui) {
+			var objJsonComparar = JSON.parse(localStorage.getItem("diagrama-" + i));
+			var objJsonOriginal = JSON.parse(localStorage.getItem("diagrama-0"));
+			$.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
+				$.each(objJsonComparar.documento.diagrama.nodeDataArray, function(j, nodeComparar){
+					objJsonComparar.documento.diagrama.nodeDataArray[j].color = "aqua";
+					if (nodeOriginal.id == nodeComparar.id) {
+						objJsonComparar.documento.diagrama.nodeDataArray[j].color = "azure";		
+					};
+				});
+			});
+			var n = $( ".swipe .dragme" ).length; 
+//			var panelId = objJsonOriginal.documento.tipo.replace( /\s/g, '' ) + "-" + objJsonComparar.documento.tipo.replace( /\s/g, '' ) + n;
+//			var panelLabel = objJsonComparar.documento.label + " x " + objJsonOriginal.documento.label;
+//			panelLabelList[n] = objJsonComparar.documento.label + " x " + objJsonOriginal.documento.label;
+//			montaPanel(panelId, panelLabel, n, panel, id);
+//		    iniciaSnapper();
+//		    iniciaAcoes(panelLabelList);        
+//			init("myDiagram-" + panelId, n, id, objJsonComparar);
+			$.ajax({
+				type: "POST",
+	            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/incluir",
+	            contentType: "application/json; charset=utf-8",
+	            dataType: 'json',
+	            data : JSON.stringify(objJsonComparar)
+			})
+			.done(function( data ) {
+				console.log ("inclusão diagrama saiu por done");
+			})
+			.fail(function(data) {
+				console.log ("inclusão diagrama saiu por fail");
+			})
+			.always(function(data) {
+				incluiSkill (objJsonComparar.documento.label + " x " + objJsonOriginal.documento.label, data.responseText);
+				$("#popupSkillsCompara").popup( "close" );
+				localStorage.setItem("panel", n);
+				setTimeout('history.go()',200);
+				window.location.reload(true);
+			});
+			
+		});
+	};
