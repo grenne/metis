@@ -39,6 +39,12 @@ $(document).ready(function() {
 					panelLabelList[i] = panel.label;
 					init("myDiagram-" + panelId, i, id )
 				});
+	        	var panel = localStorage.getItem("panel");
+	        	var i = 0;
+	        	while (i < panel) {
+	        		window.mySwipe.next();
+	        	    i++;
+	        	};      	
             }
 		});
 	});
@@ -128,7 +134,14 @@ $(document).ready(function() {
     	$("#nodePropertiesCarreira").popup( "close" );
 	});
 	$("#volta-modelos").bind( "click", function(event, ui) {
+		localStorage.setItem("dialogOpen", "false");
     	$("#nodeNewObject").popup( "close" );
+    	setTimeout('history.go()',200);
 		window.location.reload(true);
+	});
+	$("#nodeNewObject" ).bind({
+		popupafterclose: function(event, ui) {
+			window.location.reload(true);
+		}
 	});
 });

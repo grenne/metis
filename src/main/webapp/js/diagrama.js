@@ -21,6 +21,8 @@ function init(diagrama, panelReceive, idReceive) {
           "clickCreatingTool.archetypeNodeData": { text: "", color: "white" },
           // allow Ctrl-G to call groupSelection()
           "commandHandler.archetypeGroupData": { text: "Group", isGroup: true, color: "blue" },
+          // teste single click
+          "click": singleClick,
           // enable undo & redo
           "undoManager.isEnabled": true,
           "ChangedSelection": onSelectionChanged,
@@ -251,13 +253,16 @@ function init(diagrama, panelReceive, idReceive) {
         async: false,
         success: function(data) {
         	localStorage.setItem("diagrama-" + panel, JSON.stringify(data));
-        	jQuery.each(data.documento.diagrama.nodeDataArray, function(i, node) {
-        		if (node.text == "") {
-        			data.documento.diagrama.nodeDataArray.splice(i, 1);			
-        		}
-        	});
+        	var i = 0;
+        	while (i < data.documento.diagrama.nodeDataArray.length) {
+        		if (data.documento.diagrama.nodeDataArray[i].text == "") {
+        			data.documento.diagrama.nodeDataArray.splice(i, 1);	
+        			i = i - 1;
+        		};
+        		i++;
+        	};
         	myDiagram[panel].model = new go.GraphLinksModel(data.documento.diagrama.nodeDataArray, data.documento.diagrama.linkDataArray);
-        }
+       }
 	});
 }
 
@@ -271,11 +276,14 @@ function nodeInfo(d) {  // Tooltip info for a node data object
     return str;
   };
 
+  function singleClick(e, obj) {
+  };
   
   // when a node is double-clicked, add a child to it
   function nodeDoubleClick(e, obj) {
   	var node = e.diagram.selection.first();
   	localStorage.setItem("diagrama-" + e.diagram.id, e.diagram.model.toJson());
+  	localStorage.setItem("panel", e.diagram.panel);
   	montaNodeDocumento(e, node.data.id, "8080/metis/rest/documento/atualizar", node.data.key, e.diagram.id, e.diagram.panel);
 //      var clicked = obj.part;
 //      if (clicked !== null) {
@@ -291,8 +299,10 @@ function nodeInfo(d) {  // Tooltip info for a node data object
   function partCreated(e, obj) {
 	var node = e.diagram.selection.first();
 	localStorage.setItem("diagrama-" + e.diagram.id, e.diagram.model.toJson());
+	localStorage.setItem("panel", e.diagram.panel);
   	montaModeloLista(node.data.key, e.diagram.id, e.diagram.panel); 
   	jQuery("#nodeNewObject").popup( "open" );
+  	localStorage.setItem("dialogOpen", "true");
   	save(e);
   };
 
@@ -375,11 +385,14 @@ function save(e) {
 
 	var objJson = JSON.parse(localStorage.getItem("diagrama-" + e.diagram.panel));
 	var objDiagrama = JSON.parse(e.diagram.model.toJson());
-	$.each(objJson.documento.diagrama.nodeDataArray, function(i, node) {
-		if (node.text == "") {
-			objJson.documento.diagrama.nodeDataArray.splice(i, 1);			
-		}
-	});
+	var i = 0;
+	while (i < objJson.documento.diagrama.nodeDataArray.length) {
+		if (objJson.documento.diagrama.nodeDataArray[i].text == "") {
+			objJson.documento.diagrama.nodeDataArray.splice(i, 1);	
+			i = i - 1;
+		};
+		i++;
+	};
 	
 	objJson.documento.diagrama.nodeDataArray = objDiagrama.nodeDataArray;
 	objJson.documento.diagrama.linkDataArray = objDiagrama.linkDataArray;
