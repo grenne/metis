@@ -504,9 +504,9 @@ function montaLinhaModelos(i, modelos, key, idDiagrama, idModelo, panel) {
 	var linha = '' + 
 				'<li class="ui-body linha-modelo">';
 	
-	if (modelos.modelo == "Badget"){
+	if (modelos.modelo == "badges"){
 		linha = linha +
-					'<a id="item-' + i + '"href="dialog-skill-lista.html?Badget&group' + '&' + idDiagrama + '&' + panel + '&' + key + '&' +'" rel="external" data-transition="flip" data-close-btn-text="Cancel">'
+					'<a id="item-' + i + '"href="dialog-skill-lista.html?badges&group' + '&' + idDiagrama + '&' + panel + '&' + key + '&' +'" rel="external" data-transition="flip" data-close-btn-text="Cancel">'
 	}else {
 		linha = linha +
 					'<a id="item-' + i + '"href="dialog-habilidades-lista.html?' + idModelo + '&' + modelos.modelo + '&' + key + '&' + idDiagrama + '&' + panel + '" rel="external" data-transition="flip" data-close-btn-text="Cancel">'
@@ -554,7 +554,7 @@ function incluiGroup (label, id, idDiagramaOriginal, panel, key) {
                     	var link = JSON.parse('{"from":"' + label + linkNovo.from + '","to":"' +  label + linkNovo.to + '"}');
                     	dataOriginal.documento.diagrama.linkDataArray.push(link);
     				});                	
-                	console.log ("badget" + JSON.stringify(dataNovo.documento.diagrama.nodeDataArray));
+                	console.log ("badges" + JSON.stringify(dataNovo.documento.diagrama.nodeDataArray));
                 	console.log ("original" + JSON.stringify(dataOriginal.documento.diagrama.nodeDataArray));
                 	$.ajax({
                 		type: "POST",

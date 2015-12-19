@@ -87,7 +87,7 @@ function montaCabecalho(header, id, manutencao, inputDisabled ) {
 };
 
 function montaCampos(i, panelId, z, item, origem, id, manutencao, inputDisabled) {
-	var labelId = item.label.replace( /\s/g, '' ) + z + "-" + i;
+	var labelId = item.label.replace( /\s/g, '' ).replace(/[^a-zA-Z 0-9]/g, '') + z + "-" + i;
 	var label = item.label;
 	var labelRadioId = "";
 

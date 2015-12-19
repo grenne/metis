@@ -5,6 +5,13 @@ $(document).ready(function() {
 	var url   = window.location.search.replace();
 	var parametrosDaUrl = url.split("?")[1];
 	var id = parametrosDaUrl.split("=")[1];
+//	$("#teste").append(
+//			
+//			'<label class="control-label">Grenne</label>' + 
+//			'<input id="input-1" type="file" class="file">'                
+//	);
+//	alert ("ready");
+
 
 	$(function(){
 		$.ajax({
@@ -29,6 +36,11 @@ $(document).ready(function() {
 					});
 					finalPanel(panelId, panelLabel, i, panel, "true");
 				});
+//				$("#teste").append(
+//						'<label class="control-label">Grenne</label>' + 
+//						'<input id="input-1" type="file" class="file">'                
+//				);
+//				alert ("ajax");
 			    iniciaSnapper();
 			    iniciaAcoes(panelLabelList);        
 				inicializaWindow();
@@ -39,8 +51,6 @@ $(document).ready(function() {
 	    	$( "#popupIncluiInput" ).popup( "close" );
 		});	
 		$("#cancelaNovoPainel" ).bind( "click", function(event, ui) {
-			$( "#popupIncluiInput" ).popup( "close" );
-			setTimeout('history.go()', 300);
 			window.location.reload();
 		});	
 

@@ -3,29 +3,6 @@ body {
 	padding-top: 30px !important;
 }
 
-.ui-block-a {
-	width : 20% !important;
-}
-.ui-block-b {
-	width : 40% !important;
-}
-.ui-block-c {
-	width : 40% !important;
-}
-
-
-.labelInputAlign {
-	padding-top : 15px;
-}
-
-.labelInput {
-	text-align: right;
-	padding-right : 2em !important;
-}
-.input-value {
-	width: 90% !important;
-}
-
 .tabela-lista table {
 	display: table !important;
 }

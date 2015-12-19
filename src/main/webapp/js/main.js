@@ -111,9 +111,13 @@ function colocaPainelEsquerda() {
                     'rel="external"' +
                     'data-transition="flip">Carreiras</a></li>' +
                 '<li><a ' +
-                	'href="dialog-skill-lista.html?Badget&diagrama&0"' +
+                	'href="dialog-skill-lista.html?Badges&diagrama&0"' +
                     'rel="external"' +
-                    'data-transition="flip">Badgets</a></li>' +
+                    'data-transition="flip">Badges</a></li>' +
+                 '<li><a ' +
+                	'href="dialog-skill-lista.html?Cursos&diagrama&0"' +
+                    'rel="external"' +
+                    'data-transition="flip">Cursos</a></li>' +
                 '<li><a ' +
                     'href="config.html"' +
                     'rel="external"' +
@@ -267,6 +271,7 @@ function inicializaWindow() {
 	$('.fieldcontain').fieldcontain().trigger('create');
 	// formata campos botoes
 	$('.line-button').button().trigger('create');
+	$('select').select('refresh');
 	$('.mesano').mask('00/0000');
 	$('.data').mask('00/00/0000');
 	$('.cpf').mask('000.000.000-00');
