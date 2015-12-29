@@ -51,10 +51,17 @@ var app = {
 };
 
 function redirecionar() {
-	if (typeof localStorage.usu == 'undefined') {
-		console
-				.info("Não foi encontrado id do funcionário logado no storage. Redirecionando para página de configuração.");
-		console.log('não encontrou: ');
+	if (localStorage.device == "mobile"){
+		alert("usu" + localStorage.cpfUsuario + " nome - " + localStorage.nomeUsuario);		
+	}else{
+		console.log("usu" + localStorage.cpfUsuario + " nome - " + localStorage.nomeUsuario);
+	};
+	if (typeof localStorage.usuId == 'undefined') {
+   		if (localStorage.device == "mobile"){
+   			alert("Não foi encontrado id do funcionário logado no storage. Redirecionando para página de configuração.");		
+   		}else{
+   			console.log("Não foi encontrado id do funcionário logado no storage. Redirecionando para página de configuração.");
+   		};
 		document.location.replace("config.html");
 	} else {
 		console.log('encontrou: ');

@@ -46,7 +46,7 @@ $(document).ready(function() {
     		objJson = JSON.parse(new_modelo);
     		$.ajax({
     			type: "POST",
-                url: "http://" + localStorage.urlServidor + ":8080/vistorias/rest/documento/incluir",
+                url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/incluir",
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
                 data : JSON.stringify(objJson),
@@ -91,7 +91,7 @@ function montaLinha(i, modelos, id, nextPage) {
 		var objJson = JSON.parse(dataSaved);
 		$.ajax({
 			type: "POST",
-            url: "http://" + localStorage.urlServidor + ":8080/vistorias/rest/documento/excluir?id=" + id,
+            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/excluir?id=" + id,
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
             data : JSON.stringify(objJson)
@@ -116,7 +116,7 @@ function montaLinha(i, modelos, id, nextPage) {
     		objJson.documento.id = id;
     		$.ajax({
     			type: "POST",
-                url: "http://" + localStorage.urlServidor + ":8080/vistorias/rest/documento/atualizar",
+                url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/atualizar",
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
                 data : JSON.stringify(objJson),

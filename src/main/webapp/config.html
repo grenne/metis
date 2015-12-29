@@ -34,6 +34,7 @@
         <script src="js/jquery.mask.min.js"></script>
         <script src="js/main.js"></script>
         <script src="js/config.js"></script>
+        <script src="js/skills.js"></script>
         <title>Configurações</title>
     </head>
     <body>
@@ -57,13 +58,16 @@
             <form id="configForm">
                 <fieldset class="config-form">
                     <label for="urlTextInput">IP</label>
-                    <input required type="text" name="urlTextInput" id="urlTextInput" placeholder="IP servidor">
+                    <input required type="text" name="urlTextInput" id="urlTextInput" placeholder="IP servidor" value="52.27.128.28">
                     
                     <label for="cpfTextInput">CPF</label>
                     <input type="text" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" name="cpfTextInput" id="cpfTextInput" placeholder="seu CPF" required>
                     
                     <label for="senhaPassInput">Senha</label>
                     <input type="password" name="senhaPassInput" id="senhaPassInput" required>
+                    
+                    <label for="nomeUsuario" class= "cadastroUsuario" >Nome</label>
+                    <input type="text" name="nomeUsuario" id="nomeUsuario" placeholder="Nome usuário" class= "cadastroUsuario" >
                 	
                 </fieldset>
                 

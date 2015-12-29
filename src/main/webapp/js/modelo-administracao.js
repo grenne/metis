@@ -15,7 +15,7 @@ $(document).ready(function() {
 
 	$(function(){
 		$.ajax({
-            url: "http://" + localStorage.urlServidor + ":8080/vistorias/rest/documento/obter?id=" + id,
+            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/obter?id=" + id,
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
             success: function(data) {

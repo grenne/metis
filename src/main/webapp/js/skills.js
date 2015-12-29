@@ -1,6 +1,81 @@
 /**
  * 
  */
+function incluiDiagrama(modelo, diagrama, novoSkill) {
+	$.ajax({
+        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/obter/modelo?modelo=" + modelo,
+        contentType: "application/json; charset=utf-8",
+        dataType: 'json',
+        async:false
+	})
+	.done(function( data ) {
+		console.log ("inclusão diagrama saiu por done");
+	})
+	.fail(function(data) {
+		console.log ("inclusão diagrama saiu por fail");
+	})
+	.always(function(data) {
+        localStorage.setItem("dadosSaved", JSON.stringify(data));
+		var dataSaved = localStorage.getItem("dadosSaved");
+		var objJson = JSON.parse(dataSaved);
+		objJson.documento.usuarioAtual = localStorage.cpfUsuario;
+		objJson.documento.tipo = "dados";
+		objJson.documento.header[0].valor = modelo;
+		objJson.documento.situacao = "ativo";
+		objJson.documento.usuarios[0].codigo = localStorage.cpfUsuario;
+		$.ajax({
+			type: "POST",
+            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/incluir",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            async:false,
+            data : JSON.stringify(objJson)
+		})
+	  	.done(function( data ) {
+		  console.log ("inclusão documento saiu por done");
+        	})
+        .fail(function(data) {
+    	   console.log ("inclusão documento saiu por fail");
+       	  })
+       	.always(function(data) {
+   			var idDocumento = data.responseText;
+       		var new_diagrama = 
+				'{"documento" :' + 
+					'{' +
+						'"id":"",' +
+						'"tipo":"' + modelo + '",' +
+						'"label":"' + diagrama + '",' +
+						'"diagrama":' +
+						'{' +
+							'"nodeDataArray":[{"loc":"50 50","key":"1","text":"' + diagrama + '","color":"' + objJson.documento.header[1].valor + '","id":"' + idDocumento + '", "principal": "true" }]' +
+						'}' +
+						'}' +
+				'}';
+			objJson = JSON.parse(new_diagrama);
+			$.ajax({
+				type: "POST",
+	            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/incluir",
+	            contentType: "application/json; charset=utf-8",
+	            dataType: 'json',
+	            async:false,
+	            data : JSON.stringify(objJson)
+			})
+			.done(function( data ) {
+				console.log ("inclusão diagrama saiu por done");
+			})
+			.fail(function(data) {
+				console.log ("inclusão diagrama saiu por fail");
+			})
+			.always(function(data) {
+				if (novoSkill){
+					criarSkill(diagrama, data.responseText);
+				}else{
+					incluiSkill (diagrama, data.responseText);
+				};
+			});
+       	});
+	});
+};
 		
 function incluiSkill(nomeSkill, idDiagrama){
 	var objJson = JSON.parse(localStorage.getItem("skills"));
@@ -22,6 +97,40 @@ function incluiSkill(nomeSkill, idDiagrama){
      .always(function(data) {
     	 console.log ("inclusão skill saiu por always - " + JSON.stringify(data));
      });
+};	
+
+function criarSkill(nomeSkill, idDiagrama){
+	var new_skill = 
+		'{' +
+			  '"skill" : {' +
+			    '"id" : "",' +
+			    '"usuario" : "' + localStorage.cpfUsuario + '",' +
+			    '"skills" : [{' +
+			          '"tipo" : "pessoal",' +
+			          '"label": "' + nomeSkill + '",' +
+			          '"id": "' + idDiagrama + '"' +
+			        '}]' +
+			    '}' +
+			 '}';
+	objJson = JSON.parse(new_skill);
+	$.ajax({
+		type: "POST",
+        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/skill/incluir",
+        contentType: "application/json; charset=utf-8",
+        dataType: 'json',
+        data : JSON.stringify(objJson)
+	})
+	.done(function( data ) {
+		console.log ("inclusão skill saiu por done");
+	})
+	.fail(function(data) {
+		console.log ("inclusão skill saiu por fail");
+	})
+	.always(function(data) {
+		console.log ("inclusão skill saiu por always");
+	});	
+	console.log ("para parar");
+	
 };	
 
 function inicioPanel(panelId, panelLabel, i, panel, id, manutencao, inputDisabled) {
@@ -354,7 +463,7 @@ function montaCampos(i, panelId, z, item, origem, id, manutencao, inputDisabled)
 			objJson.documento.id = id;
 			$.ajax({
 				type: "POST",
-	            url: "http://" + localStorage.urlServidor + ":8080/vistorias/rest/documento/atualizar",
+	            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/atualizar",
 	            contentType: "application/json; charset=utf-8",
 	            dataType: 'json',
 	            data : JSON.stringify(objJson),
@@ -420,7 +529,7 @@ function salvaConteudo(i, z, labelId, origem, id) {
 			objJson.documento.id = id;
 			$.ajax({
 				type: "POST",
-	            url: "http://" + localStorage.urlServidor + ":8080/vistorias/rest/documento/atualizar",
+	            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/atualizar",
 	            contentType: "application/json; charset=utf-8",
 	            dataType: 'json',
 	            data : JSON.stringify(objJson),
@@ -464,7 +573,7 @@ function salvaConteudo(i, z, labelId, origem, id) {
 			objJson.documento.id = id;
 			$.ajax({
 				type: "POST",
-	            url: "http://" + localStorage.urlServidor + ":8080/vistorias/rest/documento/atualizar",
+	            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/atualizar",
 	            contentType: "application/json; charset=utf-8",
 	            dataType: 'json',
 	            data : JSON.stringify(objJson),

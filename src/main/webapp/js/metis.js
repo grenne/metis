@@ -16,40 +16,46 @@ $(document).ready(function() {
 		$.ajax({
             url: "http://" + localStorage.urlServidor + ":8080/metis/rest/skill/obter?usuario=" + localStorage.cpfUsuario,
             contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            success: function(data) {
-	            localStorage.setItem("skills", JSON.stringify(data));
-				var heightCabecalho = $("#cabecalho-detalhes").height();
-				var panelLabelList = [];
-				myDiagram = [];
-				$.each(data.skill.skills, function(i, panel){
-					var panelId = panel.tipo.replace( /\s/g, '' ) + i;
-					var panelLabel = panel.label;
-					var id = panel.id;
-					panelLabelList[i] = panel.label;
-					montaPanel(panelId, panelLabel, i, panel, id);
-				});
-			    iniciaSnapper();
-			    iniciaAcoes(panelLabelList);        
-				inicializaWindow();
-				$.each(data.skill.skills, function(i, panel){
-					var panelId = panel.tipo.replace( /\s/g, '' ) + i;
-					var panelLabel = panel.label;
-					var id = panel.id;
-					if (i != 0 ){
-						montaComparacao(panelId, panelLabel, i, panel, id, panelLabelList);
-					};
-					init("myDiagram-" + panelId, i, id )
-				});
-				$('ul').listview('refresh');
-	        	var panel = localStorage.getItem("panel");
-	        	var i = 0;
-	        	while (i < panel) {
-	        		window.mySwipe.next();
-	        	    i++;
-	        	};      	
-            }
-		});
+            dataType: 'json'
+		})
+	  	.done(function( data ) {
+            localStorage.setItem("skills", JSON.stringify(data));
+			var heightCabecalho = $("#cabecalho-detalhes").height();
+			var panelLabelList = [];
+			myDiagram = [];
+			$.each(data.skill.skills, function(i, panel){
+				var panelId = panel.tipo.replace( /\s/g, '' ) + i;
+				var panelLabel = panel.label;
+				var id = panel.id;
+				panelLabelList[i] = panel.label;
+				montaPanel(panelId, panelLabel, i, panel, id);
+			});
+		    iniciaSnapper();
+		    iniciaAcoes(panelLabelList);        
+			inicializaWindow();
+			$.each(data.skill.skills, function(i, panel){
+				var panelId = panel.tipo.replace( /\s/g, '' ) + i;
+				var panelLabel = panel.label;
+				var id = panel.id;
+				if (i != 0 ){
+					montaComparacao(panelId, panelLabel, i, panel, id, panelLabelList);
+				};
+				init("myDiagram-" + panelId, i, id )
+			});
+			$('ul').listview('refresh');
+        	var panel = localStorage.getItem("panel");
+        	var i = 0;
+        	while (i < panel) {
+        		window.mySwipe.next();
+        	    i++;
+        	};      	
+	  	})
+        .fail(function(data) {
+			console.info("ler skil saiu por fail");
+        })
+       	.always(function(data) {
+
+       	});
 	});
 
 	$( "#confirmaNovoPainel" ).bind( "click", function(event, ui) {
@@ -71,7 +77,7 @@ $(document).ready(function() {
     		var objJson = JSON.parse(dataSaved);
     		objJson.documento.usuarioAtual = localStorage.cpfUsuario;
     		objJson.documento.tipo = "dados";
-    		objJson.documento.header[0].valor = $("#nomePainel" ).val();
+    		objJson.documento.header[0].valor = $("#select-tipos-painel" ).val();
     		objJson.documento.situacao = "ativo";
     		objJson.documento.usuarios[0].codigo = localStorage.cpfUsuario;
     		$.ajax({
@@ -148,7 +154,6 @@ $(document).ready(function() {
 		}
 	});
 });
-
 	function montaComparacao(panelId, panelLabel, i, panel, id, panelLabelList) {
 		var linha = '' + 
 					'<li class="ui-body linha-compara">';
