@@ -3,6 +3,7 @@ $(document).ready(function() {
 	var cpfInput$ = $('#cpfTextInput');
 	var senhaInput$ = $('#senhaPassInput');
 	var nomeUsuario$ = $('#nomeUsuario');
+	var inputChange = false;
 
 	urlInput$.val(localStorage.urlServidor);
 	cpfInput$.val(localStorage.cpfUsuario);
@@ -15,17 +16,26 @@ $(document).ready(function() {
 		console.log ("IP:" + localStorage.urlServidor);
 		console.log ("CPF:" + localStorage.cpfUsuario);
 	};
-
-	$(".cadastroUsuario").hide();
-	$(".cadastroUsuario").prop('required',false);
 	
 	$('#cpfTextInput').mask('000.000.000-00', {
 		reverse : true
 	});
 
+	$("#cpfTextInput").bind( "change", function() {
+		  inputChange = true;
+	});
+	
+	$("#senhaPassInput").bind( "change", function() {
+		  inputChange = true;
+	});
+
+	$("#nomeUsuario").bind( "change", function() {
+		  inputChange = true;
+	});
+
 	$("#configForm").submit(function(e) {
 		e.preventDefault();
-		salvaConfiguracao(this);
+		salvaConfiguracao(this, inputChange);
 	});
 	
 	$("#preencheBaseDemo").click(function () { 
@@ -50,7 +60,7 @@ function utilizarBaseDeDemonstracao() {
 	senhaInput$.val(senhaDemo);
 }
 
-function salvaConfiguracao(formulario) {
+function salvaConfiguracao(formulario, inputChange) {
 	var $configForm = $(formulario);
 
 	if (!$configForm[0].checkValidity()) {
@@ -66,10 +76,13 @@ function salvaConfiguracao(formulario) {
 	if (localStorage.usuErro == "true"){
 		if (localStorage.cpfUsuarioValido != cpfUsuario) {
 			incluiUsuario (cpfUsuario, senha, nomeUsuario);
-		}else{
-			atualizaUsuario (cpfUsuario, senha, nomeUsuario, localStorage.usuId);
+			inputChange == false;
 		};
 		localStorage.usuErro = "false";
+	};
+
+	if (inputChange){
+		atualizaUsuario (cpfUsuario, senha, nomeUsuario, localStorage.usuId);
 	};
 
 	executaLogin(urlServidor, cpfUsuario, senha, "true");
@@ -109,6 +122,8 @@ function executaLogin(urlServidor, cpfUsuario, senha, inicialLogin) {
 			localStorage.usuDistribuidor = data.usu.distribuidor;
 			localStorage.usuId = data.usu.id;
 			
+			localStorage.setItem("usuarios", JSON.stringify(data));
+			
 			resultado = "true";
 			localStorage.usuErro = "false";
 			$(".cadastroUsuario").hide();
@@ -116,6 +131,10 @@ function executaLogin(urlServidor, cpfUsuario, senha, inicialLogin) {
 			$('#configForm')
 					.append(
 							"<span class='msg-sucesso'>Configurações salvas com sucesso</span>");
+			if (inicialLogin == "true"){
+				document.location.replace("metis.html");
+				inicialLogin = "false";
+			};
 	  	})
         .fail(function(data) {
 			localStorage.urlServidor = urlServidor;
@@ -195,6 +214,27 @@ function incluiUsuario (cpfUsuario, senha, nomeUsuario) {
 	});	
 }
 function atualizaUsuario (cpfUsuario, senha, nomeUsuario) {
-	console.log ("atualiza usuario");
+	var objJson = JSON.parse(localStorage.getItem("usuarios"));
+	objJson.usu.nome = nomeUsuario;
+	objJson.usu.senha = senha;
+	objJson.usu.usuario = cpfUsuario;
+	
+	$.ajax({
+		type: "POST",
+        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/atualizar/usuario",
+        contentType: "application/json; charset=utf-8",
+        dataType: 'json',
+        async: false,
+        data : JSON.stringify(objJson),
+	})
+	 .done(function( data ) {
+		 console.log ("atualiza usuario saiu por done - " + JSON.stringify(data));
+	  })
+     .fail(function(data) {
+    	 console.log ("atualiza usuario saiu por fail - " + JSON.stringify(data));
+     })
+     .always(function(data) {
+    	 console.log ("atualiza usuario saiu por always - " + JSON.stringify(data));
+     });
 };
 

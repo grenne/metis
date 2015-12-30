@@ -117,6 +117,33 @@ public class Documentos {
 		return "fail";
 		
 	};
+	@Path("/atualizar/usuario")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String AtualizarDocumento(Usuario usuario) throws MongoException, JsonParseException, JsonMappingException, IOException {
+		ObjectId _id = new ObjectId(usuario.usu.id.toString());
+		Mongo mongo = new Mongo();
+		DB db = (DB) mongo.getDB("documento");
+		DBCollection collection = db.getCollection("usuarios");
+		Gson gson = new Gson();
+		String jsonDocumento = gson.toJson(usuario);
+		Map<String,String> mapJson = new HashMap<String,String>();
+		ObjectMapper mapper = new ObjectMapper();
+		mapJson = mapper.readValue(jsonDocumento, HashMap.class);
+		JSONObject documento = new JSONObject();
+		documento.putAll(mapJson);
+		BasicDBObject update = new BasicDBObject("$set", new BasicDBObject(documento));
+		BasicDBObject searchQuery = new BasicDBObject("_id",_id);
+		DBObject cursor = collection.findAndModify(searchQuery,
+                null,
+                null,
+                false,
+                update,
+                true,
+                false);
+		mongo.close();
+		return cursor.get("_id").toString();
+	};
 
 
 	@Path("/lista")	
