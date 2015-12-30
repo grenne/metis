@@ -30,6 +30,7 @@ public class Diagram {
 	public static final class Documento {
 
 		public String id;
+		public String idDocPrincipal;
 		public String tipo;
 		public String label;
 		
@@ -41,8 +42,9 @@ public class Diagram {
 		}
 
 		@JsonCreator
-		public Documento(String id, String tipo, String label, Diagrama diagrama) {
+		public Documento(String id, String idDocPrincipal, String tipo, String label, Diagrama diagrama) {
 			this.id = id;
+			this.idDocPrincipal = idDocPrincipal;
 			this.tipo = tipo;
 			this.label = label;
 			this.diagrama = diagrama;

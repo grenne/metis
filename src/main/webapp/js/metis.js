@@ -77,7 +77,7 @@ $(document).ready(function() {
     		var objJson = JSON.parse(dataSaved);
     		objJson.documento.usuarioAtual = localStorage.usuario;
     		objJson.documento.tipo = "dados";
-    		objJson.documento.header[0].valor = $("#select-tipos-painel" ).val();
+    		objJson.documento.header[0].valor = $("#nomePainel" ).val();
     		objJson.documento.situacao = "ativo";
     		objJson.documento.usuarios[0].codigo = localStorage.usuario;
     		$.ajax({
@@ -99,6 +99,7 @@ $(document).ready(function() {
 					'{"documento" :' + 
 						'{' +
 							'"id":"",' +
+							'"idDocPrincipal":"' + idDocumento + '",' +
 							'"tipo":"' + $("#select-tipos-painel").val() + '",' +
 							'"label":"' + $("#nomePainel" ).val() + '",' +
 							'"diagrama":' +

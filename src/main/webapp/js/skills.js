@@ -43,6 +43,7 @@ function incluiDiagrama(modelo, diagrama, novoSkill) {
 				'{"documento" :' + 
 					'{' +
 						'"id":"",' +
+						'"idDocPrincipal":"' + idDocumento + '",' +
 						'"tipo":"' + modelo + '",' +
 						'"label":"' + diagrama + '",' +
 						'"diagrama":' +
