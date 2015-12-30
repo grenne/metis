@@ -193,7 +193,7 @@ function colocaPainelEsquerda() {
     }    
     
     $.basicAuth = function () {
-        var decodedStr = localStorage.cpfUsuario + ':' + localStorage.senha;
+        var decodedStr = localStorage.usuario + ':' + localStorage.senha;
         var encodedStr = btoa(decodedStr);
         return "Basic " + encodedStr;
     }

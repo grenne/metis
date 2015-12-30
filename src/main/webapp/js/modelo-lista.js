@@ -1,7 +1,7 @@
 /* Modelos Lista */
 
 $(document).ready(function() {
-    executaLogin(localStorage.urlServidor, localStorage.cpfUsuario, localStorage.senha);
+    executaLogin(localStorage.urlServidor, localStorage.usuario, localStorage.senha);
 	var url   = window.location.search.replace();
 	var nextPage = url.split("?")[1];
 	$(function() {
@@ -35,10 +35,10 @@ $(document).ready(function() {
     						'{' +
     						'"id": "",' +
     						'"tipo": "modelo",' +
-    						'"usuarioAtual":"' + localStorage.cpfUsuario + '",' +
+    						'"usuarioAtual":"' + localStorage.usuario + '",' +
     						'"modelo": "' + $('#nomeModelo').val() + '",' +
     						'"situacao": "valido",' +
-    						'"usuarios": [{"codigo": "' + localStorage.cpfUsuario + '"}],' +
+    						'"usuarios": [{"codigo": "' + localStorage.usuario + '"}],' +
     						'"header": [{"modelo" : "", "label" : "", "valor" : ""}],' +
     						'"panel": [{"modelo" : "swipe", "label" : "novo", "fields" : [{"modelo" : "", "label" : "", "valor" : ""}]}]' +
     						'}' +

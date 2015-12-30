@@ -38,7 +38,14 @@
         <title>Configurações</title>
     </head>
     <body>
-        <div
+ 		<div data-role="popup" id="popLimpaDados" class="ui-content" data-theme="d" style="max-width:800px;">
+  			<p>Voce deseja limpar os dados armazenados?</p>
+			<fieldset id="div-Botoes-Painel" class="ui-grid-b">
+				<a href="#" id="btn-limpaDados" data-role="button" data-inline="true" data-theme="a"  class="line-button ui-block-a">Sim</a>
+				<a href="#" id="btn-cancelaLimpaDados" data-role="button" data-inline="true" data-theme="a" class="line-button close ui-block-b">Não</a>
+			</fieldset>
+		</div>       
+		<div
             data-role="header"
             data-position="fixed"
             data-theme="d">
@@ -48,6 +55,10 @@
                 data-icon="bars"
                 data-iconpos="notext"
                id="btn-mostra-menu">Menu</a>        
+            <a
+                data-icon="recycle"
+                data-iconpos="notext"
+               id="btn-limpa-dados">Limpa dados</a>        
         </div><!-- /header -->        
         <div
             role="main"
@@ -60,14 +71,14 @@
                     <label for="urlTextInput">IP</label>
                     <input required type="text" name="urlTextInput" id="urlTextInput" placeholder="IP servidor" value="52.27.128.28">
                     
-                    <label for="cpfTextInput">CPF</label>
-                    <input required type="text" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" name="cpfTextInput" id="cpfTextInput" placeholder="seu CPF" >
+                    <label for="nomeUsuario" class= "cadastroUsuario" >Nome</label>
+                    <input required type="text" name="nomeUsuario" id="nomeUsuario" placeholder="Nome usuário" class= "cadastroUsuario" >
+
+                    <label for="usuarioInputText">E-mail</label>
+                    <input required type="email"  name="usuarioInputText" id="usuarioInputText" placeholder="email@dominio.com" >
                     
                     <label for="senhaPassInput">Senha</label>
                     <input required type="password" name="senhaPassInput" id="senhaPassInput">
-                    
-                    <label for="nomeUsuario" class= "cadastroUsuario" >Nome</label>
-                    <input required type="text" name="nomeUsuario" id="nomeUsuario" placeholder="Nome usuário" class= "cadastroUsuario" >
                 	
                 </fieldset>
                 

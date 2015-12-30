@@ -1,6 +1,6 @@
 /* Documento  */
 $(document).ready(function() {   
-    executaLogin(localStorage.urlServidor, localStorage.cpfUsuario, localStorage.senha);
+    executaLogin(localStorage.urlServidor, localStorage.usuario, localStorage.senha);
 	var url   = window.location.search.replace();
 	var parametrosUrl = url.split("?")[1];
 	var idModelo = parametrosUrl.split("&")[0];
@@ -55,10 +55,10 @@ $(document).ready(function() {
 	$( ".submitButton" ).bind( "click", function(event, ui) {
 		var dataSaved = localStorage.getItem("dadosSaved");
 		var objJson = JSON.parse(dataSaved);
-		objJson.documento.usuarioAtual = localStorage.cpfUsuario;
+		objJson.documento.usuarioAtual = localStorage.usuario;
 		objJson.documento.tipo = "dados";
 		objJson.documento.situacao = "ativo";
-		objJson.documento.usuarios[0].codigo = localStorage.cpfUsuario;
+		objJson.documento.usuarios[0].codigo = localStorage.usuario;
 		$.ajax({
 			type: "POST",
             url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/incluir",

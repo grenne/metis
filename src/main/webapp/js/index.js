@@ -52,19 +52,10 @@ var app = {
 
 function redirecionar() {
 	if (localStorage.device == "mobile"){
-		alert("usu" + localStorage.cpfUsuario + " nome - " + localStorage.nomeUsuario);		
+		alert("usu" + localStorage.usuario + " nome - " + localStorage.nomeUsuario);		
 	}else{
-		console.log("usu" + localStorage.cpfUsuario + " nome - " + localStorage.nomeUsuario);
+		console.log("usu" + localStorage.usuario + " nome - " + localStorage.nomeUsuario);
 	};
-	if (typeof localStorage.usuId == 'undefined') {
-   		if (localStorage.device == "mobile"){
-   			alert("Não foi encontrado id do funcionário logado no storage. Redirecionando para página de configuração.");		
-   		}else{
-   			console.log("Não foi encontrado id do funcionário logado no storage. Redirecionando para página de configuração.");
-   		};
-		document.location.replace("config.html");
-	} else {
-		console.log('encontrou: ');
-		document.location.replace("metis.html");
-	}
-}
+
+	document.location.replace("metis.html");
+};

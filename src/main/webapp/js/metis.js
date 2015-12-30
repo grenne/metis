@@ -1,6 +1,6 @@
 /* Documento Detalhes */
 $(document).ready(function() {
-	executaLogin(localStorage.urlServidor, localStorage.cpfUsuario, localStorage.senha);
+	executaLogin(localStorage.urlServidor, localStorage.usuario, localStorage.senha);
 
     // acertar o tamanha da tela
 	console.log ("$(window).height:()" + $(window).height());
@@ -14,7 +14,7 @@ $(document).ready(function() {
 	
 	$(function(){
 		$.ajax({
-            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/skill/obter?usuario=" + localStorage.cpfUsuario,
+            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/skill/obter?usuario=" + localStorage.usuario,
             contentType: "application/json; charset=utf-8",
             dataType: 'json'
 		})
@@ -75,11 +75,11 @@ $(document).ready(function() {
             localStorage.setItem("dadosSaved", JSON.stringify(data));
     		var dataSaved = localStorage.getItem("dadosSaved");
     		var objJson = JSON.parse(dataSaved);
-    		objJson.documento.usuarioAtual = localStorage.cpfUsuario;
+    		objJson.documento.usuarioAtual = localStorage.usuario;
     		objJson.documento.tipo = "dados";
     		objJson.documento.header[0].valor = $("#select-tipos-painel" ).val();
     		objJson.documento.situacao = "ativo";
-    		objJson.documento.usuarios[0].codigo = localStorage.cpfUsuario;
+    		objJson.documento.usuarios[0].codigo = localStorage.usuario;
     		$.ajax({
     			type: "POST",
                 url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/incluir",

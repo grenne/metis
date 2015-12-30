@@ -42,13 +42,12 @@ public class Documentos {
 	@Path("/login")	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public JSONObject login(@QueryParam("usuario") String usuario, @QueryParam("senha") String senha) throws UnknownHostException, MongoException {
+	public JSONObject login(@QueryParam("usuario") String usuario) throws UnknownHostException, MongoException {
 		Mongo mongo = new Mongo();
 		DB db = (DB) mongo.getDB("documento");
 		DBCollection collection = db.getCollection("usuarios");
 		BasicDBObject setUsu = new BasicDBObject();
 		setUsu.put("usu.usuario",usuario);
-		setUsu.put("usu.senha",senha);
 		DBObject cursor = collection.findOne(setUsu);
 		JSONObject documento = new JSONObject();
 		BasicDBObject obj = (BasicDBObject) cursor.get("usu");

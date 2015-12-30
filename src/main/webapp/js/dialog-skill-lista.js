@@ -1,7 +1,7 @@
 /* Modelos Lista */
 
 $(document).ready(function() {
-    executaLogin(localStorage.urlServidor, localStorage.cpfUsuario, localStorage.senha);
+    executaLogin(localStorage.urlServidor, localStorage.usuario, localStorage.senha);
     var url   = window.location.search.replace();
 	var parametrosUrl = url.split("?")[1];
 	var tipoLista = parametrosUrl.split("&")[0];    

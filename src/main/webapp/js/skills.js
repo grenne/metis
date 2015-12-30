@@ -18,11 +18,11 @@ function incluiDiagrama(modelo, diagrama, novoSkill) {
         localStorage.setItem("dadosSaved", JSON.stringify(data));
 		var dataSaved = localStorage.getItem("dadosSaved");
 		var objJson = JSON.parse(dataSaved);
-		objJson.documento.usuarioAtual = localStorage.cpfUsuario;
+		objJson.documento.usuarioAtual = localStorage.usuario;
 		objJson.documento.tipo = "dados";
 		objJson.documento.header[0].valor = modelo;
 		objJson.documento.situacao = "ativo";
-		objJson.documento.usuarios[0].codigo = localStorage.cpfUsuario;
+		objJson.documento.usuarios[0].codigo = localStorage.usuario;
 		$.ajax({
 			type: "POST",
             url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/incluir",
@@ -104,7 +104,7 @@ function criarSkill(nomeSkill, idDiagrama){
 		'{' +
 			  '"skill" : {' +
 			    '"id" : "",' +
-			    '"usuario" : "' + localStorage.cpfUsuario + '",' +
+			    '"usuario" : "' + localStorage.usuario + '",' +
 			    '"skills" : [{' +
 			          '"tipo" : "pessoal",' +
 			          '"label": "' + nomeSkill + '",' +

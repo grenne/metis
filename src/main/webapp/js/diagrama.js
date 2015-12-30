@@ -450,10 +450,10 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
 		var dataSaved = localStorage.getItem("dadosSaved");
 		var objJson = JSON.parse(dataSaved);
 		objJson.documento.id = id;
-		objJson.documento.usuarioAtual = localStorage.cpfUsuario;
+		objJson.documento.usuarioAtual = localStorage.usuario;
 		objJson.documento.tipo = "dados";
 		objJson.documento.situacao = "ativo";
-		objJson.documento.usuarios[0].codigo = localStorage.cpfUsuario;
+		objJson.documento.usuarios[0].codigo = localStorage.usuario;
 		$.ajax({
 			type: "POST",
             url: "http://" + localStorage.urlServidor + ":" + acao,
