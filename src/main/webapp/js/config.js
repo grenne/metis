@@ -1,16 +1,10 @@
 $(document).ready(function() {
-	var urlInput$ = $('#urlTextInput');
 	var usuario$ = $('#usuarioInputText');
 	var senhaInput$ = $('#senhaPassInput');
 	var nomeUsuario$ = $('#nomeUsuario');
 	var inputChange = false;
 	var mudouUsuario = false;
 
-	if (localStorage.urlServidor != "undefined"){
-		urlInput$.val(localStorage.urlServidor);
-	}else{
-		urlInput$.val("");
-	};
 	if (localStorage.usuario != "undefined") {
 		usuario$.val(localStorage.usuario);
 	}else{
@@ -24,16 +18,9 @@ $(document).ready(function() {
 	if (localStorage.nomeUsuario != "undefined") {
 		nomeUsuario$.val(localStorage.nomeUsuario);
 	}else{
-		urlInput$.val("");
+		nomeUsuario$.val("");
 	};
-	
-	if (localStorage.device == "mobile"){
-//		alert ("IP:" + localStorage.urlServidor + " CPF:" + localStorage.usuario);
-	}else{
-		console.log ("IP:" + localStorage.urlServidor);
-		console.log ("CPF:" + localStorage.usuario);
-	};
-	
+		
 	$("#usuarioInputText").bind( "change", function() {
 		  inputChange = true;
 		  mudouUsuario = true;
@@ -68,7 +55,6 @@ $(document).ready(function() {
 });
 
 function utilizarBaseDeDemonstracao() {
-	var urlInput$ = $('#urlTextInput');
 	var usuario$ = $('#usuarioInputText');
 	var senhaInput$ = $('#senhaPassInput');
 	var nomeUsuario$ = $('#nomeUsuario');
@@ -78,7 +64,6 @@ function utilizarBaseDeDemonstracao() {
 	var senhaDemo = "teste";
 
 	console.info("Preenchendo formulário com dados da base de demonstração");
-	urlInput$.val(urlDemo);
 	usuario$.val(cpfDemo);
 	senhaInput$.val(senhaDemo);
 }
@@ -90,7 +75,6 @@ function salvaConfiguracao(formulario, inputChange, mudouUsuario) {
 		$('#salva-configuracao').click();
 	}
 
-	var urlServidor = $('#urlTextInput').val();
 	var usuario = $('#usuarioInputText').val();
 	var senha = $('#senhaPassInput').val();
 	var nomeUsuario = $('#nomeUsuario').val();
@@ -105,7 +89,7 @@ function salvaConfiguracao(formulario, inputChange, mudouUsuario) {
 		atualizaUsuario (usuario, senha, nomeUsuario, localStorage.usuId);
 	};
 
-	executaLogin(urlServidor, usuario, senha, "true");
+	executaLogin(localStorage.urlServidor, usuario, senha, "true");
 };
 
 function executaLogin(urlServidor, usuario, senha, inicialLogin) {
@@ -134,7 +118,6 @@ function executaLogin(urlServidor, usuario, senha, inicialLogin) {
        			console.log("Login executado com sucesso!");
        		};		
 			if (data.usu.senha == senha){
-				localStorage.urlServidor = urlServidor;
 				localStorage.usuario = usuario;
 				localStorage.usuarioValido = usuario;
 				localStorage.senha = senha;
@@ -165,7 +148,6 @@ function executaLogin(urlServidor, usuario, senha, inicialLogin) {
 			};
 	  	})
         .fail(function(data) {
-			localStorage.urlServidor = urlServidor;
 			localStorage.usuario = usuario;
 			localStorage.senha = senha;
 			localStorage.usuario = usuario;

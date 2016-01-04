@@ -7,11 +7,12 @@ $(document).ready(function() {
 	console.log ("$(document).height():" + $(document).height()); 
 	console.log ("$(window).width():" + $(window).width());
 	console.log ("$(document).width():" + $(document).width());
-	var tipoDevice = mobileDetect();
-	console.log('You are using a mobile device!:' + tipoDevice);
-	var url   = window.location.search.replace();
-	console.log ("url:" + url);
-	
+	var deviceMobile = mobileDetect();
+	console.log('You are using a mobile device!:' + deviceMobile);
+	localStorage.urlServidor = window.location.hostname;
+	if (deviceMobile){
+		localStorage.urlServidor = "52.27.128.28";
+	};
 	
 	$(function(){
 		$.ajax({

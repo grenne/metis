@@ -7,8 +7,8 @@ $(function() {
 	console.log ("$(document).height():" + $(document).height()); 
 	console.log ("$(window).width():" + $(window).width());
 	console.log ("$(document).width():" + $(document).width());
-	var tipoDevice = mobileDetect();
-	console.log('You are using a mobile device!:' + tipoDevice);
+	var deviceMobile = mobileDetect();
+	console.log('You are using a mobile device!:' + deviceMobile);
 	var url   = window.location.search.replace();
 	var parametrosDaUrl = url.split("?")[1];
 	var id = localStorage.getItem("idDocumento");
