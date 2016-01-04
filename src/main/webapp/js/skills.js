@@ -90,13 +90,13 @@ function incluiSkill(nomeSkill, idDiagrama){
         data : JSON.stringify(objJson),
 	})
 	 .done(function( data ) {
-		 console.log ("inclusão skill saiu por done - " + JSON.stringify(data));
+    	 console.log ("inclusão skill saiu por done - " + JSON.stringify(data));
 	  })
      .fail(function(data) {
     	 console.log ("inclusão skill saiu por fail - " + JSON.stringify(data));
      })
      .always(function(data) {
-    	 console.log ("inclusão skill saiu por always - " + JSON.stringify(data));
+		 localStorage.setItem("panel", localStorage.paineis);
      });
 };	
 
@@ -137,7 +137,6 @@ function criarSkill(nomeSkill, idDiagrama){
 function inicioPanel(panelId, panelLabel, i, panel, id, manutencao, inputDisabled) {
 	var heightDetalhes = $(window).height() - 135 - $("#cabecalho-detalhes").height();
 	var montaScroll = '';
-	console.log ("height detalhes painel:" + heightDetalhes);
 	var linha = ''; 
 	linha = linha +
 		'<!-- ' + panel.label + ' -->' +			

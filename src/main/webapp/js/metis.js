@@ -32,6 +32,7 @@ $(document).ready(function() {
 				panelLabelList[i] = panel.label;
 				montaPanel(panelId, panelLabel, i, panel, id);
 			});
+			localStorage.paineis = $( ".swipe .dragme" ).length; 
 		    iniciaSnapper();
 		    iniciaAcoes(panelLabelList);        
 			inicializaWindow();
@@ -129,6 +130,7 @@ $(document).ready(function() {
 				})
 				.always(function(data) {
 					incluiSkill ($("#nomePainel" ).val(), data.responseText);
+					localStorage.setItem("panel", localStorage.paineis);
 					$("#popupIncluiPainel").popup( "close" );
 					setTimeout('history.go()',200);
 					window.location.reload(true);
@@ -179,12 +181,12 @@ $(document).ready(function() {
 		$( "#itemCompara-" + i ).bind( "click", function(event, ui) {
 			var objJsonComparar = JSON.parse(localStorage.getItem("diagrama-" + i));
 			var objJsonOriginal = JSON.parse(localStorage.getItem("diagrama-0"));
-			$.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
-				$.each(objJsonComparar.documento.diagrama.nodeDataArray, function(j, nodeComparar){
-					objJsonComparar.documento.diagrama.nodeDataArray[j].color = "Coral";
-					if (nodeComparar.principal == "true") {
-						objJsonComparar.documento.diagrama.nodeDataArray[j].color = "white";		
-					};
+			$.each(objJsonComparar.documento.diagrama.nodeDataArray, function(j, nodeComparar){
+				objJsonComparar.documento.diagrama.nodeDataArray[j].color = "Coral";
+				if (nodeComparar.principal == "true") {
+					objJsonComparar.documento.diagrama.nodeDataArray[j].color = "white";		
+				};
+				$.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
 					if (nodeOriginal.id == nodeComparar.id) {
 						objJsonComparar.documento.diagrama.nodeDataArray[j].color = "Turquoise";		
 					};
