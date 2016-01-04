@@ -52,7 +52,7 @@ var app = {
 
 function redirecionar() {
 	if (localStorage.device == "mobile"){
-		alert("usu" + localStorage.usuario + " nome - " + localStorage.nomeUsuario);		
+//		alert("usu" + localStorage.usuario + " nome - " + localStorage.nomeUsuario);		
 	}else{
 		console.log("usu" + localStorage.usuario + " nome - " + localStorage.nomeUsuario);
 	};

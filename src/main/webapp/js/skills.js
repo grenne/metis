@@ -20,7 +20,7 @@ function incluiDiagrama(modelo, diagrama, novoSkill) {
 		var objJson = JSON.parse(dataSaved);
 		objJson.documento.usuarioAtual = localStorage.usuario;
 		objJson.documento.tipo = "dados";
-		objJson.documento.header[0].valor = modelo;
+		objJson.documento.header[0].valor = diagrama;
 		objJson.documento.situacao = "ativo";
 		objJson.documento.usuarios[0].codigo = localStorage.usuario;
 		$.ajax({
@@ -163,7 +163,7 @@ function finalPanel(panelId, panelLabel, i, panel, manutencao, inputDisabled) {
 function montaPanel(panelId, panelLabel, i, panel, id) {
 
 	var widthDetalhes = $(window).width();
-	var heightDetalhes = $(window).height() - 135 - $("#cabecalho-detalhes").height();
+	var heightDetalhes = $(window).height() - 70 - $("#cabecalho-detalhes").height();
 	var montaScroll = 'style="overflow: scroll; width: 200px; height:' + heightDetalhes + 'px;"';
 	var linha = ''; 
 	linha = linha +
@@ -280,7 +280,7 @@ function montaCampos(i, panelId, z, item, origem, id, manutencao, inputDisabled)
 				'<label class="control-label">Grenne</label>' + 
 				'<input id="input-1" type="file" class="file">'                
 		);
-		alert ("detalhes");
+//		alert ("detalhes");
     }else if(item.modelo == 'input_checkbox') {
 		var textChecked ="";
 		if (item.valor != "") {

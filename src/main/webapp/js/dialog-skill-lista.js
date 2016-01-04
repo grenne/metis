@@ -49,8 +49,10 @@ function montaLinha(i, skills, id, idDiagramaOriginal, panel, tipoAcao, key) {
 					color = header.valor;					
 				};
 			};
-			linha = linha +
-					'<p>' + header.label + ' : ' + header.valor + '</p>'
+			if (header.label != "Cor"){
+				linha = linha +
+				'<p>' + header.label + ' : ' + header.valor + '</p>'
+			};
 		});
 	};
 	linha = linha +	

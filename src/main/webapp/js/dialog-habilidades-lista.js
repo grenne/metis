@@ -51,8 +51,10 @@ function montaLinha(i, habilidades, idDocumento, key, idDiagrama, panel) {
 					color = header.valor;					
 				};
 			};
-			linha = linha +
-					'<p>' + header.label + ' : ' + header.valor + '</p>'
+			if (header.label != "Cor"){
+				linha = linha +
+					'<p>' + header.label + ' : ' + header.valor + '</p>';
+			};
 		});
 	};
 	linha = linha +	
@@ -75,7 +77,7 @@ function montaLinha(i, habilidades, idDocumento, key, idDiagrama, panel) {
 	$("#table-habilidades").append(linha);
 	
     $('#item-' + i).bind( "click", function(event, ui) {
-    	if (habilidades.documento.modelo == "Badges" || habilidades.documento.modelo == "Carreira"){
+    	if (habilidades.documento.modelo == "Badges" || habilidades.documento.modelo == "Carreira" || habilidades.documento.modelo == "Cursos"){
     		atualizaGroup(idDocumento, idDiagrama, panel, key);
     	}else{ 
     		atualizaNode(idDocumento, key, idDiagrama, panel, text, color);

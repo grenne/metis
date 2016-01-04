@@ -10,6 +10,7 @@ $(document).ready(function() {
 	var tipoDevice = mobileDetect();
 	console.log('You are using a mobile device!:' + tipoDevice);
 	var url   = window.location.search.replace();
+	console.log ("url:" + url);
 	
 	
 	$(function(){
@@ -35,10 +36,13 @@ $(document).ready(function() {
 			inicializaWindow();
 			$.each(data.skill.skills, function(i, panel){
 				var panelId = panel.tipo.replace( /\s/g, '' ) + i;
+
 				var panelLabel = panel.label;
 				var id = panel.id;
 				if (i != 0 ){
-					montaComparacao(panelId, panelLabel, i, panel, id, panelLabelList);
+					if (panelLabel.search(" x ") < 0) {
+						montaComparacao(panelId, panelLabel, i, panel, id, panelLabelList);
+					};
 				};
 				init("myDiagram-" + panelId, i, id )
 			});
@@ -131,6 +135,12 @@ $(document).ready(function() {
            	});
 		});
 	});
+	$("#btn-nav-right").bind( "click", function(event, ui) {
+		window.mySwipe.next();
+	});
+	$("#btn-nav-left").bind( "click", function(event, ui) {
+		window.mySwipe.prev();
+	});
 	$("#cancelaNovoPainel").bind( "click", function(event, ui) {
     	$("#popupIncluiPainel").popup( "close" );
 	});
@@ -170,9 +180,12 @@ $(document).ready(function() {
 			var objJsonOriginal = JSON.parse(localStorage.getItem("diagrama-0"));
 			$.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
 				$.each(objJsonComparar.documento.diagrama.nodeDataArray, function(j, nodeComparar){
-					objJsonComparar.documento.diagrama.nodeDataArray[j].color = "aqua";
+					objJsonComparar.documento.diagrama.nodeDataArray[j].color = "Coral";
+					if (nodeComparar.principal == "true") {
+						objJsonComparar.documento.diagrama.nodeDataArray[j].color = "white";		
+					};
 					if (nodeOriginal.id == nodeComparar.id) {
-						objJsonComparar.documento.diagrama.nodeDataArray[j].color = "azure";		
+						objJsonComparar.documento.diagrama.nodeDataArray[j].color = "Turquoise";		
 					};
 				});
 			});
@@ -202,7 +215,7 @@ $(document).ready(function() {
 				$("#popupSkillsCompara").popup( "close" );
 				localStorage.setItem("panel", n);
 				setTimeout('history.go()',200);
-				window.location.reload(true);
+				document.location.replace("metis.html");
 			});
 			
 		});

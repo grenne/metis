@@ -210,7 +210,7 @@ function montaCampos(i, panelId, z, item, origem, id, manutencao, inputDisabled)
 				'<label class="control-label">Grenne</label>' + 
 				'<input id="input-1" type="file" class="file">'                
 		);
-		alert ("detalhes");
+//		alert ("detalhes");
     }else if(item.modelo == 'input_checkbox') {
 		var textChecked ="";
 		if (item.valor != "") {

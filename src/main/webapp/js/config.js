@@ -4,6 +4,7 @@ $(document).ready(function() {
 	var senhaInput$ = $('#senhaPassInput');
 	var nomeUsuario$ = $('#nomeUsuario');
 	var inputChange = false;
+	var mudouUsuario = false;
 
 	if (localStorage.urlServidor != "undefined"){
 		urlInput$.val(localStorage.urlServidor);
@@ -27,7 +28,7 @@ $(document).ready(function() {
 	};
 	
 	if (localStorage.device == "mobile"){
-		alert ("IP:" + localStorage.urlServidor + " CPF:" + localStorage.usuario);
+//		alert ("IP:" + localStorage.urlServidor + " CPF:" + localStorage.usuario);
 	}else{
 		console.log ("IP:" + localStorage.urlServidor);
 		console.log ("CPF:" + localStorage.usuario);
@@ -35,6 +36,7 @@ $(document).ready(function() {
 	
 	$("#usuarioInputText").bind( "change", function() {
 		  inputChange = true;
+		  mudouUsuario = true;
 	});
 
 	$("#nomeUsuario").bind( "change", function() {
@@ -56,7 +58,7 @@ $(document).ready(function() {
 
 	$("#configForm").submit(function(e) {
 		e.preventDefault();
-		salvaConfiguracao(this, inputChange);
+		salvaConfiguracao(this, inputChange, mudouUsuario);
 	});
 	
 	$("#preencheBaseDemo").click(function () { 
@@ -81,7 +83,7 @@ function utilizarBaseDeDemonstracao() {
 	senhaInput$.val(senhaDemo);
 }
 
-function salvaConfiguracao(formulario, inputChange) {
+function salvaConfiguracao(formulario, inputChange, mudouUsuario) {
 	var $configForm = $(formulario);
 
 	if (!$configForm[0].checkValidity()) {
@@ -99,7 +101,7 @@ function salvaConfiguracao(formulario, inputChange) {
 		localStorage.usuErro = "false";
 	};
 
-	if (inputChange){
+	if (inputChange && !mudouUsuario){
 		atualizaUsuario (usuario, senha, nomeUsuario, localStorage.usuId);
 	};
 
@@ -127,7 +129,7 @@ function executaLogin(urlServidor, usuario, senha, inicialLogin) {
 		})
 	  	.done(function( data ) {
        		if (localStorage.device == "mobile"){
-       			alert("Login executado com sucesso!");		
+//       			alert("Login executado com sucesso!");		
        		}else{
        			console.log("Login executado com sucesso!");
        		};		
@@ -155,7 +157,7 @@ function executaLogin(urlServidor, usuario, senha, inicialLogin) {
 			}else{
 				$('#configForm')
 						.append(
-								"<span class='msg-erro'>Usuario ou senha invalido, corrija seus dados para que seja incluido</span>");
+								"<span class='msg-erro'>Usuario ou senha invalido, corrija seus dados</span>");
 				localStorage.senhaInvalida = "true";
 				if (inicialLogin != "true"){
 					document.location.replace("config.html");
@@ -169,14 +171,14 @@ function executaLogin(urlServidor, usuario, senha, inicialLogin) {
 			localStorage.usuario = usuario;
 			
        		if (localStorage.device == "mobile"){
-       			alert("Não foi possível executar login.");		
+//       			alert("Não foi possível executar login.");		
        		}else{
     			console.log("Não foi possível executar login.");
        		};
 
 			$('#configForm')
 					.append(
-							"<span class='msg-erro'>Usuario ou senha invalido, corrija seus dados para que seja incluido</span>");
+							"<span class='msg-erro'>Usuario invalido, para incluir clique novamente</span>");
 			$(".cadastroUsuario").show();
 			localStorage.usuarioInvalido = "true";
 			localStorage.usuErro = "true";

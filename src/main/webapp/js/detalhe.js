@@ -69,6 +69,6 @@ $(function() {
             	console.log ("terminou atualização id:" + id + " data:" + data);
             }
 		});
-		$(window.document.location).attr('href','vistorias-lista.html');
+		$(window.document.location).attr('href','metis.html');
 	});	
 });
