@@ -6,7 +6,7 @@ function montaBarHeader(urlBack) {
 	// setar barra superior para voltar para pagina correta 
 	var linha =
 		'<div  data-role="header" data-position="fixed" data-theme="d">' +
-			'<h1 class="titulo-pagina">Vistoria</h1>' +
+			'<h1 class="titulo-pagina">SKill</h1>' +
 			'<a href="' + urlBack + '" rel="external" data-icon="arrow-l" data-iconpos="notext" id="btn-mostra-volta" >Volta</a>' +
 		'</div>';
 	$("#div-header").append(linha).trigger('create');

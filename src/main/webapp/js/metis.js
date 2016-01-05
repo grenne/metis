@@ -169,6 +169,11 @@ $(document).ready(function() {
     	setTimeout('history.go()',200);
 		window.location.reload(true);
 	});
+	$("#btn-exclui-painel").bind( "click", function(event, ui) {
+		excluiSkill(localStorage.getItem("panel"));
+		setTimeout('history.go()',200);
+		window.location.reload(true);
+	});
 	$("#nodeNewObject" ).bind({
 		popupafterclose: function(event, ui) {
 			window.location.reload(true);

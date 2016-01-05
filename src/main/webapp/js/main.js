@@ -295,6 +295,7 @@ function iniciaAcoes(panelLabelList) {
       // stopPropagation: true,
       callback: function(index, element) {
             $('.titulo-pagina').html(panelLabelList[index]);
+            localStorage.setItem("panel", index);
             if (index == 0){
             	$("#btn-exclui-painel").hide();
             }else{

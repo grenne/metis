@@ -100,6 +100,27 @@ function incluiSkill(nomeSkill, idDiagrama){
      });
 };	
 
+function excluiSkill(painel){
+	var objJson = JSON.parse(localStorage.getItem("skills"));
+	objJson.skill.skills.splice(painel, 1);
+	$.ajax({
+		type: "POST",
+        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/skill/atualizar",
+        contentType: "application/json; charset=utf-8",
+        dataType: 'json',
+        data : JSON.stringify(objJson),
+	})
+	 .done(function( data ) {
+    	 console.log ("inclusão skill saiu por done - " + JSON.stringify(data));
+	  })
+     .fail(function(data) {
+    	 console.log ("inclusão skill saiu por fail - " + JSON.stringify(data));
+     })
+     .always(function(data) {
+		 localStorage.setItem("panel", 0);
+     });
+};	
+
 function criarSkill(nomeSkill, idDiagrama){
 	var new_skill = 
 		'{' +
