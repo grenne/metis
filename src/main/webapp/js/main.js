@@ -294,7 +294,12 @@ function iniciaAcoes(panelLabelList) {
       // disableScroll: true,
       // stopPropagation: true,
       callback: function(index, element) {
-            $('.titulo-pagina').html(panelLabelList[index]); 
+            $('.titulo-pagina').html(panelLabelList[index]);
+            if (index == 0){
+            	$("#btn-exclui-painel").hide();
+            }else{
+            	$("#btn-exclui-painel").show();
+            }
       }
       // transitionEnd: function(index, element) {}
     });

@@ -10,6 +10,7 @@ $(document).ready(function() {
 	var deviceMobile = mobileDetect();
 	console.log('You are using a mobile device!:' + deviceMobile);
 	localStorage.urlServidor = window.location.hostname;
+	localStorage.paineis = 0;
 	if (deviceMobile){
 		localStorage.urlServidor = "52.27.128.28";
 	};
@@ -26,13 +27,19 @@ $(document).ready(function() {
 			var panelLabelList = [];
 			myDiagram = [];
 			$.each(data.skill.skills, function(i, panel){
+				localStorage.paineis = parseInt(localStorage.paineis) + 1; 
 				var panelId = panel.tipo.replace( /\s/g, '' ) + i;
 				var panelLabel = panel.label;
 				var id = panel.id;
 				panelLabelList[i] = panel.label;
 				montaPanel(panelId, panelLabel, i, panel, id);
-			});
-			localStorage.paineis = $( ".swipe .dragme" ).length; 
+			});			
+			if (localStorage.paineis == "1"){
+				$("#bar-footer").hide();
+			}else{
+				$("#bar-footer").show();
+			}
+			$("#btn-exclui-painel").hide();
 		    iniciaSnapper();
 		    iniciaAcoes(panelLabelList);        
 			inicializaWindow();
