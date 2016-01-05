@@ -35,6 +35,7 @@ function init(diagrama, panelReceive, idReceive, diagramaDesc) {
           "SelectionDeleted" : save,
           "SelectionGrouped" : save,
           "SelectionMoved" : selectionMove,
+          "ObjectContextClicked": onTextEdited,
           "TextEdited": onTextEdited
         });
     
@@ -154,7 +155,7 @@ function init(diagrama, panelReceive, idReceive, diagramaDesc) {
             stroke: '#333',
             margin: 6,  // make some extra space for the shape around the text
             isMultiline: false,  // don't allow newlines in text
-            editable: true  // allow in-place editing by user
+            editable: false  // allow in-place editing by user
           },
           new go.Binding("text", "text").makeTwoWay()),  // the label shows the node data's text
         { // this tooltip Adornment is shared by all nodes
@@ -340,13 +341,17 @@ function nodeInfo(d) {  // Tooltip info for a node data object
   }
 // This is called when the user has finished inline text-editing
 function onTextEdited(e) {
-  	var tb = e.subject;
-  	if (tb === null || !tb.name) return;
-  	var node = tb.part;
-  	if (node instanceof go.Node) {
-    	updateProperties(node.data);
-  	}
-  	save(e);
+//  	var tb = e.subject;
+//  	if (tb === null || !tb.name) return;
+//  	var node = tb.part;
+//  	if (node instanceof go.Node) {
+//    	updateProperties(node.data);
+//  	}
+//  	save(e);
+  	var node = e.diagram.selection.first();
+  	localStorage.setItem("diagrama-" + e.diagram.id, e.diagram.model.toJson());
+  	localStorage.setItem("panel", e.diagram.panel);
+  	montaNodeDocumento(e, node.data.id, "8080/metis/rest/documento/atualizar", node.data.key, e.diagram.id, e.diagram.panel);
 }
 // Define the appearance and behavior for Links:
 function linkInfo(d) {  // Tooltip info for a link data object
