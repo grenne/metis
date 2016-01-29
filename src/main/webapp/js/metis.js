@@ -1,5 +1,6 @@
 /* Documento Detalhes */
 $(document).ready(function() {
+	localStorage.urlServidor = window.location.hostname;
 	executaLogin(localStorage.urlServidor, localStorage.usuario, localStorage.senha);
 
     // acertar o tamanha da tela
@@ -9,7 +10,6 @@ $(document).ready(function() {
 	console.log ("$(document).width():" + $(document).width());
 	var deviceMobile = mobileDetect();
 	console.log('You are using a mobile device!:' + deviceMobile);
-	localStorage.urlServidor = window.location.hostname;
 	localStorage.paineis = 0;
 	if (deviceMobile){
 		localStorage.urlServidor = "52.27.128.28";

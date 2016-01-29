@@ -202,7 +202,7 @@ function init(diagrama, panelReceive, idReceive, diagramaDesc) {
           {
             font: "bold 19px sans-serif",
             isMultiline: false,  // don't allow newlines in text
-            editable: true  // allow in-place editing by user
+            editable: false  // allow in-place editing by user
           },
           new go.Binding("text", "text").makeTwoWay(),
           new go.Binding("stroke", "color")),
