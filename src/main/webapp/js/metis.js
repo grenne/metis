@@ -11,13 +11,14 @@ $(document).ready(function() {
 	var deviceMobile = mobileDetect();
 	console.log('You are using a mobile device!:' + deviceMobile);
 	localStorage.paineis = 0;
+	localStorage.comparacao = "false";
 	if (deviceMobile){
 		localStorage.urlServidor = "52.27.128.28";
 	};
 	
 	$(function(){
 		$.ajax({
-            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/skill/obter?usuario=" + localStorage.usuario,
+            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/skill/obter?usuario=YggMap",
             contentType: "application/json; charset=utf-8",
             dataType: 'json'
 		})
@@ -32,7 +33,7 @@ $(document).ready(function() {
 				var panelLabel = panel.label;
 				var id = panel.id;
 				panelLabelList[i] = panel.label;
-				montaPanel(panelId, panelLabel, i, panel, id);
+				montaPanel(panelId, panel.label);
 			});			
 			if (localStorage.paineis == "1"){
 				$("#bar-footer").hide();
@@ -71,88 +72,23 @@ $(document).ready(function() {
        	});
 	});
 
-	$( "#confirmaNovoPainel" ).bind( "click", function(event, ui) {
-		$.ajax({
-            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/obter/modelo?modelo=" + $("#select-tipos-painel" ).val(),
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            async:false
-		})
-		.done(function( data ) {
-			console.log ("inclusão diagrama saiu por done");
-		})
-		.fail(function(data) {
-			console.log ("inclusão diagrama saiu por fail");
-		})
-		.always(function(data) {
-            localStorage.setItem("dadosSaved", JSON.stringify(data));
-    		var dataSaved = localStorage.getItem("dadosSaved");
-    		var objJson = JSON.parse(dataSaved);
-    		objJson.documento.usuarioAtual = localStorage.usuario;
-    		objJson.documento.tipo = "dados";
-    		objJson.documento.header[0].valor = $("#nomePainel" ).val();
-    		objJson.documento.situacao = "ativo";
-    		objJson.documento.usuarios[0].codigo = localStorage.usuario;
-    		$.ajax({
-    			type: "POST",
-                url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/incluir",
-                contentType: "application/json; charset=utf-8",
-                dataType: 'json',
-                data : JSON.stringify(objJson)
-    		})
-    	  	.done(function( data ) {
-    		  console.log ("inclusão diagrama saiu por done");
-            	})
-            .fail(function(data) {
-        	   console.log ("inclusão diagrama saiu por fail");
-           	  })
-           	.always(function(data) {
-       			var idDocumento = data.responseText;
-           		var new_diagrama = 
-					'{"documento" :' + 
-						'{' +
-							'"id":"",' +
-							'"idDocPrincipal":"' + idDocumento + '",' +
-							'"tipo":"' + $("#select-tipos-painel").val() + '",' +
-							'"label":"' + $("#nomePainel" ).val() + '",' +
-							'"diagrama":' +
-							'{' +
-								'"nodeDataArray":[{"loc":"50 50","key":"1","text":"' + $("#nomePainel" ).val() + '","color":"' + objJson.documento.header[1].valor + '","id":"' + idDocumento + '", "principal": "true" }]' +
-							'}' +
-							'}' +
-					'}';
-				objJson = JSON.parse(new_diagrama);
-				$.ajax({
-					type: "POST",
-		            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/incluir",
-		            contentType: "application/json; charset=utf-8",
-		            dataType: 'json',
-		            data : JSON.stringify(objJson)
-				})
-				.done(function( data ) {
-					console.log ("inclusão diagrama saiu por done");
-				})
-				.fail(function(data) {
-					console.log ("inclusão diagrama saiu por fail");
-				})
-				.always(function(data) {
-					incluiSkill ($("#nomePainel" ).val(), data.responseText);
-					localStorage.setItem("panel", localStorage.paineis);
-					$("#popupIncluiPainel").popup( "close" );
-					setTimeout('history.go()',200);
-					window.location.reload(true);
-				});
-           	});
-		});
-	});
 	$("#btn-nav-right").bind( "click", function(event, ui) {
 		window.mySwipe.next();
 	});
 	$("#btn-nav-left").bind( "click", function(event, ui) {
 		window.mySwipe.prev();
 	});
-	$("#cancelaNovoPainel").bind( "click", function(event, ui) {
-    	$("#popupIncluiPainel").popup( "close" );
+	$("#listaCarreiras").bind( "click", function(event, ui) {
+		montaListasSkill("Carreira");
+	});
+	$("#listaBadges").bind( "click", function(event, ui) {
+		montaListasSkill("Badges");
+	});
+	$("#listaCursos").bind( "click", function(event, ui) {
+		montaListasSkill("Cursos");
+	});
+	$("#listaPessoal").bind( "click", function(event, ui) {
+		montaListasSkill("Cursos");
 	});
 	$("#volta-documento").bind( "click", function(event, ui) {
     	$("#popupDetalhes").popup( "close" );
@@ -162,6 +98,9 @@ $(document).ready(function() {
 	});
 	$("#volta-carreira").bind( "click", function(event, ui) {
     	$("#nodePropertiesCarreira").popup( "close" );
+	});
+	$("#fecha-listaSkills").bind( "click", function(event, ui) {
+    	$("#popupSkills").popup( "close" );
 	});
 	$("#volta-modelos").bind( "click", function(event, ui) {
 		localStorage.setItem("dialogOpen", "false");
@@ -180,58 +119,88 @@ $(document).ready(function() {
 		}
 	});
 });
-	function montaComparacao(panelId, panelLabel, i, panel, id, panelLabelList) {
-		var linha = '' + 
-					'<li class="ui-body linha-compara">';
-		
-		linha = linha +
-				'<a id="itemCompara-' + i + '" data-transition="flip" data-close-btn-text="Cancel">';
-		linha = linha +
-				'<h2>' + panelLabel + '</h2>' +
-				'</li>';
-		$("#tabela-compara").append(linha);
-		$( "#itemCompara-" + i ).bind( "click", function(event, ui) {
-			var objJsonComparar = JSON.parse(localStorage.getItem("diagrama-" + i));
-			var objJsonOriginal = JSON.parse(localStorage.getItem("diagrama-0"));
-			$.each(objJsonComparar.documento.diagrama.nodeDataArray, function(j, nodeComparar){
-				objJsonComparar.documento.diagrama.nodeDataArray[j].color = "Coral";
-				if (nodeComparar.principal == "true") {
-					objJsonComparar.documento.diagrama.nodeDataArray[j].color = "white";		
-				};
-				$.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
-					if (nodeOriginal.id == nodeComparar.id) {
-						objJsonComparar.documento.diagrama.nodeDataArray[j].color = "Turquoise";		
-					};
+	
+function montaListasSkill(tipoLista) {
+	$(function() {
+		$.ajax({
+			url : "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/lista?tipoLista=" + tipoLista,
+			contentType : "application/json; charset=utf-8",
+			dataType : 'json',
+			success : function(data) {
+				var dados = JSON.stringify(data);
+				$('.linhasSkill').remove();
+				$.each(data, function(i, skills) {
+					var obj = JSON.stringify(skills);
+					var id = skills._id;
+					montaLinhaSkill(i, skills, id);
 				});
-			});
-			var n = $( ".swipe .dragme" ).length; 
-//			var panelId = objJsonOriginal.documento.tipo.replace( /\s/g, '' ) + "-" + objJsonComparar.documento.tipo.replace( /\s/g, '' ) + n;
-//			var panelLabel = objJsonComparar.documento.label + " x " + objJsonOriginal.documento.label;
-//			panelLabelList[n] = objJsonComparar.documento.label + " x " + objJsonOriginal.documento.label;
-//			montaPanel(panelId, panelLabel, n, panel, id);
-//		    iniciaSnapper();
-//		    iniciaAcoes(panelLabelList);        
-//			init("myDiagram-" + panelId, n, id, objJsonComparar);
-			$.ajax({
-				type: "POST",
-	            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/incluir",
-	            contentType: "application/json; charset=utf-8",
-	            dataType: 'json',
-	            data : JSON.stringify(objJsonComparar)
-			})
-			.done(function( data ) {
-				console.log ("inclusão diagrama saiu por done");
-			})
-			.fail(function(data) {
-				console.log ("inclusão diagrama saiu por fail");
-			})
-			.always(function(data) {
-				incluiSkill (objJsonComparar.documento.label + " x " + objJsonOriginal.documento.label, data.responseText);
-				$("#popupSkillsCompara").popup( "close" );
-				localStorage.setItem("panel", n);
-				setTimeout('history.go()',200);
-				document.location.replace("metis.html");
-			});
-			
+				inicializaWindow();
+				$('ul').listview('refresh');
+				$("#popupSkills").popup( "open" );
+			}
+		});
+	});
+};
+
+function montaLinhaSkill(i, skills, id) {
+	var labelId = skills.label.replace( /\s/g, '' ) + "-" + i;
+	var linha = 
+        '<li class="ui-body linhasSkill">' +
+	    	'<a id="item-' + i + '"  data-transition="flip">' +
+	    		'<h2  class="ui-bar ui-bar-d ui-corner-all">'; 
+	if (skills.documento.header != null){
+		$.each(skills.documento.header, function(i, header) {
+			if (i == 0){
+				text = header.valor;
+			}else{
+				if (i == 1){
+					color = header.valor;					
+				};
+			};
+			if (header.label != "Cor"){
+				linha = linha +
+				'<p>' + header.valor + '</p>'
+			};
 		});
 	};
+	linha = linha +	
+				'</h2>' +
+			'</a>' +
+		'</li>';	
+	$("#tabela-listaSkills").append(linha);
+	
+	$("#item-" + i).bind( "click", function(event, ui) {
+		$("#skill-yggmap0").remove();
+		montaPanel("yggmap0", "YggMap");
+		montaComparacao(id);
+	});
+};
+
+function montaComparacao(id) {
+
+	var objJsonOriginal = JSON.parse(localStorage.getItem("diagrama-0"));
+	jQuery.ajax({
+        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/obter?id=" + id,
+        contentType: "application/json; charset=utf-8",
+        dataType: 'json',
+        async: false,
+        success: function(data) {
+        	var objJsonComparar = data.documento.diagrama.nodeDataArray
+        	$.each(objJsonComparar, function(j, nodeComparar){
+        		$.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
+        			if (nodeOriginal.id == nodeComparar.id) {
+        				objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "coral";		
+        			};
+        		});
+        	});		
+        	localStorage.setItem("diagrama-0", JSON.stringify(objJsonOriginal));
+        	localStorage.setItem("diagrama-1", JSON.stringify(data));
+    		init("myDiagram-yggmap0", 0, 0, JSON.parse(localStorage.getItem("diagrama-0")) );
+    		localStorage.comparacao = "true";
+    		localStorage.labelComparacao = data.documento.label;
+    		$('.titulo-pagina').html("YggMap (comparação com " + data.documento.label + ")");
+    		$("#popupSkills").popup( "close" );
+       }
+	});	
+
+};

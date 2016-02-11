@@ -86,6 +86,21 @@
 	           </div>
 	        </div><!--main -->      
  	   </div>
+	    <div data-role="popup" id="popupSkills" class="ui-content" data-theme="d" style="max-width:300px;" >
+			<div data-role="header" data-rel="back" >
+				<h1 class="titulo-compara">Escolha o Skill</h1>
+				<a id="fecha-listaSkills" href="#" rel="external" class= "btn-volta" data-icon="delete"
+					data-iconpos="notext" id="btn-mostra-volta"></a>
+			</div>
+	        <div
+	            role="main"
+	            class="ui-content jqm-content jqm-fullwidth">        
+	            <div id="listaSkills"  class="ui-responsive" data-iscroll>
+		            <ul id="tabela-listaSkills" data-role="listview" data-filter="true"  data-split-icon="plus" data-filter-placeholder="Pesquisar..."   data-inset="true" >
+	   		        </ul>
+	           </div>
+	        </div><!--main -->      
+ 	   </div>
 	   <div data-role="popup" id="nodePropertiesCarreira" class="ui-content" data-theme="d" style="max-width:800px; ">
 			<div data-role="header" data-rel="back" >
 				<h1 class="titulo-documento">Carreira</h1>
@@ -145,11 +160,11 @@
 				<hr class="separador" />
 				<div id="paineis-popup">
 				</div>
-				<input type="button" value="Enviar" class="submitButton" />
+				<input id="submitButtonDetalhes" type="button" value="Confirmar" class="submitButton" />
 		</div>
 	<div id="conteudo-geral" data-theme="d">
 		<div data-role="header" data-position="fixed">
-			<h1 class="titulo-pagina">Seu Skill</h1>
+			<h1 class="titulo-pagina">YggMap</h1>
 			<a href="#nav-panel" data-icon="bars" data-iconpos="notext"	id="btn-mostra-menu">Menu</a>
 			<a href="#" data-icon="delete" data-iconpos="notext" id="btn-exclui-painel">Exclui Painel</a>
 		</div>

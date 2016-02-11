@@ -287,18 +287,23 @@ function nodeInfo(d) {  // Tooltip info for a node data object
   
   // when a node is double-clicked, add a child to it
   function nodeDoubleClick(e, obj) {
-  	var node = e.diagram.selection.first();
-  	localStorage.setItem("diagrama-" + e.diagram.id, e.diagram.model.toJson());
-  	localStorage.setItem("panel", e.diagram.panel);
-  	montaNodeDocumento(e, node.data.id, "8080/metis/rest/documento/atualizar", node.data.key, e.diagram.id, e.diagram.panel);
-//      var clicked = obj.part;
-//      if (clicked !== null) {
-//        var thisemp = clicked.data;
-//        myDiagram[panel].startTransaction("add employee");
-//        var nextkey = (myDiagram[panel].model.nodeDataArray.length + 1).toString();
-//        var newemp = { key: nextkey, name: "(new person)", title: "", parent: thisemp.key };
-//        myDiagram[panel].model.addNodeData(newemp);
-//        myDiagram[panel].commitTransaction("add employee");
+	  if (localStorage.comparacao == "false"){
+		  var node = e.diagram.selection.first();
+		  localStorage.setItem("diagrama-" + e.diagram.id, e.diagram.model.toJson());
+		  localStorage.setItem("panel", e.diagram.panel);
+		  montaNodeDocumento(e, node.data.id, "8080/metis/rest/documento/atualizar", node.data.key, e.diagram.id, e.diagram.panel);
+	//    var clicked = obj.part;
+	//    if (clicked !== null) {
+	//      var thisemp = clicked.data;
+	//        myDiagram[panel].startTransaction("add employee");
+	//        var nextkey = (myDiagram[panel].model.nodeDataArray.length + 1).toString();
+	//        var newemp = { key: nextkey, name: "(new person)", title: "", parent: thisemp.key };
+	//        myDiagram[panel].model.addNodeData(newemp);
+	//        myDiagram[panel].commitTransaction("add employee");
+	  }else{
+		  var node = e.diagram.selection.first();
+		  montaNodeDocumento(e, node.data.id, "8080/metis/rest/diagrama/atualizar", node.data.key, e.diagram.id, e.diagram.panel);		  
+	  };
   };
   
   // when a node is double-clicked, add a child to it
@@ -393,30 +398,30 @@ function updateData(text, field, panel) {
 // Save the diagram's model in DB
 function save(e) {
 
-	var objJson = JSON.parse(localStorage.getItem("diagrama-" + e.diagram.panel));
-	var objDiagrama = JSON.parse(e.diagram.model.toJson());
-	var i = 0;
-	while (i < objJson.documento.diagrama.nodeDataArray.length) {
-		if (objJson.documento.diagrama.nodeDataArray[i].text == "") {
-			objJson.documento.diagrama.nodeDataArray.splice(i, 1);	
-			i = i - 1;
+	if (localStorage.comparacao == "false"){
+		var objJson = JSON.parse(localStorage.getItem("diagrama-" + e.diagram.panel));
+		var objDiagrama = JSON.parse(e.diagram.model.toJson());
+		var i = 0;
+		while (i < objJson.documento.diagrama.nodeDataArray.length) {
+			if (objJson.documento.diagrama.nodeDataArray[i].text == "") {
+				objJson.documento.diagrama.nodeDataArray.splice(i, 1);	
+				i = i - 1;
+			};
+			i++;
 		};
-		i++;
+		objJson.documento.diagrama.nodeDataArray = objDiagrama.nodeDataArray;
+		objJson.documento.diagrama.linkDataArray = objDiagrama.linkDataArray;
+		$.ajax({
+			type: "POST",
+		       url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/atualizar",
+		       contentType: "application/json; charset=utf-8",
+		       dataType: 'json',
+		       data : JSON.stringify(objJson),
+		       success: function(data) {
+		       }
+		});
+		myDiagram[panel].isModified = false;
 	};
-	
-	objJson.documento.diagrama.nodeDataArray = objDiagrama.nodeDataArray;
-	objJson.documento.diagrama.linkDataArray = objDiagrama.linkDataArray;
-	$.ajax({
-		type: "POST",
-	       url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/atualizar",
-	       contentType: "application/json; charset=utf-8",
-	       dataType: 'json',
-	       data : JSON.stringify(objJson),
-	       success: function(data) {
-	       }
-	});
-	
-	myDiagram[panel].isModified = false;
 }
 
 function load() {
@@ -440,6 +445,16 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
 				var panelLabel = panelDocumento.label;
 				panelLabelList[i] = panelDocumento.label;
 				inicioPanel(panelId, panelLabel, i, panelDocumento);
+				var objJsonOriginal = JSON.parse(localStorage.getItem("diagrama-0"));
+	    		$.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
+	    			if (nodeOriginal.id == id) {
+	    				if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "coral"){
+	    					$('.titulo-documento').html("Exclui de " + localStorage.labelComparacao);
+	    				}else{
+	    					$('.titulo-documento').html("Incluir em " + localStorage.labelComparacao);
+	    				};
+	    			};
+	    		});
 				$.each(panelDocumento.fields, function(z, item){
 					montaCampos(i, panelId, z, item, "detalhes", id, "false", "");
 				});
@@ -459,28 +474,66 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
 		objJson.documento.tipo = "dados";
 		objJson.documento.situacao = "ativo";
 		objJson.documento.usuarios[0].codigo = localStorage.usuario;
-		$.ajax({
-			type: "POST",
-            url: "http://" + localStorage.urlServidor + ":" + acao,
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            data : JSON.stringify(objJson)
-		})
-	  	.done(function( data ) {
-		  console.log ("inclusão diagrama saiu por done");
-        	})
-        .fail(function(data) {
-    	   console.log ("inclusão diagrama saiu por fail");
-       	  })
-       	.always(function(data) {
-       		if (acao.split("/")[4] == "incluir") {
-       			incluiSkill ($("#nomePainel" ).val(), data.responseText);
-       		};
-       		atualizaNode(data.responseText, key, idDiagrama, panel, objJson.documento.header[0].valor, objJson.documento.header[1].valor);
-          });
-		$("#popupDetalhes" ).popup( "close" );
-		setTimeout('history.go()',200);
-		windows.location.reload();
+		if (localStorage.comparacao == "false"){
+			$.ajax({
+				type: "POST",
+	            url: "http://" + localStorage.urlServidor + ":" + acao,
+	            contentType: "application/json; charset=utf-8",
+	            dataType: 'json',
+	            data : JSON.stringify(objJson)
+			})
+		  	.done(function( data ) {
+			  console.log ("inclusão diagrama saiu por done");
+	        	})
+	        .fail(function(data) {
+	    	   console.log ("inclusão diagrama saiu por fail");
+	       	  })
+	       	.always(function(data) {
+	       		if (acao.split("/")[4] == "incluir") {
+	       			incluiSkill ($("#nomePainel" ).val(), data.responseText);
+	       		};
+	       		atualizaNode(data.responseText, key, idDiagrama, panel, objJson.documento.header[0].valor, objJson.documento.header[1].valor);
+	          });
+			$("#popupDetalhes" ).popup( "close" );
+			setTimeout('history.go()',200);
+			windows.location.reload();
+		}else{
+			console.log ("comparacao");
+			$("#popupDetalhes" ).popup( "close" );
+			$("#skill-yggmap0").remove();
+			montaPanel("yggmap0", "YggMap");
+			var objJsonOriginal = JSON.parse(localStorage.getItem("diagrama-0"));
+			var objJsonCompara = JSON.parse(localStorage.getItem("diagrama-1"));
+    		$.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
+    			if (typeof nodeOriginal.id === "undefined"){
+    			}else{
+	    			if (nodeOriginal.id == id) {
+	    				if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "coral"){
+	    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "white";
+	    					$.each(objJsonCompara.documento.diagrama.nodeDataArray, function(z, nodeCompara){
+	    		    			if (typeof nodeCompara.id === "undefined"){
+	    		    			}else{
+		    						if (nodeCompara.id == id) {
+		    							objJsonCompara.documento.diagrama.nodeDataArray.splice(z, 1);
+		    	    					localStorage.setItem("diagrama-1", JSON.stringify(objJsonCompara));
+		    	    					atualizaComparacao();
+		    						};
+	    						};
+	    					});
+	    				}else{
+	    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "coral";
+	    					var new_node = '{"loc":"50 50","key":"1","text":"' + objJson.documento.header[0].valor + '","color":"' + objJson.documento.header[1].valor + '","id":"' + id + '"}';
+	    					var objNode = JSON.parse(new_node);
+	    					objJsonCompara.documento.diagrama.nodeDataArray.push(objNode);
+	    					localStorage.setItem("diagrama-1", JSON.stringify(objJsonCompara));
+	    					atualizaComparacao();
+	    				};
+	    			};
+				};
+    		});
+        	localStorage.setItem("diagrama-0", JSON.stringify(objJsonOriginal));
+			init("myDiagram-yggmap0", 0, 0, JSON.parse(localStorage.getItem("diagrama-0")) );
+		};
 	});	
 };
 
@@ -526,3 +579,19 @@ function montaLinhaModelos(i, modelos, key, idDiagrama, idModelo, panel) {
 	$("#tabela-modelos").append(linha);
 };
 
+function atualizaComparacao() {
+
+	if (localStorage.comparacao == "true"){
+		var objJson = JSON.parse(localStorage.getItem("diagrama-1"));
+		$.ajax({
+			type: "POST",
+		       url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/atualizar",
+		       contentType: "application/json; charset=utf-8",
+		       dataType: 'json',
+		       data : JSON.stringify(objJson),
+		       success: function(data) {
+		       }
+		});
+		myDiagram[panel].isModified = false;
+	};
+}

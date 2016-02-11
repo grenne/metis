@@ -180,7 +180,7 @@ function finalPanel(panelId, panelLabel, i, panel, manutencao, inputDisabled) {
 	);
 };
 
-function montaPanel(panelId, panelLabel, i, panel, id) {
+function montaPanel(panelId, panelLabel) {
 
 	var widthDetalhes = $(window).width();
 	var heightDetalhes = $(window).height() - 70 - $("#cabecalho-detalhes").height();

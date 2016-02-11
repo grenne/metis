@@ -1,22 +1,5 @@
 var restPath = "/rest";
 var loginPath = "/login";
-var funcionarioDetalhesPath = "/funcionario";
-var funcionarioNomePath = "/funcionario/nome";
-var fotoDoFuncionarioPath = "/funcionario/foto";
-var listaFuncionariosDoGestorPath = "/funcionario/lista/doGestor";
-var feriasPath = "/ferias";
-var feriasHistoricoPath = "/ferias/historico";
-var feriasProgramacaoPath = "/ferias/programacao";
-var feriasColetivasPath = "/ferias/coletivas";
-var holeritePath = "/ficha/holerite";
-var processamentosDoAnoPath = "/ficha/processamentosDoAno";
-var anosComProcessamentoPath = "/ficha/anosComProcessamento";
-var dadosPessoaisPath = "/pessoa";
-var excecoesPath = "/ponto/excecoes";
-var motivosDeAbonoPath = "/ponto/motivosDeAbono";
-var motivosDeAutorizacaoPath = "/ponto/motivosDeAutorizacao";
-var tarefasDoWFPath = "/workflow/tarefas";
-var completaTarefasDoWFPath = "/workflow/tarefas/completa";
 
 $(document).on('pagebeforecreate', function () {
     colocaPainelEsquerda();
@@ -101,21 +84,28 @@ function colocaPainelEsquerda() {
                     'rel="external"' +
                     'data-transition="flip">Modelos</a></li>' +
                 '<li><a ' +
-                	'href="#popupIncluiPainel" data-rel="popup"'	 +  
-                    'data-transition="flip">Novo Skill</a></li>' +
+                	'id="listaPessoal"' +
+                    'href="#popupSkills?Pessoal"' +
+                    'rel="external"' +
+                    'data-transition="flip">Seus skills</a></li>' +
                 '<li><a ' +
-                	'href="#popupSkillsCompara" data-rel="popup"'	 +  
-                    'data-transition="flip">Compara skill</a></li>' +
+                	'id="yggmap"' +
+                    'href="metis.html"' +
+                    'rel="external"' +
+                    'data-transition="flip">YggMap</a></li>' +
                 '<li><a ' +
-                    'href="dialog-skill-lista.html?Carreira&diagrama&0"' +
+                	'id="listaCarreiras"' +
+                    'href="#popupSkills?Carreira"' +
                     'rel="external"' +
                     'data-transition="flip">Carreiras</a></li>' +
                 '<li><a ' +
-                	'href="dialog-skill-lista.html?Badges&diagrama&0"' +
+            		'id="listaBadges"' +
+                	'href="#popupSkills?Badges"' +
                     'rel="external"' +
                     'data-transition="flip">Badges</a></li>' +
                  '<li><a ' +
-                	'href="dialog-skill-lista.html?Cursos&diagrama&0"' +
+                 	'id="listaCursos"' +
+                	'href="#popupSkills?Cursos"' +
                     'rel="external"' +
                     'data-transition="flip">Cursos</a></li>' +
                 '<li><a ' +

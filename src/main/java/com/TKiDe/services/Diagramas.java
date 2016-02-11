@@ -220,6 +220,7 @@ public class Diagramas {
 		         }catch (Exception e) {
 		 		}
 		      }
+		    jsonDocumento.put("diagrama", jsonDiagrama);
 			documentos.add(jsonDocumento);
 		};
 		mongo.close();
