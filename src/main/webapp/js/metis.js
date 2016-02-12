@@ -10,15 +10,84 @@ $(document).ready(function() {
 	console.log ("$(document).width():" + $(document).width());
 	var deviceMobile = mobileDetect();
 	console.log('You are using a mobile device!:' + deviceMobile);
-	localStorage.paineis = 0;
-	localStorage.comparacao = "false";
 	if (deviceMobile){
 		localStorage.urlServidor = "52.27.128.28";
 	};
 	
+	//
+	// ** monta paineis iniciais
+	//
+	skillInicial("YggMap");
+
+	//
+	//  ** inicializa campos da tela
+	//
+	$("#btn-nav-right").bind( "click", function(event, ui) {
+		window.mySwipe.next();
+	});
+	$("#btn-nav-left").bind( "click", function(event, ui) {
+		window.mySwipe.prev();
+	});
+	$("#telaInicial").bind( "click", function(event, ui) {
+		skillInicial("YggMap");
+	});
+	$("#listaCarreiras").bind( "click", function(event, ui) {
+		montaListasSkill("Carreira");
+		localStorage.modelo = "Carreira";
+	});
+	$("#listaBadges").bind( "click", function(event, ui) {
+		montaListasSkill("Badges");
+		localStorage.modelo = "Badges";
+	});
+	$("#listaCursos").bind( "click", function(event, ui) {
+		montaListasSkill("Cursos");
+		localStorage.modelo = "Cursos";
+	});
+	$("#listaPessoal").bind( "click", function(event, ui) {
+		montaListasSkill("Pessoal");
+		localStorage.modelo = "Pessoal";
+	});
+	$("#volta-documento").bind( "click", function(event, ui) {
+    	$("#popupDetalhes").popup( "close" );
+	});
+	$("#volta-inlcui-painel").bind( "click", function(event, ui) {
+    	$("#popupIncluiPainel").popup( "close" );
+	});
+	$("#volta-carreira").bind( "click", function(event, ui) {
+    	$("#nodePropertiesCarreira").popup( "close" );
+	});
+	$("#fecha-listaSkills").bind( "click", function(event, ui) {
+    	$("#popupSkills").popup( "close" );
+	});
+	$("#inclui-skills").bind( "click", function(event, ui) {
+		incluiDiagrama(localStorage.modelo, "novo", "sem informacao");
+	});
+	$("#volta-modelos").bind( "click", function(event, ui) {
+		localStorage.setItem("dialogOpen", "false");
+    	$("#nodeNewObject").popup( "close" );
+    	skillInicial("YggMap");
+	});
+	$("#btn-exclui-painel").bind( "click", function(event, ui) {
+		excluiSkill(localStorage.getItem("panel"));
+		setTimeout('skillInicial("YggMap");',20);
+	});
+	$("#nodeNewObject" ).bind({
+		popupafterclose: function(event, ui) {
+			skillInicial("YggMap");
+		}
+	});
+});
+
+function skillInicial(skillInicial) {
+		
+	$(".paineis").remove();
+	localStorage.paineis = 0;
+	localStorage.comparacao = "false";
+	localStorage.corComparacao = "";
+	
 	$(function(){
 		$.ajax({
-            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/skill/obter?usuario=YggMap",
+            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/skill/obter?usuario=" + skillInicial,
             contentType: "application/json; charset=utf-8",
             dataType: 'json'
 		})
@@ -71,54 +140,8 @@ $(document).ready(function() {
 
        	});
 	});
-
-	$("#btn-nav-right").bind( "click", function(event, ui) {
-		window.mySwipe.next();
-	});
-	$("#btn-nav-left").bind( "click", function(event, ui) {
-		window.mySwipe.prev();
-	});
-	$("#listaCarreiras").bind( "click", function(event, ui) {
-		montaListasSkill("Carreira");
-	});
-	$("#listaBadges").bind( "click", function(event, ui) {
-		montaListasSkill("Badges");
-	});
-	$("#listaCursos").bind( "click", function(event, ui) {
-		montaListasSkill("Cursos");
-	});
-	$("#listaPessoal").bind( "click", function(event, ui) {
-		montaListasSkill("Cursos");
-	});
-	$("#volta-documento").bind( "click", function(event, ui) {
-    	$("#popupDetalhes").popup( "close" );
-	});
-	$("#volta-inlcui-painel").bind( "click", function(event, ui) {
-    	$("#popupIncluiPainel").popup( "close" );
-	});
-	$("#volta-carreira").bind( "click", function(event, ui) {
-    	$("#nodePropertiesCarreira").popup( "close" );
-	});
-	$("#fecha-listaSkills").bind( "click", function(event, ui) {
-    	$("#popupSkills").popup( "close" );
-	});
-	$("#volta-modelos").bind( "click", function(event, ui) {
-		localStorage.setItem("dialogOpen", "false");
-    	$("#nodeNewObject").popup( "close" );
-    	setTimeout('history.go()',200);
-		window.location.reload(true);
-	});
-	$("#btn-exclui-painel").bind( "click", function(event, ui) {
-		excluiSkill(localStorage.getItem("panel"));
-		setTimeout('history.go()',200);
-		window.location.reload(true);
-	});
-	$("#nodeNewObject" ).bind({
-		popupafterclose: function(event, ui) {
-			window.location.reload(true);
-		}
-	});
-});
+	
+}
 	
 function montaListasSkill(tipoLista) {
 	$(function() {
@@ -132,7 +155,8 @@ function montaListasSkill(tipoLista) {
 				$.each(data, function(i, skills) {
 					var obj = JSON.stringify(skills);
 					var id = skills._id;
-					montaLinhaSkill(i, skills, id);
+					var idDocumento = skills.documento.id;
+					montaLinhaSkill(i, skills, id, idDocumento);
 				});
 				inicializaWindow();
 				$('ul').listview('refresh');
@@ -142,7 +166,7 @@ function montaListasSkill(tipoLista) {
 	});
 };
 
-function montaLinhaSkill(i, skills, id) {
+function montaLinhaSkill(i, skills, id, idDocumento) {
 	var labelId = skills.label.replace( /\s/g, '' ) + "-" + i;
 	var linha = 
         '<li class="ui-body linhasSkill">' +
@@ -166,6 +190,7 @@ function montaLinhaSkill(i, skills, id) {
 	linha = linha +	
 				'</h2>' +
 			'</a>' +
+			'<a id="item-descricao' + i + '"  data-rel="popup" data-position-to="window" data-transition="pop">Descrição</a>' +
 		'</li>';	
 	$("#tabela-listaSkills").append(linha);
 	
@@ -173,6 +198,9 @@ function montaLinhaSkill(i, skills, id) {
 		$("#skill-yggmap0").remove();
 		montaPanel("yggmap0", "YggMap");
 		montaComparacao(id);
+	});
+	$("#item-descricao" + i).bind( "click", function(event, ui) {
+		telaDescricao(idDocumento);
 	});
 };
 
@@ -185,11 +213,20 @@ function montaComparacao(id) {
         dataType: 'json',
         async: false,
         success: function(data) {
+        	if (localStorage.corComparacao == ""){
+        		localStorage.corComparacao = "coral"
+        	}else{
+        		if (localStorage.corComparacao == "coral"){
+        			localStorage.corComparacao = "green"	
+        		}else{
+        			localStorage.corComparacao = "yellow"
+        		};
+        	};
         	var objJsonComparar = data.documento.diagrama.nodeDataArray
         	$.each(objJsonComparar, function(j, nodeComparar){
         		$.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
         			if (nodeOriginal.id == nodeComparar.id) {
-        				objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "coral";		
+        				objJsonOriginal.documento.diagrama.nodeDataArray[w].color = localStorage.corComparacao;		
         			};
         		});
         	});		
@@ -202,5 +239,136 @@ function montaComparacao(id) {
     		$("#popupSkills").popup( "close" );
        }
 	});	
-
+	
 };
+
+function telaDescricao(id){
+	$('.cabecalho').remove();
+	$('.painel').remove();
+	
+	$.ajax({
+        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/obter?id=" + id,
+        contentType: "application/json; charset=utf-8",
+        dataType: 'json',
+        success: function(data) {
+            localStorage.setItem("dadosSaved", JSON.stringify(data));
+    		montaCabecalho(data.documento.header, id, "false", "");
+			var heightCabecalho = $("#cabecalho-detalhes").height();
+			var panelLabelList = [];
+			$.each(data.documento.panel, function(i, panelDocumento){
+				var panelId = panelDocumento.label.replace( /\s/g, '' ) + i;
+				var panelLabel = panelDocumento.label;
+				panelLabelList[i] = panelDocumento.label;
+				inicioPanel(panelId, panelLabel, i, panelDocumento);
+				var objJsonOriginal = JSON.parse(localStorage.getItem("diagrama-0"));
+				$.each(panelDocumento.fields, function(z, item){
+					montaCampos(i, panelId, z, item, "detalhes", id, "false", "");
+				});
+				finalPanel(panelId, panelLabel, i, panelDocumento);
+			});
+			inicializaWindow();
+			$("#popupSkills").popup( "close" );
+			setTimeout('$("#popupDetalhes").popup( "open" )',200);
+        }
+	});
+	// setar acao para botao submit
+	$( ".submitButton" ).unbind( "click");
+	$( ".submitButton" ).bind( "click", function(event, ui) {
+		var dataSaved = localStorage.getItem("dadosSaved");
+		var objJson = JSON.parse(dataSaved);
+		objJson.documento.id = id;
+		objJson.documento.usuarioAtual = localStorage.usuario;
+		objJson.documento.tipo = "dados";
+		objJson.documento.situacao = "ativo";
+		objJson.documento.usuarios[0].codigo = localStorage.usuario;
+			$.ajax({
+				type: "POST",
+	            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/atualizar",
+	            contentType: "application/json; charset=utf-8",
+	            dataType: 'json',
+	            data : JSON.stringify(objJson)
+			})
+		  	.done(function( data ) {
+			  console.log ("inclusão diagrama saiu por done");
+	        	})
+	        .fail(function(data) {
+	    	   console.log ("inclusão diagrama saiu por fail");
+	       	  })
+	       	.always(function(data) {
+	       		atualizaNode(data.responseText, key, idDiagrama, panel, objJson.documento.header[0].valor, objJson.documento.header[1].valor);
+	          });
+			$("#popupDetalhes" ).popup( "close" );
+	});	
+};
+
+function incluiDiagramasssss(modelo){
+	console.log("aqui");
+	$.ajax({
+        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/obter/modelo?modelo=" + modelo,
+        contentType: "application/json; charset=utf-8",
+        dataType: 'json',
+        async:false
+	})
+	.done(function( data ) {
+		console.log ("inclusão diagrama saiu por done");
+	})
+	.fail(function(data) {
+		console.log ("inclusão diagrama saiu por fail");
+	})
+	.always(function(data) {
+        localStorage.setItem("dadosSaved", JSON.stringify(data));
+		var dataSaved = localStorage.getItem("dadosSaved");
+		var objJson = JSON.parse(dataSaved);
+		objJson.documento.usuarioAtual = localStorage.usuario;
+		objJson.documento.tipo = "dados";
+		objJson.documento.situacao = "ativo";
+		objJson.documento.usuarios[0].codigo = localStorage.usuario;
+		$.ajax({
+			type: "POST",
+            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/incluir",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data : JSON.stringify(objJson)
+		})
+	  	.done(function( data ) {
+		  console.log ("inclusão diagrama saiu por done");
+        	})
+        .fail(function(data) {
+    	   console.log ("inclusão diagrama saiu por fail");
+       	  })
+       	.always(function(data) {
+   			var idDocumento = data.responseText;
+       		var new_diagrama = 
+				'{"documento" :' + 
+					'{' +
+						'"id":"",' +
+						'"idDocPrincipal":"' + idDocumento + '",' +
+						'"tipo":"' + $("#select-tipos-painel").val() + '",' +
+						'"label":"' + $("#nomePainel" ).val() + '",' +
+						'"diagrama":' +
+						'{' +
+							'"nodeDataArray":[{"loc":"50 50","key":"1","text":"' + $("#nomePainel" ).val() + '","color":"' + objJson.documento.header[1].valor + '","id":"' + idDocumento + '", "principal": "true" }]' +
+						'}' +
+						'}' +
+				'}';
+			objJson = JSON.parse(new_diagrama);
+			$.ajax({
+				type: "POST",
+	            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/incluir",
+	            contentType: "application/json; charset=utf-8",
+	            dataType: 'json',
+	            data : JSON.stringify(objJson)
+			})
+			.done(function( data ) {
+				console.log ("inclusão diagrama saiu por done");
+			})
+			.fail(function(data) {
+				console.log ("inclusão diagrama saiu por fail");
+			})
+			.always(function(data) {
+				telaDescricao(idDocumento)
+			});
+       	});
+	});
+
+} 

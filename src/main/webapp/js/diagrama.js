@@ -236,6 +236,8 @@ function init(diagrama, panelReceive, idReceive, diagramaDesc) {
       $(go.Adornment, "Vertical",
           makeButton("Incluir novo skill",
                       function(e, obj) { partCreated(e, obj) }),
+          makeButton("Incluir novo skill",
+                      function(e, obj) { partCreated(e, obj) }),
           makeButton("Colar",
                      function(e, obj) { e.diagram.commandHandler.pasteSelection(e.diagram.lastInput.documentPoint); },
                      function(o) { return o.diagram.commandHandler.canPasteSelection(); }),
@@ -448,7 +450,7 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
 				var objJsonOriginal = JSON.parse(localStorage.getItem("diagrama-0"));
 	    		$.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
 	    			if (nodeOriginal.id == id) {
-	    				if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "coral"){
+	    				if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == localStorage.corComparacao){
 	    					$('.titulo-documento').html("Exclui de " + localStorage.labelComparacao);
 	    				}else{
 	    					$('.titulo-documento').html("Incluir em " + localStorage.labelComparacao);
@@ -495,8 +497,7 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
 	       		atualizaNode(data.responseText, key, idDiagrama, panel, objJson.documento.header[0].valor, objJson.documento.header[1].valor);
 	          });
 			$("#popupDetalhes" ).popup( "close" );
-			setTimeout('history.go()',200);
-			windows.location.reload();
+			setTimeout('skillInicial("YggMap");',200);
 		}else{
 			console.log ("comparacao");
 			$("#popupDetalhes" ).popup( "close" );
@@ -508,7 +509,7 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
     			if (typeof nodeOriginal.id === "undefined"){
     			}else{
 	    			if (nodeOriginal.id == id) {
-	    				if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "coral"){
+	    				if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == localStorage.corComparacao){
 	    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "white";
 	    					$.each(objJsonCompara.documento.diagrama.nodeDataArray, function(z, nodeCompara){
 	    		    			if (typeof nodeCompara.id === "undefined"){
@@ -521,7 +522,7 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
 	    						};
 	    					});
 	    				}else{
-	    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "coral";
+	    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = localStorage.corComparacao;
 	    					var new_node = '{"loc":"50 50","key":"1","text":"' + objJson.documento.header[0].valor + '","color":"' + objJson.documento.header[1].valor + '","id":"' + id + '"}';
 	    					var objNode = JSON.parse(new_node);
 	    					objJsonCompara.documento.diagrama.nodeDataArray.push(objNode);

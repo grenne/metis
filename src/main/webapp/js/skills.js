@@ -21,6 +21,7 @@ function incluiDiagrama(modelo, diagrama, novoSkill) {
 		objJson.documento.usuarioAtual = localStorage.usuario;
 		objJson.documento.tipo = "dados";
 		objJson.documento.header[0].valor = diagrama;
+		objJson.documento.header[1].valor = "novo";
 		objJson.documento.situacao = "ativo";
 		objJson.documento.usuarios[0].codigo = localStorage.usuario;
 		$.ajax({
@@ -68,11 +69,14 @@ function incluiDiagrama(modelo, diagrama, novoSkill) {
 				console.log ("inclusão diagrama saiu por fail");
 			})
 			.always(function(data) {
-				if (novoSkill){
-					criarSkill(diagrama, data.responseText);
-				}else{
-					incluiSkill (diagrama, data.responseText);
-				};
+				telaDescricao(idDocumento)
+//         
+//		****  volta a precisar quando criamos varios paineis		
+//				if (novoSkill){
+//					criarSkill(diagrama, data.responseText);
+//				}else{
+//					incluiSkill (diagrama, data.responseText);
+//				};
 			});
        	});
 	});
@@ -188,7 +192,7 @@ function montaPanel(panelId, panelLabel) {
 	var linha = ''; 
 	linha = linha +
 		'<!-- ' + panelLabel + ' -->' +			
-		'<div id="skill-' + panelId + '" data-role="content" class="dragme dragmeRecepcao">' +
+		'<div id="skill-' + panelId + '" data-role="content" class="dragme dragmeRecepcao paineis">' +
 			'<div id="sample">' +
 				'<div id="myDiagram-' + panelId + '"	style=" width: ' + widthDetalhes + 'px; height: ' + heightDetalhes + 'px"></div>' +
 			'</div>' +

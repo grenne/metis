@@ -89,8 +89,7 @@ function colocaPainelEsquerda() {
                     'rel="external"' +
                     'data-transition="flip">Seus skills</a></li>' +
                 '<li><a ' +
-                	'id="yggmap"' +
-                    'href="metis.html"' +
+                	'id="telaInicial"' +
                     'rel="external"' +
                     'data-transition="flip">YggMap</a></li>' +
                 '<li><a ' +
