@@ -481,6 +481,7 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
 		console.log ("obter documento saiu por fail");
 		incluirDocumento("Habilidades", "perdeu documento");
 		data = JSON.parse(localStorage.getItem("dadosSaved"));
+		id = data.documento.id;
 	    montaCabecalho(data.documento.header, id, "false", "");
 	    var heightCabecalho = $("#cabecalho-detalhes").height();
 	    var panelLabelList = [];
@@ -530,17 +531,18 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
 	            data : JSON.stringify(objJson)
 			})
 		  	.done(function( data ) {
-			  console.log ("inclusão diagrama saiu por done");
-	        	})
+		  		console.log ("inclusão diagrama saiu por done");
+		  	})
 	        .fail(function(data) {
 	    	   console.log ("inclusão diagrama saiu por fail");
-	       	  })
+	        })
 	       	.always(function(data) {
+	       		console.log ("inclusão diagrama saiu por always");
 	       		if (acao.split("/")[4] == "incluir") {
 	       			incluiSkill ($("#nomePainel" ).val(), data.responseText);
 	       		};
-	       		atualizaNode(data.responseText, key, idDiagrama, panel, objJson.documento.header[0].valor, objJson.documento.header[1].valor);
-	          });
+	       		atualizaNode(id, key, idDiagrama, panel, objJson.documento.header[0].valor, objJson.documento.header[1].valor);
+	       	});
 			$("#popupDetalhes" ).popup( "close" );
 			setTimeout('skillInicial("YggMap");',200);
 		}else{

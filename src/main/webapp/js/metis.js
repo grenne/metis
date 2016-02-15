@@ -49,6 +49,7 @@ $(document).ready(function() {
 		window.mySwipe.prev();
 	});
 	$("#telaInicial").bind( "click", function(event, ui) {
+		$('.titulo-pagina').html("YggMap");
 		skillInicial("YggMap");
 	});
 	$("#listaCarreiras").bind( "click", function(event, ui) {
