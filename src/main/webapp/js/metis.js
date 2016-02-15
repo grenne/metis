@@ -15,6 +15,26 @@ $(document).ready(function() {
 	};
 	
 	//
+	// ** obter idModeloHabilidade
+	//
+	$.ajax({
+        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/obter/modelo?modelo=Habilidades",
+        contentType: "application/json; charset=utf-8",
+        dataType: 'json',
+        async:false
+	})
+	.done(function( data ) {
+		console.log ("obter idHabilidade saiu por done");
+		localStorage.idModeloHabilidade = data.documento.id;
+		localStorage.ModeloHabilidade = "Habilidades";
+	})
+	.fail(function(data) {
+		console.log ("obter idHabilidade saiu por fail");
+	})
+	.always(function(data) {
+		console.log ("obter idHabilidade saiu por fail");
+	});
+
 	// ** monta paineis iniciais
 	//
 	skillInicial("YggMap");
@@ -140,8 +160,7 @@ function skillInicial(skillInicial) {
 
        	});
 	});
-	
-}
+};
 	
 function montaListasSkill(tipoLista) {
 	$(function() {
@@ -156,7 +175,7 @@ function montaListasSkill(tipoLista) {
 					var obj = JSON.stringify(skills);
 					var id = skills._id;
 					var idDocumento = skills.documento.id;
-					montaLinhaSkill(i, skills, id, idDocumento);
+					montaLinhaSkill(i, skills, skills._id, skills.documento.id, tipoLista, skills.documento.label);
 				});
 				inicializaWindow();
 				$('ul').listview('refresh');
@@ -166,7 +185,7 @@ function montaListasSkill(tipoLista) {
 	});
 };
 
-function montaLinhaSkill(i, skills, id, idDocumento) {
+function montaLinhaSkill(i, skills, id, idDocumento, tipoLista, nomeDiagrama) {
 	var labelId = skills.label.replace( /\s/g, '' ) + "-" + i;
 	var linha = 
         '<li class="ui-body linhasSkill">' +
@@ -200,7 +219,7 @@ function montaLinhaSkill(i, skills, id, idDocumento) {
 		montaComparacao(id);
 	});
 	$("#item-descricao" + i).bind( "click", function(event, ui) {
-		telaDescricao(idDocumento);
+		telaDescricao(idDocumento, tipoLista, nomeDiagrama, id);
 	});
 };
 
@@ -242,35 +261,30 @@ function montaComparacao(id) {
 	
 };
 
-function telaDescricao(id){
-	$('.cabecalho').remove();
-	$('.painel').remove();
+function telaDescricao(id, modelo, nomeDiagrama, idDiagrama){
 	
 	$.ajax({
         url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/obter?id=" + id,
         contentType: "application/json; charset=utf-8",
-        dataType: 'json',
-        success: function(data) {
-            localStorage.setItem("dadosSaved", JSON.stringify(data));
-    		montaCabecalho(data.documento.header, id, "false", "");
-			var heightCabecalho = $("#cabecalho-detalhes").height();
-			var panelLabelList = [];
-			$.each(data.documento.panel, function(i, panelDocumento){
-				var panelId = panelDocumento.label.replace( /\s/g, '' ) + i;
-				var panelLabel = panelDocumento.label;
-				panelLabelList[i] = panelDocumento.label;
-				inicioPanel(panelId, panelLabel, i, panelDocumento);
-				var objJsonOriginal = JSON.parse(localStorage.getItem("diagrama-0"));
-				$.each(panelDocumento.fields, function(z, item){
-					montaCampos(i, panelId, z, item, "detalhes", id, "false", "");
-				});
-				finalPanel(panelId, panelLabel, i, panelDocumento);
-			});
-			inicializaWindow();
-			$("#popupSkills").popup( "close" );
-			setTimeout('$("#popupDetalhes").popup( "open" )',200);
-        }
-	});
+        dataType: 'json'
+	})  	
+	.done(function( data ) {
+	  console.log ("obter documento saiu por done");
+	  localStorage.setItem("dadosSaved", JSON.stringify(data));
+	  montaDocumento (data);
+	  $("#popupSkills").popup( "close" );
+	  setTimeout('$("#popupDetalhes").popup( "open" )',200);
+	})
+	.fail(function(data) {
+		console.log ("obter documento saiu por fail");
+		incluirDocumento(modelo, nomeDiagrama);
+		montaDocumento (JSON.parse(localStorage.getItem("dadosSaved")));
+		$("#popupSkills").popup( "close" );
+		setTimeout('$("#popupDetalhes").popup( "open" )',200);
+	})
+   	.always(function(data) {
+   		console.log ("obter documento saiu por always");
+   	});
 	// setar acao para botao submit
 	$( ".submitButton" ).unbind( "click");
 	$( ".submitButton" ).bind( "click", function(event, ui) {
@@ -295,80 +309,67 @@ function telaDescricao(id){
 	    	   console.log ("inclusão diagrama saiu por fail");
 	       	  })
 	       	.always(function(data) {
-	       		atualizaNode(data.responseText, key, idDiagrama, panel, objJson.documento.header[0].valor, objJson.documento.header[1].valor);
+	       		obterDiagrama (idDiagrama);
+	       		atualizaDiagrama(data.responseText, idDiagrama, objJson.documento.header[0].valor, objJson.documento.header[1].valor);
 	          });
 			$("#popupDetalhes" ).popup( "close" );
 	});	
 };
+function obterDiagrama (idDiagrama){
 
-function incluiDiagramasssss(modelo){
-	console.log("aqui");
-	$.ajax({
-        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/obter/modelo?modelo=" + modelo,
+	jQuery.ajax({
+        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/obter?id=" + idDiagrama,
         contentType: "application/json; charset=utf-8",
         dataType: 'json',
-        async:false
+        async: false,
 	})
-	.done(function( data ) {
-		console.log ("inclusão diagrama saiu por done");
-	})
-	.fail(function(data) {
-		console.log ("inclusão diagrama saiu por fail");
-	})
-	.always(function(data) {
-        localStorage.setItem("dadosSaved", JSON.stringify(data));
-		var dataSaved = localStorage.getItem("dadosSaved");
-		var objJson = JSON.parse(dataSaved);
-		objJson.documento.usuarioAtual = localStorage.usuario;
-		objJson.documento.tipo = "dados";
-		objJson.documento.situacao = "ativo";
-		objJson.documento.usuarios[0].codigo = localStorage.usuario;
-		$.ajax({
-			type: "POST",
-            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/incluir",
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            data : JSON.stringify(objJson)
-		})
-	  	.done(function( data ) {
-		  console.log ("inclusão diagrama saiu por done");
-        	})
-        .fail(function(data) {
-    	   console.log ("inclusão diagrama saiu por fail");
-       	  })
-       	.always(function(data) {
-   			var idDocumento = data.responseText;
-       		var new_diagrama = 
-				'{"documento" :' + 
-					'{' +
-						'"id":"",' +
-						'"idDocPrincipal":"' + idDocumento + '",' +
-						'"tipo":"' + $("#select-tipos-painel").val() + '",' +
-						'"label":"' + $("#nomePainel" ).val() + '",' +
-						'"diagrama":' +
-						'{' +
-							'"nodeDataArray":[{"loc":"50 50","key":"1","text":"' + $("#nomePainel" ).val() + '","color":"' + objJson.documento.header[1].valor + '","id":"' + idDocumento + '", "principal": "true" }]' +
-						'}' +
-						'}' +
-				'}';
-			objJson = JSON.parse(new_diagrama);
-			$.ajax({
-				type: "POST",
-	            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/incluir",
-	            contentType: "application/json; charset=utf-8",
-	            dataType: 'json',
-	            data : JSON.stringify(objJson)
-			})
-			.done(function( data ) {
-				console.log ("inclusão diagrama saiu por done");
-			})
-			.fail(function(data) {
-				console.log ("inclusão diagrama saiu por fail");
-			})
-			.always(function(data) {
-				telaDescricao(idDocumento)
-			});
-       	});
+  	.done(function( data ) {
+	  console.log ("obter diagrama saiu por done");
+	  localStorage.setItem("diagrama-" + idDiagrama, JSON.stringify(data));
+  	})
+    .fail(function(data) {
+	   console.log ("obter diagrama saiu por fail");
+    })
+   	.always(function(data) {
+ 	   console.log ("obter diagrama saiu por always");
+   	});
+};
+function montaDocumento (data){
+	$('.cabecalho').remove();
+	$('.painel').remove();
+	localStorage.setItem("dadosSaved", JSON.stringify(data));
+	montaCabecalho(data.documento.header, id, "false", "");
+	var heightCabecalho = $("#cabecalho-detalhes").height();
+	var panelLabelList = [];
+	$.each(data.documento.panel, function(i, panelDocumento){
+		var panelId = panelDocumento.label.replace( /\s/g, '' ) + i;
+		var panelLabel = panelDocumento.label;
+		panelLabelList[i] = panelDocumento.label;
+		inicioPanel(panelId, panelLabel, i, panelDocumento);
+		var objJsonOriginal = JSON.parse(localStorage.getItem("diagrama-0"));
+		$.each(panelDocumento.fields, function(z, item){
+			montaCampos(i, panelId, z, item, "detalhes", id, "false", "");
+		});
+		finalPanel(panelId, panelLabel, i, panelDocumento);
 	});
+	inicializaWindow();	
+};
 
-} 
+function atualizaDiagrama(idDocumento, idDiagrama, text, color) {
+	
+	var objJson = JSON.parse(localStorage.getItem("diagrama-" + idDiagrama));
+	objJson.documento.label = text;
+	objJson.documento.idDocPrincipal = idDocumento;
+	$.ajax({
+		type: "POST",
+        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/atualizar",
+        contentType: "application/json; charset=utf-8",
+        dataType: 'json',
+        async : false,
+        data : JSON.stringify(objJson),
+        success: function(data) {
+        	console.log ("terminou atualização diagrama id:" + idDocumento + " data:" + data);
+    		localStorage.removeItem("diagrama-" + idDiagrama);
+        }
+	});
+};

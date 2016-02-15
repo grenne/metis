@@ -7,7 +7,6 @@ function atualizaNode(idDocumento, key, idDiagrama, panel, text, color) {
 	var objJson = JSON.parse(localStorage.getItem("diagrama-" + panel));
 	var objDiagrama = JSON.parse(localStorage.getItem("diagrama-" + idDiagrama));
 	objJson.documento.diagrama.nodeDataArray = objDiagrama.nodeDataArray;
-	
 	objJson.documento.diagrama.linkDataArray = objDiagrama.linkDataArray;
 	$.each(objJson.documento.diagrama.nodeDataArray, function(i, node) {
 		if (node.key == key){

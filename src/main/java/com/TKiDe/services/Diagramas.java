@@ -85,6 +85,7 @@ public class Diagramas {
 		DBCollection collection = db.getCollection("diagrams");
 		Gson gson = new Gson();
 		String jsonDocumento = gson.toJson(doc);
+		System.out.println("xxxxxxx " +jsonDocumento);
 		Map<String,String> mapJson = new HashMap<String,String>();
 		ObjectMapper mapper = new ObjectMapper();
 		mapJson = mapper.readValue(jsonDocumento, HashMap.class);

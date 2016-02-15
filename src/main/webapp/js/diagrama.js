@@ -310,13 +310,19 @@ function nodeInfo(d) {  // Tooltip info for a node data object
   
   // when a node is double-clicked, add a child to it
   function partCreated(e, obj) {
-	var node = e.diagram.selection.first();
-	localStorage.setItem("diagrama-" + e.diagram.id, e.diagram.model.toJson());
-	localStorage.setItem("panel", e.diagram.panel);
-  	montaModeloLista(node.data.key, e.diagram.id, e.diagram.panel); 
-  	jQuery("#nodeNewObject").popup( "open" );
-  	localStorage.setItem("dialogOpen", "true");
-  	save(e);
+	  var node = e.diagram.selection.first();
+	  localStorage.setItem("diagrama-" + e.diagram.id, e.diagram.model.toJson());
+	  var linha = 
+			'<a id="nova_habilidade-' + localStorage.idModeloHabilidade + '" href="nova-habilidade.html?' + localStorage.idModeloHabilidade + '&' + localStorage.ModeloHabilidade + '&' + node.data.key + '&' + e.diagram.id + '&' + e.diagram.panel + '" rel="external" data-transition="flip">Nova Habilidade</a>';
+	  $("#div-incluirHabilidaddeButton").append(linha);
+	  document.location.replace('dialog-habilidades-lista.html?' + localStorage.idModeloHabilidade + '&' + localStorage.ModeloHabilidade + '&' + node.data.key + '&' + e.diagram.id + '&' + e.diagram.panel );	  
+//	
+//	localStorage.setItem("diagrama-" + e.diagram.id, e.diagram.model.toJson());
+//	localStorage.setItem("panel", e.diagram.panel);
+//  	montaModeloLista(node.data.key, e.diagram.id, e.diagram.panel); 
+//  	jQuery("#nodeNewObject").popup( "open" );
+//  	localStorage.setItem("dialogOpen", "true");
+//  	save(e);
   };
 
   // when a node is double-clicked, add a child to it
@@ -360,10 +366,12 @@ function onTextEdited(e) {
   	localStorage.setItem("panel", e.diagram.panel);
   	montaNodeDocumento(e, node.data.id, "8080/metis/rest/documento/atualizar", node.data.key, e.diagram.id, e.diagram.panel);
 }
+
 // Define the appearance and behavior for Links:
 function linkInfo(d) {  // Tooltip info for a link data object
   return "Link:\nfrom " + d.from + " to " + d.to;
 }
+
 // Define the appearance and behavior for Groups:
 function groupInfo(adornment) {  // takes the tooltip or context menu, not a group node data object
   var g = adornment.adornedPart;  // get the Group that the tooltip adorns
@@ -374,10 +382,12 @@ function groupInfo(adornment) {  // takes the tooltip or context menu, not a gro
   });
   return "Group " + g.data.key + ": " + g.data.text + "\n" + mems + " members including " + links + " links";
 }
+
 // Define the behavior for the Diagram background:
 function diagramInfo(model) {  // Tooltip info for the diagram's model
   return "Model:\n" + model.nodeDataArray.length + " nodes, " + model.linkDataArray.length + " links";
 }
+
 // Update the data fields when the text is changed
 function updateData(text, field, panel) {
   var node =myDiagram[panel].selection.first();
@@ -436,36 +446,71 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
 	$.ajax({
         url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/obter?id=" + id,
         contentType: "application/json; charset=utf-8",
-        dataType: 'json',
-        success: function(data) {
-            localStorage.setItem("dadosSaved", JSON.stringify(data));
-    		montaCabecalho(data.documento.header, id, "false", "");
-			var heightCabecalho = $("#cabecalho-detalhes").height();
-			var panelLabelList = [];
-			$.each(data.documento.panel, function(i, panelDocumento){
-				var panelId = panelDocumento.label.replace( /\s/g, '' ) + i;
-				var panelLabel = panelDocumento.label;
-				panelLabelList[i] = panelDocumento.label;
-				inicioPanel(panelId, panelLabel, i, panelDocumento);
-				var objJsonOriginal = JSON.parse(localStorage.getItem("diagrama-0"));
-	    		$.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
-	    			if (nodeOriginal.id == id) {
-	    				if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == localStorage.corComparacao){
-	    					$('.titulo-documento').html("Exclui de " + localStorage.labelComparacao);
-	    				}else{
-	    					$('.titulo-documento').html("Incluir em " + localStorage.labelComparacao);
-	    				};
+        dataType: 'json'
+	})
+  	.done(function(data) {
+  	  console.log ("obter documento saiu por done");
+      localStorage.setItem("dadosSaved", JSON.stringify(data));
+      montaCabecalho(data.documento.header, id, "false", "");
+      var heightCabecalho = $("#cabecalho-detalhes").height();
+      var panelLabelList = [];
+      $.each(data.documento.panel, function(i, panelDocumento){
+    	  var panelId = panelDocumento.label.replace( /\s/g, '' ) + i;
+    	  var panelLabel = panelDocumento.label;
+    	  panelLabelList[i] = panelDocumento.label;
+    	  inicioPanel(panelId, panelLabel, i, panelDocumento);
+    	  var objJsonOriginal = JSON.parse(localStorage.getItem("diagrama-0"));
+    	  $.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
+    		  if (nodeOriginal.id == id) {
+    			  if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == localStorage.corComparacao){
+    				  $('.titulo-documento').html("Exclui de " + localStorage.labelComparacao);
+    			  }else{
+    				  $('.titulo-documento').html("Incluir em " + localStorage.labelComparacao);
+    			  };
+    		  };
+    	  });
+    	  $.each(panelDocumento.fields, function(z, item){
+    		  montaCampos(i, panelId, z, item, "detalhes", id, "false", "");
+    	  });
+    	  finalPanel(panelId, panelLabel, i, panelDocumento);
+    	  inicializaWindow();
+    	  $("#popupDetalhes").popup( "open" );
+      });
+    })
+	.fail(function(data) {
+		console.log ("obter documento saiu por fail");
+		incluirDocumento("Habilidades", "perdeu documento");
+		data = JSON.parse(localStorage.getItem("dadosSaved"));
+	    montaCabecalho(data.documento.header, id, "false", "");
+	    var heightCabecalho = $("#cabecalho-detalhes").height();
+	    var panelLabelList = [];
+	    $.each(data.documento.panel, function(i, panelDocumento){
+	    	var panelId = panelDocumento.label.replace( /\s/g, '' ) + i;
+	    	var panelLabel = panelDocumento.label;
+	    	panelLabelList[i] = panelDocumento.label;
+	    	inicioPanel(panelId, panelLabel, i, panelDocumento);
+	    	var objJsonOriginal = JSON.parse(localStorage.getItem("diagrama-0"));
+	    	$.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
+	    		if (nodeOriginal.id == id) {
+	    			if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == localStorage.corComparacao){
+	    				$('.titulo-documento').html("Exclui de " + localStorage.labelComparacao);
+	    			}else{
+	    				$('.titulo-documento').html("Incluir em " + localStorage.labelComparacao);
 	    			};
-	    		});
-				$.each(panelDocumento.fields, function(z, item){
-					montaCampos(i, panelId, z, item, "detalhes", id, "false", "");
-				});
-				finalPanel(panelId, panelLabel, i, panelDocumento);
-			});
-			inicializaWindow();
-            $("#popupDetalhes").popup( "open" );
-        }
+	    		};
+	    	});
+	    	$.each(panelDocumento.fields, function(z, item){
+	    		montaCampos(i, panelId, z, item, "detalhes", id, "false", "");
+	    	});
+	    	finalPanel(panelId, panelLabel, i, panelDocumento);
+	    	inicializaWindow();
+	    	$("#popupDetalhes").popup( "open" );
+	    });
+	})
+	.always(function(data) {
+		console.log ("obter documento saiu por always");
 	});
+
 	// setar acao para botao submit
 	$( ".submitButton" ).unbind( "click");
 	$( ".submitButton" ).bind( "click", function(event, ui) {

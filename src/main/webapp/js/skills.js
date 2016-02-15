@@ -81,6 +81,64 @@ function incluiDiagrama(modelo, diagrama, novoSkill) {
        	});
 	});
 };
+function incluirDocumento(modelo, nomeDiagrama) {
+	
+	$.ajax({
+        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/obter/modelo?modelo=" + modelo,
+        contentType: "application/json; charset=utf-8",
+        dataType: 'json',
+        async:false
+	})
+	.done(function( data ) {
+		console.log ("inclusão documento saiu por done");
+		var objJson = data;
+		objJson.documento.usuarioAtual = localStorage.usuario;
+		objJson.documento.tipo = "dados";
+		objJson.documento.header[0].valor = nomeDiagrama;
+		objJson.documento.header[1].valor = "novo";
+		objJson.documento.situacao = "ativo";
+		objJson.documento.usuarios[0].codigo = localStorage.usuario;
+		$.ajax({
+			type: "POST",
+			url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/incluir",
+			contentType: "application/json; charset=utf-8",
+			dataType: 'json',
+			async:false,
+			data : JSON.stringify(objJson)
+		})
+		.done(function(data) {
+			console.log ("inclusão documento saiu por done");
+		})
+		.fail(function(data) {
+			console.log ("inclusão documento saiu por fail");
+		})
+		.always(function(data) {
+    	   console.log ("inclusão documento saiu por always");
+    		$.ajax({
+    	        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/obter?id=" + data.responseText,
+    	        contentType: "application/json; charset=utf-8",
+    	        dataType: 'json',
+    	        async:false
+    		})
+    		.done(function( data ) {
+    			console.log ("inclusão documento saiu por done");
+    			localStorage.setItem("dadosSaved", JSON.stringify(data));
+			})
+			.fail(function(data) {
+				console.log ("inclusão documento saiu por fail");
+			})
+			.always(function(data) {
+	    	   console.log ("inclusão documento saiu por always");
+	      	});
+      	});
+	})
+	.fail(function(data) {
+		console.log ("inclusão documento saiu por fail");
+	})
+	.always(function(data) {
+		console.log ("inclusão documento saiu por always");
+	});
+};
 		
 function incluiSkill(nomeSkill, idDiagrama){
 	var objJson = JSON.parse(localStorage.getItem("skills"));
@@ -610,5 +668,4 @@ function salvaConteudo(i, z, labelId, origem, id) {
 		});	
 	};
 	// setar acao para botao submit
-	
 };
