@@ -252,6 +252,7 @@ function montaComparacao(id) {
         	});		
         	localStorage.setItem("diagrama-0", JSON.stringify(objJsonOriginal));
         	localStorage.setItem("diagrama-1", JSON.stringify(data));
+        	$(".paineis").remove();       	
     		init("myDiagram-yggmap0", 0, 0, JSON.parse(localStorage.getItem("diagrama-0")) );
     		localStorage.comparacao = "true";
     		localStorage.labelComparacao = data.documento.label;
