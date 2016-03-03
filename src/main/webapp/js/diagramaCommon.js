@@ -24,7 +24,7 @@ function atualizaNode(idDocumento, key, idDiagrama, panel, text, color) {
         data : JSON.stringify(objJson),
         success: function(data) {
         	console.log ("terminou atualização diagrama id:" + idDocumento + " data:" + data);
-    		localStorage.removeItem("diagrama-" + idDiagrama);
+ //   		localStorage.removeItem("diagrama-" + idDiagrama);
         }
 	});
 };

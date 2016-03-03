@@ -272,7 +272,9 @@ function init(diagrama, panelReceive, idReceive, diagramaDesc) {
 			        			i = i - 1;
 			        		};
 		        		}else{
-			        		if (typeof data.categorias[i].panel[0].fields[4].valor != 'undefined') {
+			        		if (typeof data.categorias[i] != 'undefined' &&
+			        			typeof data.categorias[i].panel[0] != 'undefined' &&
+			        			typeof data.categorias[i].panel[0].fields[4].valor != 'undefined') {
 			        			data.documento.diagrama.nodeDataArray[i].group = data.categorias[i].panel[0].fields[4].valor;
 			        		};
 		        		};
@@ -430,10 +432,17 @@ function save(e) {
 		var objDiagrama = JSON.parse(e.diagram.model.toJson());
 		var i = 0;
 		while (i < objJson.documento.diagrama.nodeDataArray.length) {
-			if (objJson.documento.diagrama.nodeDataArray[i].text == "") {
-				objJson.documento.diagrama.nodeDataArray.splice(i, 1);	
-				i = i - 1;
-			};
+    		if (objJson.documento.diagrama.nodeDataArray[i].text == "") {
+    			objJson.documento.diagrama.nodeDataArray.splice(i, 1);	
+    			i = i - 1;
+    		}else{
+        		if (typeof objJson.documento.diagrama.nodeDataArray[i].isGroup != 'undefined') {
+	        		if (objJson.documento.diagrama.nodeDataArray[i].isGroup) {
+	        			objJson.documento.diagrama.nodeDataArray.splice(i, 1);	
+	        			i = i - 1;
+	        		};
+        		};
+    		};
 			i++;
 		};
 		objJson.documento.diagrama.nodeDataArray = objDiagrama.nodeDataArray;
