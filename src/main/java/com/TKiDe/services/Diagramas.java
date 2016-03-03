@@ -28,7 +28,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.TKiDe.services.Document.Documento;
 import com.google.gson.Gson;
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -85,7 +87,6 @@ public class Diagramas {
 		DBCollection collection = db.getCollection("diagrams");
 		Gson gson = new Gson();
 		String jsonDocumento = gson.toJson(doc);
-		System.out.println("xxxxxxx " +jsonDocumento);
 		Map<String,String> mapJson = new HashMap<String,String>();
 		ObjectMapper mapper = new ObjectMapper();
 		mapJson = mapper.readValue(jsonDocumento, HashMap.class);
@@ -211,7 +212,6 @@ public class Diagramas {
 		        			DBCollection docCollection = db.getCollection("documentos");
 		        			BasicDBObject searchQuery = new BasicDBObject("_id",_id);
 		        			DBObject docCursor = docCollection.findOne(searchQuery);
-		        			JSONObject docDocumento = new JSONObject();
 		        			BasicDBObject docObj = (BasicDBObject) docCursor.get("documento");
 		        			jsonDocumento.put("documento", docObj);
 				        }catch (Exception e) {
@@ -226,6 +226,57 @@ public class Diagramas {
 		};
 		mongo.close();
 		return documentos;
+	};
+	
+	@Path("/obter_com_categoria")	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject ObterComCategoria(@QueryParam("id") String id) throws UnknownHostException, MongoException, ParseException, IOException {
+
+		ObjectId _id = new ObjectId(id);
+		Mongo mongo = new Mongo();
+		DB db = (DB) mongo.getDB("documento");
+		DBCollection collection = db.getCollection("diagrams");
+		BasicDBObject searchQuery = new BasicDBObject("_id",_id);
+		DBObject cursor = collection.findOne(searchQuery);
+		BasicDBObject obj = (BasicDBObject) cursor.get("documento");
+		
+		JSONObject jsonObject; 
+		JSONParser parser = new JSONParser(); 
+		jsonObject = (JSONObject) parser.parse(obj.toString());
+		JSONObject jsonDocumento = new JSONObject();
+		String diagrama = jsonObject.get("diagrama").toString();
+		JSONObject jsonDiagrama;
+		jsonDiagrama = (JSONObject) parser.parse(diagrama);
+		List nodes = (List) jsonDiagrama.get("nodeDataArray");
+		Iterator itr = nodes.iterator();
+		itr = nodes.iterator();
+		int i = 0;
+		JSONArray categorias = new JSONArray();
+	    while(itr.hasNext()) {
+	    	Object element = itr.next();
+	        JSONObject jsonNode;
+	        jsonNode = (JSONObject) parser.parse(element.toString());
+	        
+	        try {
+        		try {
+        			String idDocumento = jsonNode.get("id").toString();
+        			ObjectId _idDoc = new ObjectId(idDocumento);
+        			DBCollection docCollection = db.getCollection("documentos");
+        			BasicDBObject searchQueryDoc = new BasicDBObject("_id",_idDoc);
+        			DBObject docCursor = docCollection.findOne(searchQueryDoc);
+        			BasicDBObject docObj = (BasicDBObject) docCursor.get("documento");
+        			categorias.add(docObj);
+		        }catch (Exception e) {
+		        }
+	         }catch (Exception e) {
+	 		}
+	        i++;
+	      }
+	    jsonDocumento.put("categorias", categorias);
+	    jsonDocumento.put("documento", obj);
+		mongo.close();
+		return jsonDocumento;
 	};
 
 	
