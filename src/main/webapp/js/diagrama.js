@@ -435,13 +435,13 @@ function save(e) {
     		if (objJson.documento.diagrama.nodeDataArray[i].text == "") {
     			objJson.documento.diagrama.nodeDataArray.splice(i, 1);	
     			i = i - 1;
-    		}else{
-        		if (typeof objJson.documento.diagrama.nodeDataArray[i].isGroup != 'undefined') {
-	        		if (objJson.documento.diagrama.nodeDataArray[i].isGroup) {
-	        			objJson.documento.diagrama.nodeDataArray.splice(i, 1);	
-	        			i = i - 1;
-	        		};
-        		};
+//    		}else{
+//        		if (typeof objJson.documento.diagrama.nodeDataArray[i].isGroup != 'undefined') {
+//	        		if (objJson.documento.diagrama.nodeDataArray[i].isGroup) {
+//	        			objJson.documento.diagrama.nodeDataArray.splice(i, 1);	
+//	        			i = i - 1;
+//	        		};
+//        		};
     		};
 			i++;
 		};
@@ -672,14 +672,14 @@ function criarGruposPadrao(nodeDataArray) {
 	'{"key" : "Administração de empresas","text" :"Administração de empresas","color" :"aqua","isGroup" : "true"},'  +
 	'{"key" : "Ciências contábeis","text" :"Ciências contábeis","color" :"aqua","isGroup" : "true"},'  +
 	'{"key" : "Direito","text" :"Direito","color" :"aqua","isGroup" : "true"},'  +
-	'{"key" : "Direito ","text" :"Direito ","color" :"aqua","isGroup" : "true"},'  +
+//	'{"key" : "Direito ","text" :"Direito ","color" :"aqua","isGroup" : "true"},'  +
 	'{"key" : "Economia","text" :"Economia","color" :"aqua","isGroup" : "true"},'  +
-	'{"key" : "Matemática ","text" :"Matemática ","color" :"aqua","isGroup" : "true"},'  +
+//	'{"key" : "Matemática ","text" :"Matemática ","color" :"aqua","isGroup" : "true"},'  +
 	'{"key" : "Tecnologia da informação","text" :"Tecnologia da informação","color" :"aqua","isGroup" : "true"},'  +
-	'{"key" : "Estatística","text" :"Estatística","color" :"aqua","isGroup" : "true"},'  +
+//	'{"key" : "Estatística","text" :"Estatística","color" :"aqua","isGroup" : "true"},'  +
 	'{"key" : "Psicologia","text" :"Psicologia","color" :"aqua","isGroup" : "true"},'  +
-	'{"key" : "Academica","text" :"Academica","color" :"aqua","isGroup" : "true"},'  +
-	'{"key" : "Ética ","text" :"Ética ","color" :"aqua","isGroup" : "true"},' +
+//	'{"key" : "Academica","text" :"Academica","color" :"aqua","isGroup" : "true"},'  +
+//	'{"key" : "Ética ","text" :"Ética ","color" :"aqua","isGroup" : "true"},' +
 	//campos
 	'{"key" : "Finanças","text" :"Finanças","color" :"aquamarine","group":"Administração de empresas","isGroup" : "true"},'  +
 	'{"key" : "Recursos humanos","text" :"Recursos humanos","color" :"aquamarine","group":"Administração de empresas","isGroup" : "true"},'  +
@@ -688,21 +688,21 @@ function criarGruposPadrao(nodeDataArray) {
 	'{"key" : "Estratégia","text" :"Estratégia","color" :"aquamarine","group":"Administração de empresas","isGroup" : "true"},'  +
 	'{"key" : "Comercial","text" :"Comercial","color" :"aquamarine","group":"Administração de empresas","isGroup" : "true"},'  +
 	'{"key" : "Administração geral","text" :"Administração geral","color" :"aquamarine","group":"Administração de empresas","isGroup" : "true"},'  +
-	'{"key" : "Administração geral ","text" :"Administração geral ","color" :"aquamarine","group":"Administração de empresas","isGroup" : "true"},'  +
-	'{"key" : "Logística","text" :"Logística","color" :"aquamarine","group":"Administração de empresas","isGroup" : "true"},'  +
+//	'{"key" : "Administração geral ","text" :"Administração geral ","color" :"aquamarine","group":"Administração de empresas","isGroup" : "true"},'  +
+//	'{"key" : "Logística","text" :"Logística","color" :"aquamarine","group":"Administração de empresas","isGroup" : "true"},'  +
 	'{"key" : "Contabilidade","text" :"Contabilidade","color" :"aquamarine","group":"Ciências contábeis","isGroup" : "true"},'  +
-	'{"key" : "Direito constitucional","text" :"Direito constitucional","color" :"aquamarine","group":"Direito","isGroup" : "true"},'  +
+//	'{"key" : "Direito constitucional","text" :"Direito constitucional","color" :"aquamarine","group":"Direito","isGroup" : "true"},'  +
 	'{"key" : "Direito Civil","text" :"Direito Civil","color" :"aquamarine","group":"Direito","isGroup" : "true"},'  +
-	'{"key" : "Direito trabalhista","text" :"Direito trabalhista","color" :"aquamarine","group":"Direito ","isGroup" : "true"},'  +
+//	'{"key" : "Direito trabalhista","text" :"Direito trabalhista","color" :"aquamarine","group":"Direito","isGroup" : "true"},'  +
 	'{"key" : "Direito tributário","text" :"Direito tributário","color" :"aquamarine","group":"Direito","isGroup" : "true"},'  +
 	'{"key" : "Direito Comercial","text" :"Direito Comercial","color" :"aquamarine","group":"Direito","isGroup" : "true"},'  +
 	'{"key" : "Análise economica","text" :"Análise economica","color" :"aquamarine","group":"Economia","isGroup" : "true"},'  +
 	'{"key" : "Economia comportamental","text" :"Economia comportamental","color" :"aquamarine","group":"Economia","isGroup" : "true"},'  +
-	'{"key" : "Cálculo","text" :"Cálculo","color" :"aquamarine","group":"Matemática ","isGroup" : "true"},'  +
+//	'{"key" : "Cálculo","text" :"Cálculo","color" :"aquamarine","group":"Matemática ","isGroup" : "true"},'  +
 	'{"key" : "Computação geral","text" :"Computação geral","color" :"aquamarine","group":"Tecnologia da informação","isGroup" : "true"},'  +
-	'{"key" : "Psicologia Freudiana","text" :"Psicologia Freudiana","color" :"aquamarine","group":"Psicologia","isGroup" : "true"},'  +
+//	'{"key" : "Psicologia Freudiana","text" :"Psicologia Freudiana","color" :"aquamarine","group":"Psicologia","isGroup" : "true"},'  +
 	'{"key" : "Psicologia do trabalho","text" :"Psicologia do trabalho","color" :"aquamarine","group":"Psicologia","isGroup" : "true"},'  +
-	'{"key" : "Academia","text" :"Academia","color" :"aquamarine","group":"Academica","isGroup" : "true"},'  +
+//	'{"key" : "Academia","text" :"Academia","color" :"aquamarine","group":"Academica","isGroup" : "true"},'  +
 	// categoria
 	'{"key" : "Finanças corporativas","text" :"Finanças corporativas","color" :"greenyellow","group":"Finanças","isGroup" : "true"},'  +
 	'{"key" : "Matemática financeira","text" :"Matemática financeira","color" :"greenyellow","group":"Finanças","isGroup" : "true"},'  +
@@ -725,7 +725,6 @@ function criarGruposPadrao(nodeDataArray) {
 	'{"key" : "Sustentabilidade","text" :"Sustentabilidade","color" :"greenyellow","group":"Administração geral","isGroup" : "true"},'  +
 	'{"key" : "Operações","text" :"Operações","color" :"greenyellow","group":"Administração geral","isGroup" : "true"},'  +
 	'{"key" : "Soft Skills","text" :"Soft Skills","color" :"greenyellow","group":"Administração geral","isGroup" : "true"},'  +
-	'{"key" : "","text" :"","color" :"greenyellow","group":"Logística","isGroup" : "true"},'  +
 	'{"key" : "Contabilidade empresarial","text" :"Contabilidade empresarial","color" :"greenyellow","group":"Contabilidade","isGroup" : "true"},'  +
 	'{"key" : "Contabilidade financeira","text" :"Contabilidade financeira","color" :"greenyellow","group":"Contabilidade","isGroup" : "true"},'  +
 	'{"key" : "Contabilidade Pessoal","text" :"Contabilidade Pessoal","color" :"greenyellow","group":"Contabilidade","isGroup" : "true"},'  +
@@ -741,8 +740,8 @@ function criarGruposPadrao(nodeDataArray) {
 	'{"key" : "Teoria dos jogos","text" :"Teoria dos jogos","color" :"greenyellow","group":"Análise economica","isGroup" : "true"},'  +
 	'{"key" : "Finanças comportamentais","text" :"Finanças comportamentais","color" :"greenyellow","group":"Economia comportamental","isGroup" : "true"},'  +
 	'{"key" : "Utilização MS Office","text" :"Utilização MS Office","color" :"greenyellow","group":"Computação geral","isGroup" : "true"},'  +
-	'{"key" : "Psicologia comportamental","text" :"Psicologia comportamental","color" :"greenyellow","group":"Psicologia do trabalho","isGroup" : "true"},'  +
-	'{"key" : "Monografias","text" :"Monografias","color" :"greenyellow","group":"Academia","isGroup" : "true"}'  +
+	'{"key" : "Psicologia comportamental","text" :"Psicologia comportamental","color" :"greenyellow","group":"Psicologia do trabalho","isGroup" : "true"}'  +
+//	'{"key" : "Monografias","text" :"Monografias","color" :"greenyellow","group":"Academia","isGroup" : "true"}'  +
 	']';
 	
 	var gruposAreas = JSON.parse(montagemGruposAreas);
