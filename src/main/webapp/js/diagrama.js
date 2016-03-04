@@ -672,12 +672,11 @@ function criarGruposPadrao(nodeDataArray) {
 	'{"key" : "Administração de empresas","text" :"Administração de empresas","color" :"aqua","isGroup" : "true"},'  +
 	'{"key" : "Ciências contábeis","text" :"Ciências contábeis","color" :"aqua","isGroup" : "true"},'  +
 	'{"key" : "Direito","text" :"Direito","color" :"aqua","isGroup" : "true"},'  +
-//	'{"key" : "Direito ","text" :"Direito ","color" :"aqua","isGroup" : "true"},'  +
 	'{"key" : "Economia","text" :"Economia","color" :"aqua","isGroup" : "true"},'  +
 //	'{"key" : "Matemática ","text" :"Matemática ","color" :"aqua","isGroup" : "true"},'  +
 	'{"key" : "Tecnologia da informação","text" :"Tecnologia da informação","color" :"aqua","isGroup" : "true"},'  +
 //	'{"key" : "Estatística","text" :"Estatística","color" :"aqua","isGroup" : "true"},'  +
-	'{"key" : "Psicologia","text" :"Psicologia","color" :"aqua","isGroup" : "true"},'  +
+//	'{"key" : "Psicologia","text" :"Psicologia","color" :"aqua","isGroup" : "true"},'  +
 //	'{"key" : "Academica","text" :"Academica","color" :"aqua","isGroup" : "true"},'  +
 //	'{"key" : "Ética ","text" :"Ética ","color" :"aqua","isGroup" : "true"},' +
 	//campos
@@ -688,7 +687,6 @@ function criarGruposPadrao(nodeDataArray) {
 	'{"key" : "Estratégia","text" :"Estratégia","color" :"aquamarine","group":"Administração de empresas","isGroup" : "true"},'  +
 	'{"key" : "Comercial","text" :"Comercial","color" :"aquamarine","group":"Administração de empresas","isGroup" : "true"},'  +
 	'{"key" : "Administração geral","text" :"Administração geral","color" :"aquamarine","group":"Administração de empresas","isGroup" : "true"},'  +
-//	'{"key" : "Administração geral ","text" :"Administração geral ","color" :"aquamarine","group":"Administração de empresas","isGroup" : "true"},'  +
 //	'{"key" : "Logística","text" :"Logística","color" :"aquamarine","group":"Administração de empresas","isGroup" : "true"},'  +
 	'{"key" : "Contabilidade","text" :"Contabilidade","color" :"aquamarine","group":"Ciências contábeis","isGroup" : "true"},'  +
 //	'{"key" : "Direito constitucional","text" :"Direito constitucional","color" :"aquamarine","group":"Direito","isGroup" : "true"},'  +
@@ -701,7 +699,7 @@ function criarGruposPadrao(nodeDataArray) {
 //	'{"key" : "Cálculo","text" :"Cálculo","color" :"aquamarine","group":"Matemática ","isGroup" : "true"},'  +
 	'{"key" : "Computação geral","text" :"Computação geral","color" :"aquamarine","group":"Tecnologia da informação","isGroup" : "true"},'  +
 //	'{"key" : "Psicologia Freudiana","text" :"Psicologia Freudiana","color" :"aquamarine","group":"Psicologia","isGroup" : "true"},'  +
-	'{"key" : "Psicologia do trabalho","text" :"Psicologia do trabalho","color" :"aquamarine","group":"Psicologia","isGroup" : "true"},'  +
+//	'{"key" : "Psicologia do trabalho","text" :"Psicologia do trabalho","color" :"aquamarine","group":"Psicologia","isGroup" : "true"},'  +
 //	'{"key" : "Academia","text" :"Academia","color" :"aquamarine","group":"Academica","isGroup" : "true"},'  +
 	// categoria
 	'{"key" : "Finanças corporativas","text" :"Finanças corporativas","color" :"greenyellow","group":"Finanças","isGroup" : "true"},'  +
@@ -739,8 +737,8 @@ function criarGruposPadrao(nodeDataArray) {
 	'{"key" : "Teoria do desenvolvimento econômico","text" :"Teoria do desenvolvimento econômico","color" :"greenyellow","group":"Análise economica","isGroup" : "true"},'  +
 	'{"key" : "Teoria dos jogos","text" :"Teoria dos jogos","color" :"greenyellow","group":"Análise economica","isGroup" : "true"},'  +
 	'{"key" : "Finanças comportamentais","text" :"Finanças comportamentais","color" :"greenyellow","group":"Economia comportamental","isGroup" : "true"},'  +
-	'{"key" : "Utilização MS Office","text" :"Utilização MS Office","color" :"greenyellow","group":"Computação geral","isGroup" : "true"},'  +
-	'{"key" : "Psicologia comportamental","text" :"Psicologia comportamental","color" :"greenyellow","group":"Psicologia do trabalho","isGroup" : "true"}'  +
+	'{"key" : "Utilização MS Office","text" :"Utilização MS Office","color" :"greenyellow","group":"Computação geral","isGroup" : "true"}'  +
+//	'{"key" : "Psicologia comportamental","text" :"Psicologia comportamental","color" :"greenyellow","group":"Psicologia do trabalho","isGroup" : "true"}'  +
 //	'{"key" : "Monografias","text" :"Monografias","color" :"greenyellow","group":"Academia","isGroup" : "true"}'  +
 	']';
 	

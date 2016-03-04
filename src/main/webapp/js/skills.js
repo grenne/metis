@@ -251,6 +251,7 @@ function montaPanel(panelId, panelLabel) {
 	linha = linha +
 		'<!-- ' + panelLabel + ' -->' +			
 		'<div id="skill-' + panelId + '" data-role="content" class="dragme dragmeRecepcao paineis">' +
+			'<br>' +
 			'<div id="sample">' +
 				'<div id="myDiagram-' + panelId + '"	style=" width: ' + widthDetalhes + 'px; height: ' + heightDetalhes + 'px"></div>' +
 			'</div>' +

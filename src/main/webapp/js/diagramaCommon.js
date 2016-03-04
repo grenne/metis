@@ -2,19 +2,22 @@
  *  atualiza o diagrama segundo dados do documento
  */
 
-function atualizaNode(idDocumento, key, idDiagrama, panel, text, color) {
+function atualizaNode(idDocumento, key, idDiagrama, panel, text, color, atualizaNode) {
 	
 	var objJson = JSON.parse(localStorage.getItem("diagrama-" + panel));
 	var objDiagrama = JSON.parse(localStorage.getItem("diagrama-" + idDiagrama));
 	objJson.documento.diagrama.nodeDataArray = objDiagrama.nodeDataArray;
 	objJson.documento.diagrama.linkDataArray = objDiagrama.linkDataArray;
-	$.each(objJson.documento.diagrama.nodeDataArray, function(i, node) {
-		if (node.key == key){
-			node.id = idDocumento;
-			node.text = text;
-			node.color = color;
-		};
-	});	    	
+	if (atualizaNode  ||
+		typeof atualizaNode == 'undefined'){
+		$.each(objJson.documento.diagrama.nodeDataArray, function(i, node) {
+			if (node.key == key){
+				node.id = idDocumento;
+				node.text = text;
+				node.color = color;
+			};
+		});	    	
+	};
 	$.ajax({
 		type: "POST",
         url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/atualizar",

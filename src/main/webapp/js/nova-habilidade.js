@@ -56,34 +56,38 @@ $(document).ready(function() {
 		var dataSaved = localStorage.getItem("dadosSaved");
 		var objJson = JSON.parse(dataSaved);
 		if (objJson.documento.header[0].valor == "criagrupo"){
-			criaHabllidadesEmGrupo(key, idDiagrama, panel)
+			criaHabllidades(key, idDiagrama, panel)
 		}else{		
-			objJson.documento.usuarioAtual = localStorage.usuario;
-			objJson.documento.tipo = "dados";
-			objJson.documento.situacao = "ativo";
-			objJson.documento.usuarios[0].codigo = localStorage.usuario;
-			$.ajax({
-				type: "POST",
-	            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/incluir",
-	            contentType: "application/json; charset=utf-8",
-	            dataType: 'json',
-	            data : JSON.stringify(objJson)
-			})
-		  	.done(function( data ) {
-			  console.log ("inclusão diagrama saiu por done");
-	        	})
-	        .fail(function(data) {
-	    	   console.log ("inclusão diagrama saiu por fail");
-	       	  })
-	       	.always(function(data) {
-	    	   atualizaNode(data.responseText, key, idDiagrama, panel, objJson.documento.header[0].valor, objJson.documento.header[1].valor);
-	    	   $(window.document.location).attr('href','metis.html');
-	       	});
+			if (objJson.documento.header[0].valor == "crialink"){
+				criaLinkHabllidades(key, idDiagrama, panel)
+			}else{		
+				objJson.documento.usuarioAtual = localStorage.usuario;
+				objJson.documento.tipo = "dados";
+				objJson.documento.situacao = "ativo";
+				objJson.documento.usuarios[0].codigo = localStorage.usuario;
+				$.ajax({
+					type: "POST",
+		            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/incluir",
+		            contentType: "application/json; charset=utf-8",
+		            dataType: 'json',
+		            data : JSON.stringify(objJson)
+				})
+			  	.done(function( data ) {
+				  console.log ("inclusão diagrama saiu por done");
+		        	})
+		        .fail(function(data) {
+		    	   console.log ("inclusão diagrama saiu por fail");
+		       	  })
+		       	.always(function(data) {
+		    	   atualizaNode(data.responseText, key, idDiagrama, panel, objJson.documento.header[0].valor, objJson.documento.header[1].valor);
+		    	   $(window.document.location).attr('href','metis.html');
+		       	})
+			}
 		};
 	});	
 });
 
-function criaHabllidadesEmGrupo(key, idDiagrama, panel){
+function criaHabllidades(key, idDiagrama, panel){
 	
 	var doc_part_1 = '' +
 					'{"documento":{"id":"","tipo":"dados","usuarioAtual":"03868171877","modelo":"Habilidades","situacao":"valido","usuarios":[{"codigo":"03868171877"}],';
@@ -125,7 +129,7 @@ function criaHabllidadesEmGrupo(key, idDiagrama, panel){
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Gestão de remuneração e beneficios"},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Gestão da folha de pagamentos"},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Análise mercadológica"},;' +
-		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Inteligência competitiva"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Inteligência competitiva "},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Precificação de produtos e serviços"},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Atração/ retenção de clientes"},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Criação de estratégia competitiva"},;' +
@@ -149,13 +153,13 @@ function criaHabllidadesEmGrupo(key, idDiagrama, panel){
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Gestão de relacionamento com clientes"},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Negociação "},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"História da administração"},;' +
-		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Tomada de decisões"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Tomada de decisões "},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Gestão de projeto"},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Análise de valor agregado de projetos"},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Desenvolvimento de cronogramas"},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Planejamento de projetos"},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Gerênciamento de riscos de projetos"},;' +
-		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Gestão de projetos"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Gestão de projetos "},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Administração de fundos de investimentos"},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Administração de hospitais e clínicas"},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Gestão da sustentabilidade"},;' +
@@ -601,7 +605,9 @@ function criaHabllidadesEmGrupo(key, idDiagrama, panel){
 	var doc_part_7 = ' ' +
 					'"opcoes":[{"label":"Finanças Corporativas"},{"label":"Trading"},{"label":"Investimentos"},{"label":"Gestão de Recursos Humanos"},{"label":"Gestão de Marketing"},{"label":"Inovação"},{"label":"Novos Negócios"},{"label":"Análise Estratégica"}]}]}]}}';
 	
+
 	var i = 0;
+
 	while (i < arrayDoc_part_4.length) {
 		var objJson = JSON.parse(doc_part_1 + arrayDoc_part_2[i]  + doc_part_3 + arrayDoc_part_4[i] + arrayDoc_part_5[i] + arrayDoc_part_6[i] + doc_part_7);
 		objJson.documento.usuarioAtual = localStorage.usuario;
@@ -623,21 +629,157 @@ function criaHabllidadesEmGrupo(key, idDiagrama, panel){
 		   console.log ("inclusão diagrama saiu por fail");
 	   	  })
 	   	.always(function(data) {
-	   		var node = JSON.parse(
-	   			'{' +
-			            '"key" : "' + objJson.documento.header[0].valor + '",' +
-			            '"text" : "' + objJson.documento.header[0].valor + '",' +
+			$.ajax({
+	            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/obter?id=" + data.responseText,
+	            contentType: "application/json; charset=utf-8",
+	            dataType: 'json',
+	            async:false
+			})
+		  	.done(function( data ) {
+		   		var node = JSON.parse(
+	   					'{' +
+			            '"key" : "' + data.documento.header[0].valor + '",' +
+			            '"text" : "' + data.documento.header[0].valor + '",' +
 			            '"color" : "aquamarine",' +
-			            '"group" : "' + objJson.documento.panel[0].fields[4].valor + '",' +
-			            '"id" : "' + data.responseText + '"' +
+			            '"group" : "' + data.documento.panel[0].fields[4].valor + '",' +
+			            '"id" : "' + data.documento.id + '"' +
 	          			'}');
-	   		objDiagrama.nodeDataArray.push(node);
-	   		localStorage.setItem("diagrama-" + idDiagrama, JSON.stringify(objDiagrama));
-	   		atualizaNode(data.responseText, key, idDiagrama, panel, objJson.documento.header[0].valor, objJson.documento.header[1].valor);
+		   		objDiagrama.nodeDataArray.push(node);
+		   		localStorage.setItem("diagrama-" + idDiagrama, JSON.stringify(objDiagrama));
+		   		atualizaNode(data.documento.id, key, idDiagrama, panel, data.documento.header[0].valor, data.documento.header[1].valor, true);
+		  	})
+		    .fail(function(data) {
+		    	console.log ("obter documento saiu por fail");
+		    })
+		   	.always(function(data) {
+		   		console.log ("obter documento saiu por always");
+		   	});
 	   	});
 		i++;
 	};
+};
 
+function criaLinkHabllidades(key, idDiagrama, panel){	
+	var doc_link =
+		'{"from" : "Análise de demonstrativos financeiros","to" : "Demonstrativos financeiros"};' + 
+		'{"from" : "Análise de índices financeiros","to" : "Análise de demonstrativos financeiros"};' + 
+		'{"from" : "Gestão de caixa","to" : "Análise de demonstrativos financeiros"};' + 
+		'{"from" : "Cálculo do custo de capital","to" : "Teoria financeira"};' + 
+		'{"from" : "Avaliação de empresas (precificação de ações)","to" : "Cálculo do custo de capital"};' + 
+		'{"from" : "Avaliação de empresas (precificação de ações)","to" : "Análise de demonstrativos financeiros"};' + 
+		'{"from" : "Avaliação de empresas (precificação de ações)","to" : "Matemática financeira"};' + 
+		'{"from" : "Avaliação de opções reais","to" : "Precificação de derivativos"};' + 
+		'{"from" : "Avaliação de opções reais","to" : "Desconto de fluxo de caixa"};' + 
+		'{"from" : "Determinação da estrutura de capital","to" : "Teoria financeira"};' + 
+		'{"from" : "Captação a mercado de dívida","to" : "Determinação da estrutura de capital"};' + 
+		'{"from" : "Captação a mercado de dívida","to" : "Negociação"};' + 
+		'{"from" : "Captação a mercado de dívida","to" : "Avaliação de empresas"};' + 
+		'{"from" : "Captação a mercado via ações","to" : "Determinação da estrutura de capital"};' + 
+		'{"from" : "Captação a mercado via ações","to" : "Negociação"};' + 
+		'{"from" : "Captação a mercado via ações","to" : "Avaliação de empresas"};' + 
+		'{"from" : "Fusões e aquisições","to" : "Negociação"};' + 
+		'{"from" : "Fusões e aquisições","to" : "Determinação da estrutura de capital"};' + 
+		'{"from" : "Fusões e aquisições","to" : "Avaliação de empresas"};' + 
+		'{"from" : "Reestruturação de passivos","to" : "Gestão de caixa"};' + 
+		'{"from" : "Reestruturação de passivos","to" : "Determinação da estrutura de capital"};' + 
+		'{"from" : "Reestruturação de passivos","to" : "Negociação"};' + 
+		'{"from" : "Cálculo de juros","to" : "Algebra"};' + 
+		'{"from" : "Utilização de fluxos de caixa","to" : "Cálculo de juros"};' + 
+		'{"from" : "Criação de estratégias de hedge","to" : "Precificação de derivativos"};' + 
+		'{"from" : "Precificação de derivativos","to" : "Teoria financeira"};' + 
+		'{"from" : "Precificação de títulos de renda fixa","to" : "Cálculo da curva a termo de juros"};' + 
+		'{"from" : "Cálculo da curva a termo de juros","to" : "Cálculo de juros"};' + 
+		'{"from" : "Negociação de ações","to" : "Análise fundamentalista"};' + 
+		'{"from" : "Negociação de ações","to" : "Avaliação de empresas"};' + 
+		'{"from" : "Negociação de ações","to" : "Análise quantitativa"};' + 
+		'{"from" : "Negociação de ações","to" : "Negociação"};' + 
+		'{"from" : "Negociação de commodities","to" : "Negociação, análise macro economica"};' + 
+		'{"from" : "Negociação de moedas estrangeiras","to" : "Precificação de derivativos"};' + 
+		'{"from" : "Negociação de moedas estrangeiras","to" : "Análise macro economica"};' + 
+		'{"from" : "Negociação de moedas estrangeiras","to" : "Negociação"};' + 
+		'{"from" : "Negociação de juros","to" : "Cálculo da curva a termo de juros"};' + 
+		'{"from" : "Negociação de juros","to" : "Precificação de derivativos"};' + 
+		'{"from" : "Negociação de juros","to" : "Negociação"};' + 
+		'{"from" : "Gestão de ações","to" : "Otimização de portfolio"};' + 
+		'{"from" : "Gestão de ações","to" : "Teoria financeira"};' + 
+		'{"from" : "Gestão de ações","to" : "Avaliação de empresas"};' + 
+		'{"from" : "Gestão de renda fixa","to" : "Precificação de títulos de renda fixa"};' + 
+		'{"from" : "Análise fundamentaista","to" : "Precificação de títulos de renda fixa"};' + 
+		'{"from" : "Análise fundamentaista","to" : "Avaliação de empresas"};' + 
+		'{"from" : "Análise técnica","to" : "Teoria financeira"};' + 
+		'{"from" : "Análise quantitativa","to" : "Modelagem behaviorista de preços"};' + 
+		'{"from" : "Análise quantitativa","to" : "Avaliação de empresas"};' + 
+		'{"from" : "Contratação de funcionários","to" : "Negociação"};' + 
+		'{"from" : "Criação de estratégias de Recursos humanos","to" : "Gestão de remuneração e benefícios"};' + 
+		'{"from" : "Criação de estratégias de Recursos humanos","to" : "Treinamento de recursos humanos"};' + 
+		'{"from" : "Inteligência competitiva","to" : "Análise mercadológica"};' + 
+		'{"from" : "Precificação de produtos e serviços","to" : "Análise mercadológica"};' + 
+		'{"from" : "Criação de estratégia competitiva","to" : "Segmentação de mercado"};' + 
+		'{"from" : "","to" : "Análise da concorrência"};' + 
+		'{"from" : "Criação de estratégia competitiva","to" : "Análise mercadológica"};' + 
+		'{"from" : "Gestão de produtos","to" : "Precificação de produtos e serviços e gestão de canais"};' + 
+		'{"from" : "Gestão de produtos","to" : "Análise da concorrência"};' + 
+		'{"from" : "Gestão de produtos","to" : "Análise mercadológica"};' + 
+		'{"from" : "Gestão de canais","to" : "Análise da concorrência"};' + 
+		'{"from" : "Gestão de canais","to" : "Análise mercadológica"};' + 
+		'{"from" : "Gestão de canais","to" : "Análise da concorrência"};' + 
+		'{"from" : "Gestão de comunicação mercadológica","to" : "Análise mercadológica"};' + 
+		'{"from" : "Gestão de propaganda e publicidade","to" : "Análise mercadológica"};' + 
+		'{"from" : "Segmentação de mercado","to" : "Análise mercadológica"};' + 
+		'{"from" : "Financiamento de novos negócios","to" : "Teoria financeira, negociação"};' + 
+		'{"from" : "Criação de negócio no modelo Lean Start-up","to" : "Criação de novos modelos de negócios"};' + 
+		'{"from" : "Criação de negócio no modelo Lean Start-up","to" : "Inovação em produtos e serviços"};' + 
+		'{"from" : "Construção de estratégias competitivas","to" : "Análises economicas"};' + 
+		'{"from" : "Construção de estratégias competitivas","to" : "Análises estratégicas"};' + 
+		'{"from" : "Planejamento estratégico","to" : "Análises economicas"};' + 
+		'{"from" : "Planejamento estratégico","to" : "Análises estratégicas"};' + 
+		'{"from" : "Planejamento de projetos","to" : "Desenvolvimento de cronogramas"};' + 
+		'{"from" : "Planejamento de projetos","to" : "Análise de valor agregado de projetos"};' + 
+		'{"from" : "Gestão de projetos","to" : "Gerênciamento de riscos de projetos"};' + 
+		'{"from" : "Gestão de projetos","to" : "Negociação"};' + 
+		'{"from" : "Gestão de projetos","to" : "Comunicação"};' + 
+		'{"from" : "Gestão de projetos","to" : "Planejamento de projetos"};' + 
+		'{"from" : "Determinação de níveis de eficiência","to" : "Criação e revisão de processos"};' + 
+		'{"from" : "Determinação de níveis de eficiência","to" : "Planejamento operacional"};' + 
+		'{"from" : "Montagem de demonstrativos financeiros","to" : "Princípios de contabilidade"};' + 
+		'{"from" : "Gestão Contábil","to" : "Princípios de contabilidade"};' + 
+		'{"from" : "Contabilização de custos","to" : "Princípios de contabilidade"};' + 
+		'{"from" : "Contabilização de receitas","to" : "Princípios de contabilidade"};' + 
+		'{"from" : "Contabilização de resultados","to" : "Contabilização de custos"};' + 
+		'{"from" : "Contabilização de operações de leasing","to" : "Contabilização de receitas"};' + 
+		'{"from" : "Contabilização de operações de leasing","to" : "Princípios de contabilidade"};' + 
+		'{"from" : "Contabilização fiscal","to" : "Contabilização de custos"};' + 
+		'{"from" : "Contabilização fiscal","to" : "Contabilização de receitas"};' + 
+		'{"from" : "Contabilização fiscal","to" : "Princípios de contabilidade"};' + 
+		'{"from" : "Contabilização de operações de leasing","to" : "Princípios de contabilidade"};' + 
+		'{"from" : "Contabilização de seguros","to" : "Princípios de contabilidade"};' + 
+		'{"from" : "Contabilização bancária","to" : "Contabilização de resultados"};' + 
+		'{"from" : "Contabilização bancária","to" : "Contabilização fiscal"};' + 
+		'{"from" : "Contabilização bancária","to" : "Princípios de contabilidade"};' + 
+		'{"from" : "Contabilização de IRPF","to" : "Princípios de contabilidade"};' + 
+		'{"from" : "Basiléia - Cálculos de requerimento de capital ","to" : "Contabilização bancária"};' + 
+		'{"from" : "Basiléia - Cálculos de liquidez e estabilidade de captação","to" : "Contabilização bancária"};' + 
+		'{"from" : "Definição de pessoa jurídica","to" : "Principios constitucionais do direito"};' + 
+		'{"from" : "Consolidação das Leis do trabalho","to" : "Principios constitucionais do direito"};' + 
+		'{"from" : "Reestruturação societária","to" : "Criação de sociedades"};' + 
+		'{"from" : "Reestruturação societária","to" : "Negociação"};' + 
+		'{"from" : "Análise das contas públicas","to" : "Análise macro economica"};' + 
+		'{"from" : "Análise das políticas monetárias e fiscais","to" : "Análise macro economica"};' + 
+		'{"from" : "Modelagem behaviorista de preços","to" : "Precificação de títulos de renda fixa"};' + 
+		'{"from" : "Modelagem behaviorista de preços","to" : "Avaliação de empresas"};' + 
+		'{"from" : "Expertise MS Excel","to" : "Introdução ao pacote office"};' + 
+		'{"from" : "Expertise MS Powerpoint","to" : "Introdução ao pacote office"};' + 
+		'{"from" : "Expertise MS Word","to" : "Introdução ao pacote office"};';
 	
+	var arrayDoc_link = doc_link.split(";");
 	
-}
+	var i = 0;
+	while (i < arrayDoc_link.length) {
+   		var objDiagrama = JSON.parse(localStorage.getItem("diagrama-" + idDiagrama));
+   		var link = JSON.parse(arrayDoc_link[i]);
+   		objDiagrama.linkDataArray.push(link);
+   		localStorage.setItem("diagrama-" + idDiagrama, JSON.stringify(objDiagrama));
+   		atualizaNode(1, key, idDiagrama, panel, "", "", false);
+		i++;
+	};
+};
