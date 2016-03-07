@@ -175,7 +175,9 @@ function montaListasSkill(tipoLista) {
 				$.each(data, function(i, skills) {
 					var obj = JSON.stringify(skills);
 					var id = skills._id;
-					var idDocumento = skills.documento.id;
+					if (typeof skills.documento.id != 'undefined') {
+						var idDocumento = skills.documento.id;
+					};
 					montaLinhaSkill(i, skills, skills._id, skills.documento.id, tipoLista, skills.documento.label);
 				});
 				inicializaWindow();
@@ -252,7 +254,7 @@ function montaComparacao(id) {
         	});		
         	localStorage.setItem("diagrama-0", JSON.stringify(objJsonOriginal));
         	localStorage.setItem("diagrama-1", JSON.stringify(data));
-        	$(".paineis").remove();       	
+//        	$(".paineis").remove();       	
     		init("myDiagram-yggmap0", 0, 0, JSON.parse(localStorage.getItem("diagrama-0")) );
     		localStorage.comparacao = "true";
     		localStorage.labelComparacao = data.documento.label;

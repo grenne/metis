@@ -228,6 +228,22 @@ public class Documentos {
 		return documento;
 	};
 
+	@Path("/obter/query")	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public JSONObject ObterDocumentoNome(@QueryParam("query") String query, @QueryParam("valor") String valor) throws UnknownHostException, MongoException {
+		Mongo mongo = new Mongo();
+		DB db = (DB) mongo.getDB("documento");
+		DBCollection collection = db.getCollection("documentos");
+		BasicDBObject searchQuery = new BasicDBObject(query,valor);
+		DBObject cursor = collection.findOne(searchQuery);
+		JSONObject documento = new JSONObject();
+		BasicDBObject obj = (BasicDBObject) cursor.get("documento");
+		documento.put("documento", obj);
+		mongo.close();
+		return documento;
+	};
+
 	@Path("/obter/modelo")	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

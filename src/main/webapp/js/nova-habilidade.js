@@ -55,33 +55,37 @@ $(document).ready(function() {
 	$( ".submitButton" ).bind( "click", function(event, ui) {
 		var dataSaved = localStorage.getItem("dadosSaved");
 		var objJson = JSON.parse(dataSaved);
-		if (objJson.documento.header[0].valor == "criagrupo"){
+		if (objJson.documento.header[0].valor == "criaHabilidades"){
 			criaHabllidades(key, idDiagrama, panel)
 		}else{		
 			if (objJson.documento.header[0].valor == "crialink"){
 				criaLinkHabllidades(key, idDiagrama, panel)
 			}else{		
-				objJson.documento.usuarioAtual = localStorage.usuario;
-				objJson.documento.tipo = "dados";
-				objJson.documento.situacao = "ativo";
-				objJson.documento.usuarios[0].codigo = localStorage.usuario;
-				$.ajax({
-					type: "POST",
-		            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/incluir",
-		            contentType: "application/json; charset=utf-8",
-		            dataType: 'json',
-		            data : JSON.stringify(objJson)
-				})
-			  	.done(function( data ) {
-				  console.log ("inclusão diagrama saiu por done");
-		        	})
-		        .fail(function(data) {
-		    	   console.log ("inclusão diagrama saiu por fail");
-		       	  })
-		       	.always(function(data) {
-		    	   atualizaNode(data.responseText, key, idDiagrama, panel, objJson.documento.header[0].valor, objJson.documento.header[1].valor);
-		    	   $(window.document.location).attr('href','metis.html');
-		       	})
+				if (objJson.documento.header[0].valor == "criaCarreiras"){
+					criaCarreiras(key, idDiagrama, panel)
+				}else{		
+					objJson.documento.usuarioAtual = localStorage.usuario;
+					objJson.documento.tipo = "dados";
+					objJson.documento.situacao = "ativo";
+					objJson.documento.usuarios[0].codigo = localStorage.usuario;
+					$.ajax({
+						type: "POST",
+			            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/incluir",
+			            contentType: "application/json; charset=utf-8",
+			            dataType: 'json',
+			            data : JSON.stringify(objJson)
+					})
+				  	.done(function( data ) {
+					  console.log ("inclusão diagrama saiu por done");
+			        	})
+			        .fail(function(data) {
+			    	   console.log ("inclusão diagrama saiu por fail");
+			       	  })
+			       	.always(function(data) {
+			    	   atualizaNode(data.responseText, key, idDiagrama, panel, objJson.documento.header[0].valor, objJson.documento.header[1].valor);
+			    	   $(window.document.location).attr('href','metis.html');
+			       	})
+				}
 			}
 		};
 	});	
@@ -661,115 +665,115 @@ function criaHabllidades(key, idDiagrama, panel){
 
 function criaLinkHabllidades(key, idDiagrama, panel){	
 	var doc_link =
-		'{"from" : "Análise de demonstrativos financeiros","to" : "Demonstrativos financeiros"};' + 
-		'{"from" : "Análise de índices financeiros","to" : "Análise de demonstrativos financeiros"};' + 
-		'{"from" : "Gestão de caixa","to" : "Análise de demonstrativos financeiros"};' + 
-		'{"from" : "Cálculo do custo de capital","to" : "Teoria financeira"};' + 
-		'{"from" : "Avaliação de empresas (precificação de ações)","to" : "Cálculo do custo de capital"};' + 
-		'{"from" : "Avaliação de empresas (precificação de ações)","to" : "Análise de demonstrativos financeiros"};' + 
-		'{"from" : "Avaliação de empresas (precificação de ações)","to" : "Matemática financeira"};' + 
-		'{"from" : "Avaliação de opções reais","to" : "Precificação de derivativos"};' + 
-		'{"from" : "Avaliação de opções reais","to" : "Desconto de fluxo de caixa"};' + 
-		'{"from" : "Determinação da estrutura de capital","to" : "Teoria financeira"};' + 
-		'{"from" : "Captação a mercado de dívida","to" : "Determinação da estrutura de capital"};' + 
-		'{"from" : "Captação a mercado de dívida","to" : "Negociação"};' + 
-		'{"from" : "Captação a mercado de dívida","to" : "Avaliação de empresas"};' + 
-		'{"from" : "Captação a mercado via ações","to" : "Determinação da estrutura de capital"};' + 
-		'{"from" : "Captação a mercado via ações","to" : "Negociação"};' + 
-		'{"from" : "Captação a mercado via ações","to" : "Avaliação de empresas"};' + 
-		'{"from" : "Fusões e aquisições","to" : "Negociação"};' + 
-		'{"from" : "Fusões e aquisições","to" : "Determinação da estrutura de capital"};' + 
-		'{"from" : "Fusões e aquisições","to" : "Avaliação de empresas"};' + 
-		'{"from" : "Reestruturação de passivos","to" : "Gestão de caixa"};' + 
-		'{"from" : "Reestruturação de passivos","to" : "Determinação da estrutura de capital"};' + 
-		'{"from" : "Reestruturação de passivos","to" : "Negociação"};' + 
-		'{"from" : "Cálculo de juros","to" : "Algebra"};' + 
-		'{"from" : "Utilização de fluxos de caixa","to" : "Cálculo de juros"};' + 
-		'{"from" : "Criação de estratégias de hedge","to" : "Precificação de derivativos"};' + 
-		'{"from" : "Precificação de derivativos","to" : "Teoria financeira"};' + 
-		'{"from" : "Precificação de títulos de renda fixa","to" : "Cálculo da curva a termo de juros"};' + 
-		'{"from" : "Cálculo da curva a termo de juros","to" : "Cálculo de juros"};' + 
-		'{"from" : "Negociação de ações","to" : "Análise fundamentalista"};' + 
-		'{"from" : "Negociação de ações","to" : "Avaliação de empresas"};' + 
-		'{"from" : "Negociação de ações","to" : "Análise quantitativa"};' + 
-		'{"from" : "Negociação de ações","to" : "Negociação"};' + 
-		'{"from" : "Negociação de commodities","to" : "Negociação, análise macro economica"};' + 
-		'{"from" : "Negociação de moedas estrangeiras","to" : "Precificação de derivativos"};' + 
-		'{"from" : "Negociação de moedas estrangeiras","to" : "Análise macro economica"};' + 
-		'{"from" : "Negociação de moedas estrangeiras","to" : "Negociação"};' + 
-		'{"from" : "Negociação de juros","to" : "Cálculo da curva a termo de juros"};' + 
-		'{"from" : "Negociação de juros","to" : "Precificação de derivativos"};' + 
-		'{"from" : "Negociação de juros","to" : "Negociação"};' + 
-		'{"from" : "Gestão de ações","to" : "Otimização de portfolio"};' + 
-		'{"from" : "Gestão de ações","to" : "Teoria financeira"};' + 
-		'{"from" : "Gestão de ações","to" : "Avaliação de empresas"};' + 
-		'{"from" : "Gestão de renda fixa","to" : "Precificação de títulos de renda fixa"};' + 
-		'{"from" : "Análise fundamentaista","to" : "Precificação de títulos de renda fixa"};' + 
-		'{"from" : "Análise fundamentaista","to" : "Avaliação de empresas"};' + 
-		'{"from" : "Análise técnica","to" : "Teoria financeira"};' + 
-		'{"from" : "Análise quantitativa","to" : "Modelagem behaviorista de preços"};' + 
-		'{"from" : "Análise quantitativa","to" : "Avaliação de empresas"};' + 
-		'{"from" : "Contratação de funcionários","to" : "Negociação"};' + 
-		'{"from" : "Criação de estratégias de Recursos humanos","to" : "Gestão de remuneração e benefícios"};' + 
-		'{"from" : "Criação de estratégias de Recursos humanos","to" : "Treinamento de recursos humanos"};' + 
-		'{"from" : "Inteligência competitiva","to" : "Análise mercadológica"};' + 
-		'{"from" : "Precificação de produtos e serviços","to" : "Análise mercadológica"};' + 
-		'{"from" : "Criação de estratégia competitiva","to" : "Segmentação de mercado"};' + 
-		'{"from" : "","to" : "Análise da concorrência"};' + 
-		'{"from" : "Criação de estratégia competitiva","to" : "Análise mercadológica"};' + 
-		'{"from" : "Gestão de produtos","to" : "Precificação de produtos e serviços e gestão de canais"};' + 
-		'{"from" : "Gestão de produtos","to" : "Análise da concorrência"};' + 
-		'{"from" : "Gestão de produtos","to" : "Análise mercadológica"};' + 
-		'{"from" : "Gestão de canais","to" : "Análise da concorrência"};' + 
-		'{"from" : "Gestão de canais","to" : "Análise mercadológica"};' + 
-		'{"from" : "Gestão de canais","to" : "Análise da concorrência"};' + 
-		'{"from" : "Gestão de comunicação mercadológica","to" : "Análise mercadológica"};' + 
-		'{"from" : "Gestão de propaganda e publicidade","to" : "Análise mercadológica"};' + 
-		'{"from" : "Segmentação de mercado","to" : "Análise mercadológica"};' + 
-		'{"from" : "Financiamento de novos negócios","to" : "Teoria financeira, negociação"};' + 
-		'{"from" : "Criação de negócio no modelo Lean Start-up","to" : "Criação de novos modelos de negócios"};' + 
-		'{"from" : "Criação de negócio no modelo Lean Start-up","to" : "Inovação em produtos e serviços"};' + 
-		'{"from" : "Construção de estratégias competitivas","to" : "Análises economicas"};' + 
-		'{"from" : "Construção de estratégias competitivas","to" : "Análises estratégicas"};' + 
-		'{"from" : "Planejamento estratégico","to" : "Análises economicas"};' + 
-		'{"from" : "Planejamento estratégico","to" : "Análises estratégicas"};' + 
-		'{"from" : "Planejamento de projetos","to" : "Desenvolvimento de cronogramas"};' + 
-		'{"from" : "Planejamento de projetos","to" : "Análise de valor agregado de projetos"};' + 
-		'{"from" : "Gestão de projetos","to" : "Gerênciamento de riscos de projetos"};' + 
-		'{"from" : "Gestão de projetos","to" : "Negociação"};' + 
-		'{"from" : "Gestão de projetos","to" : "Comunicação"};' + 
-		'{"from" : "Gestão de projetos","to" : "Planejamento de projetos"};' + 
-		'{"from" : "Determinação de níveis de eficiência","to" : "Criação e revisão de processos"};' + 
-		'{"from" : "Determinação de níveis de eficiência","to" : "Planejamento operacional"};' + 
-		'{"from" : "Montagem de demonstrativos financeiros","to" : "Princípios de contabilidade"};' + 
-		'{"from" : "Gestão Contábil","to" : "Princípios de contabilidade"};' + 
-		'{"from" : "Contabilização de custos","to" : "Princípios de contabilidade"};' + 
-		'{"from" : "Contabilização de receitas","to" : "Princípios de contabilidade"};' + 
-		'{"from" : "Contabilização de resultados","to" : "Contabilização de custos"};' + 
-		'{"from" : "Contabilização de operações de leasing","to" : "Contabilização de receitas"};' + 
-		'{"from" : "Contabilização de operações de leasing","to" : "Princípios de contabilidade"};' + 
-		'{"from" : "Contabilização fiscal","to" : "Contabilização de custos"};' + 
-		'{"from" : "Contabilização fiscal","to" : "Contabilização de receitas"};' + 
-		'{"from" : "Contabilização fiscal","to" : "Princípios de contabilidade"};' + 
-		'{"from" : "Contabilização de operações de leasing","to" : "Princípios de contabilidade"};' + 
-		'{"from" : "Contabilização de seguros","to" : "Princípios de contabilidade"};' + 
-		'{"from" : "Contabilização bancária","to" : "Contabilização de resultados"};' + 
-		'{"from" : "Contabilização bancária","to" : "Contabilização fiscal"};' + 
-		'{"from" : "Contabilização bancária","to" : "Princípios de contabilidade"};' + 
-		'{"from" : "Contabilização de IRPF","to" : "Princípios de contabilidade"};' + 
-		'{"from" : "Basiléia - Cálculos de requerimento de capital ","to" : "Contabilização bancária"};' + 
-		'{"from" : "Basiléia - Cálculos de liquidez e estabilidade de captação","to" : "Contabilização bancária"};' + 
-		'{"from" : "Definição de pessoa jurídica","to" : "Principios constitucionais do direito"};' + 
-		'{"from" : "Consolidação das Leis do trabalho","to" : "Principios constitucionais do direito"};' + 
-		'{"from" : "Reestruturação societária","to" : "Criação de sociedades"};' + 
-		'{"from" : "Reestruturação societária","to" : "Negociação"};' + 
-		'{"from" : "Análise das contas públicas","to" : "Análise macro economica"};' + 
-		'{"from" : "Análise das políticas monetárias e fiscais","to" : "Análise macro economica"};' + 
-		'{"from" : "Modelagem behaviorista de preços","to" : "Precificação de títulos de renda fixa"};' + 
-		'{"from" : "Modelagem behaviorista de preços","to" : "Avaliação de empresas"};' + 
-		'{"from" : "Expertise MS Excel","to" : "Introdução ao pacote office"};' + 
-		'{"from" : "Expertise MS Powerpoint","to" : "Introdução ao pacote office"};' + 
-		'{"from" : "Expertise MS Word","to" : "Introdução ao pacote office"};';
+		'{"from" : "Demonstrativos financeiros","to" : "Análise de demonstrativos financeiros"};' + 
+		'{"from" : "Análise de demonstrativos financeiros","to" : "Análise de índices financeiros"};' + 
+		'{"from" : "Análise de demonstrativos financeiros","to" : "Gestão de caixa"};' + 
+		'{"from" : "Teoria financeira","to" : "Cálculo do custo de capital"};' + 
+		'{"from" : "Cálculo do custo de capital","to" : "Avaliação de empresas (precificação de ações)"};' + 
+		'{"from" : "Análise de demonstrativos financeiros","to" : "Avaliação de empresas (precificação de ações)"};' + 
+		'{"from" : "Matemática financeira","to" : "Avaliação de empresas (precificação de ações)"};' + 
+		'{"from" : "Precificação de derivativos","to" : "Avaliação de opções reais"};' + 
+		'{"from" : "Desconto de fluxo de caixa","to" : "Avaliação de opções reais"};' + 
+		'{"from" : "Teoria financeira","to" : "Determinação da estrutura de capital"};' + 
+		'{"from" : "Determinação da estrutura de capital","to" : "Captação a mercado de dívida"};' + 
+		'{"from" : "Negociação","to" : "Captação a mercado de dívida"};' + 
+		'{"from" : "Avaliação de empresas","to" : "Captação a mercado de dívida"};' + 
+		'{"from" : "Determinação da estrutura de capital","to" : "Captação a mercado via ações"};' + 
+		'{"from" : "Negociação","to" : "Captação a mercado via ações"};' + 
+		'{"from" : "Avaliação de empresas","to" : "Captação a mercado via ações"};' + 
+		'{"from" : "Negociação","to" : "Fusões e aquisições"};' + 
+		'{"from" : "Determinação da estrutura de capital","to" : "Fusões e aquisições"};' + 
+		'{"from" : "Avaliação de empresas","to" : "Fusões e aquisições"};' + 
+		'{"from" : "Gestão de caixa","to" : "Reestruturação de passivos"};' + 
+		'{"from" : "Determinação da estrutura de capital","to" : "Reestruturação de passivos"};' + 
+		'{"from" : "Negociação","to" : "Reestruturação de passivos"};' + 
+		'{"from" : "Algebra","to" : "Cálculo de juros"};' + 
+		'{"from" : "Cálculo de juros","to" : "Utilização de fluxos de caixa"};' + 
+		'{"from" : "Precificação de derivativos","to" : "Criação de estratégias de hedge"};' + 
+		'{"from" : "Teoria financeira","to" : "Precificação de derivativos"};' + 
+		'{"from" : "Cálculo da curva a termo de juros","to" : "Precificação de títulos de renda fixa"};' + 
+		'{"from" : "Cálculo de juros","to" : "Cálculo da curva a termo de juros"};' + 
+		'{"from" : "Análise fundamentalista","to" : "Negociação de ações"};' + 
+		'{"from" : "Avaliação de empresas","to" : "Negociação de ações"};' + 
+		'{"from" : "Análise quantitativa","to" : "Negociação de ações"};' + 
+		'{"from" : "Negociação","to" : "Negociação de ações"};' + 
+		'{"from" : "Negociação, análise macro economica","to" : "Negociação de commodities"};' + 
+		'{"from" : "Precificação de derivativos","to" : "Negociação de moedas estrangeiras"};' + 
+		'{"from" : "Análise macro economica","to" : "Negociação de moedas estrangeiras"};' + 
+		'{"from" : "Negociação","to" : "Negociação de moedas estrangeiras"};' + 
+		'{"from" : "Cálculo da curva a termo de juros","to" : "Negociação de juros"};' + 
+		'{"from" : "Precificação de derivativos","to" : "Negociação de juros"};' + 
+		'{"from" : "Negociação","to" : "Negociação de juros"};' + 
+		'{"from" : "Otimização de portfolio","to" : "Gestão de ações"};' + 
+		'{"from" : "Teoria financeira","to" : "Gestão de ações"};' + 
+		'{"from" : "Avaliação de empresas","to" : "Gestão de ações"};' + 
+		'{"from" : "Precificação de títulos de renda fixa","to" : "Gestão de renda fixa"};' + 
+		'{"from" : "Precificação de títulos de renda fixa","to" : "Análise fundamentaista"};' + 
+		'{"from" : "Avaliação de empresas","to" : "Análise fundamentaista"};' + 
+		'{"from" : "Teoria financeira","to" : "Análise técnica"};' + 
+		'{"from" : "Modelagem behaviorista de preços","to" : "Análise quantitativa"};' + 
+		'{"from" : "Avaliação de empresas","to" : "Análise quantitativa"};' + 
+		'{"from" : "Negociação","to" : "Contratação de funcionários"};' + 
+		'{"from" : "Gestão de remuneração e benefícios","to" : "Criação de estratégias de Recursos humanos"};' + 
+		'{"from" : "Treinamento de recursos humanos","to" : "Criação de estratégias de Recursos humanos"};' + 
+		'{"from" : "Análise mercadológica","to" : "Inteligência competitiva"};' + 
+		'{"from" : "Análise mercadológica","to" : "Precificação de produtos e serviços"};' + 
+		'{"from" : "Segmentação de mercado","to" : "Criação de estratégia competitiva"};' + 
+		'{"from" : "Análise da concorrência","to" : ""};' + 
+		'{"from" : "Análise mercadológica","to" : "Criação de estratégia competitiva"};' + 
+		'{"from" : "Precificação de produtos e serviços e gestão de canais","to" : "Gestão de produtos"};' + 
+		'{"from" : "Análise da concorrência","to" : "Gestão de produtos"};' + 
+		'{"from" : "Análise mercadológica","to" : "Gestão de produtos"};' + 
+		'{"from" : "Análise da concorrência","to" : "Gestão de canais"};' + 
+		'{"from" : "Análise mercadológica","to" : "Gestão de canais"};' + 
+		'{"from" : "Análise da concorrência","to" : "Gestão de canais"};' + 
+		'{"from" : "Análise mercadológica","to" : "Gestão de comunicação mercadológica"};' + 
+		'{"from" : "Análise mercadológica","to" : "Gestão de propaganda e publicidade"};' + 
+		'{"from" : "Análise mercadológica","to" : "Segmentação de mercado"};' + 
+		'{"from" : "Teoria financeira, negociação","to" : "Financiamento de novos negócios"};' + 
+		'{"from" : "Criação de novos modelos de negócios","to" : "Criação de negócio no modelo Lean Start-up"};' + 
+		'{"from" : "Inovação em produtos e serviços","to" : "Criação de negócio no modelo Lean Start-up"};' + 
+		'{"from" : "Análises economicas","to" : "Construção de estratégias competitivas"};' + 
+		'{"from" : "Análises estratégicas","to" : "Construção de estratégias competitivas"};' + 
+		'{"from" : "Análises economicas","to" : "Planejamento estratégico"};' + 
+		'{"from" : "Análises estratégicas","to" : "Planejamento estratégico"};' + 
+		'{"from" : "Desenvolvimento de cronogramas","to" : "Planejamento de projetos"};' + 
+		'{"from" : "Análise de valor agregado de projetos","to" : "Planejamento de projetos"};' + 
+		'{"from" : "Gerênciamento de riscos de projetos","to" : "Gestão de projetos"};' + 
+		'{"from" : "Negociação","to" : "Gestão de projetos"};' + 
+		'{"from" : "Comunicação","to" : "Gestão de projetos"};' + 
+		'{"from" : "Planejamento de projetos","to" : "Gestão de projetos"};' + 
+		'{"from" : "Criação e revisão de processos","to" : "Determinação de níveis de eficiência"};' + 
+		'{"from" : "Planejamento operacional","to" : "Determinação de níveis de eficiência"};' + 
+		'{"from" : "Princípios de contabilidade","to" : "Montagem de demonstrativos financeiros"};' + 
+		'{"from" : "Princípios de contabilidade","to" : "Gestão Contábil"};' + 
+		'{"from" : "Princípios de contabilidade","to" : "Contabilização de custos"};' + 
+		'{"from" : "Princípios de contabilidade","to" : "Contabilização de receitas"};' + 
+		'{"from" : "Contabilização de custos","to" : "Contabilização de resultados"};' + 
+		'{"from" : "Contabilização de receitas","to" : "Contabilização de operações de leasing"};' + 
+		'{"from" : "Princípios de contabilidade","to" : "Contabilização de operações de leasing"};' + 
+		'{"from" : "Contabilização de custos","to" : "Contabilização fiscal"};' + 
+		'{"from" : "Contabilização de receitas","to" : "Contabilização fiscal"};' + 
+		'{"from" : "Princípios de contabilidade","to" : "Contabilização fiscal"};' + 
+		'{"from" : "Princípios de contabilidade","to" : "Contabilização de operações de leasing"};' + 
+		'{"from" : "Princípios de contabilidade","to" : "Contabilização de seguros"};' + 
+		'{"from" : "Contabilização de resultados","to" : "Contabilização bancária"};' + 
+		'{"from" : "Contabilização fiscal","to" : "Contabilização bancária"};' + 
+		'{"from" : "Princípios de contabilidade","to" : "Contabilização bancária"};' + 
+		'{"from" : "Princípios de contabilidade","to" : "Contabilização de IRPF"};' + 
+		'{"from" : "Contabilização bancária","to" : "Basiléia - Cálculos de requerimento de capital "};' + 
+		'{"from" : "Contabilização bancária","to" : "Basiléia - Cálculos de liquidez e estabilidade de captação"};' + 
+		'{"from" : "Principios constitucionais do direito","to" : "Definição de pessoa jurídica"};' + 
+		'{"from" : "Principios constitucionais do direito","to" : "Consolidação das Leis do trabalho"};' + 
+		'{"from" : "Criação de sociedades","to" : "Reestruturação societária"};' + 
+		'{"from" : "Negociação","to" : "Reestruturação societária"};' + 
+		'{"from" : "Análise macro economica","to" : "Análise das contas públicas"};' + 
+		'{"from" : "Análise macro economica","to" : "Análise das políticas monetárias e fiscais"};' + 
+		'{"from" : "Precificação de títulos de renda fixa","to" : "Modelagem behaviorista de preços"};' + 
+		'{"from" : "Avaliação de empresas","to" : "Modelagem behaviorista de preços"};' + 
+		'{"from" : "Introdução ao pacote office","to" : "Expertise MS Excel"};' + 
+		'{"from" : "Introdução ao pacote office","to" : "Expertise MS Powerpoint"};' + 
+		'{"from" : "Introdução ao pacote office","to" : "Expertise MS Word"};';
 	
 	var arrayDoc_link = doc_link.split(";");
 	
@@ -780,6 +784,464 @@ function criaLinkHabllidades(key, idDiagrama, panel){
    		objDiagrama.linkDataArray.push(link);
    		localStorage.setItem("diagrama-" + idDiagrama, JSON.stringify(objDiagrama));
    		atualizaNode(1, key, idDiagrama, panel, "", "", false);
+		i++;
+	};
+};
+
+function criaCarreiras(key, idDiagrama, panel){
+	
+	var doc_part_1 = '' +
+					'{"documento":{"id":"","tipo":"dados","usuarioAtual":"03868171877","modelo":"Carreira","situacao":"valido","usuarios":[{"codigo":"03868171877"}],';
+	var doc_part_2 = 
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Estagiário - finanças"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Analista financeiro (jr. a sr.)"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Especialista financeiro"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Coordenador financeiro"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Gerente financeiro"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Superintendente financeiro"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Diretor financeiro"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"CFO"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Analista IB"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Associate IB"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Vice presidente IB"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Director IB"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Managing Director IB"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Analista Private Equity"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Associate Private Equity"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Vice presidente Private Equity"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Diretor/ sócio Private Equity"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Estagiário"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Analista"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Business analyst (sr.)"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Associate/Consultor (sr.)"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Gerente (sr.)"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Project leader"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Engagement manager"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Principal"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Estagiário - Marketing"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Analista de mercado"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Gerente de produtos"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Gerente de marketing"},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Diretor de marketing"},;';
+
+	var arrayDoc_part_2 = doc_part_2.split(";");	
+	
+	var doc_part_3 = ' ' +
+					'{"modelo":"input_select","label":"Cor","valor":"aquamarine","opcoes":[{"label":"aqua"},{"label":"lightblue"},{"label":"lightgreen"},{"label":"azure"},{"label":"aquamarine"},{"label":"blanchedalmond"}]}],"panel":[{"modelo":"swipe","label":"Descrição","fields":[{"modelo":"input_textarea",';
+	
+	var doc_part_4 = 
+		'"label":"Descrição Rotina Básica","valor":"Coleta informações financeiras, manutenção de relatórios, extração de dados de bases, pesquisa de dados economicos"},{"modelo":"input_decimal","label":"Salário","valor":"0,8 - 1,8"},{"modelo":"input_decimal","label":"Salário Médio","valor":"1200"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Análise de informações financeiras, desenvolvimento de relatórios, extração de dados de bases "},{"modelo":"input_decimal","label":"Salário","valor":"2,6 - 9,8"},{"modelo":"input_decimal","label":"Salário Médio","valor":"4500"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Análise de informações financeiras, desenvolvimento de relatórios, extração de dados de bases, realização de apresentações "},{"modelo":"input_decimal","label":"Salário","valor":"5,0 - 11,8"},{"modelo":"input_decimal","label":"Salário Médio","valor":"7000"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Análise de informações financeiras, desenvolvimento de relatórios, extração de dados de bases, apresentações para alta gestão, coordenação de equipe"},{"modelo":"input_decimal","label":"Salário","valor":"6,6 - 15,2"},{"modelo":"input_decimal","label":"Salário Médio","valor":"10000"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Gestão de equipe, apresentações para alta gestão, responsabilidade pelos produtos desenvolvidos na área, Interação intra-empresa "},{"modelo":"input_decimal","label":"Salário","valor":"8,8 - 25,8"},{"modelo":"input_decimal","label":"Salário Médio","valor":"14000"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Gestão de equipes de gerentes, apresentações para alta gestão, responsabilidade pelos produtos desenvolvidos em sua área, Interação intra-empresa e com alta gestão"},{"modelo":"input_decimal","label":"Salário","valor":"12,3 - 43,6"},{"modelo":"input_decimal","label":"Salário Médio","valor":"20000"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Gestão de departamento, Interação com alta gestão, participação de comitês, responsabilidade pela produção das informações financeiras da empresa"},{"modelo":"input_decimal","label":"Salário","valor":"17,8 - 65,4"},{"modelo":"input_decimal","label":"Salário Médio","valor":"30000"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Gestão de departamento, Interação com alta gestão, participação de comitês, responsabilidade pela produção das informações financeiras da empresa"},{"modelo":"input_decimal","label":"Salário","valor":"32,0 - 78,0"},{"modelo":"input_decimal","label":"Salário Médio","valor":"45000"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Avaliação de empresas e negócios, desenvolvimento de materiais e pitches para clientes, pesquisa de informações de mercado"},{"modelo":"input_decimal","label":"Salário","valor":"7,0 - 12,0"},{"modelo":"input_decimal","label":"Salário Médio","valor":"9500"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Supervisão de analistas, apresentação para clientes, avaliação de empresas e negócios, revisão de materiais e pitches para clientes"},{"modelo":"input_decimal","label":"Salário","valor":"14,6 - 22,3"},{"modelo":"input_decimal","label":"Salário Médio","valor":"17000"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Alocação de equipes, gestão de equipes, apresentação para clientes"},{"modelo":"input_decimal","label":"Salário","valor":"19,8 - 32,4"},{"modelo":"input_decimal","label":"Salário Médio","valor":"26200"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Gestão de equipes, apresentação para clientes, negociação de mandatos"},{"modelo":"input_decimal","label":"Salário","valor":"35,2 - 46,4"},{"modelo":"input_decimal","label":"Salário Médio","valor":"40000"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Interação com clientes para negociação de mandatos, gestão da área"},{"modelo":"input_decimal","label":"Salário","valor":"44,4 - 62,8"},{"modelo":"input_decimal","label":"Salário Médio","valor":"55000"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Análise de empresas e economica, análise de deals, pesquisa de mercado, acompanhamento de processos de due diligence"},{"modelo":"input_decimal","label":"Salário","valor":"7,0 - 12,0"},{"modelo":"input_decimal","label":"Salário Médio","valor":"9500"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Análise de empresas e deals, originação de deals, coordenação de processos de due diligence, gestão de empresas do portfolio"},{"modelo":"input_decimal","label":"Salário","valor":"14,6 - 22,3"},{"modelo":"input_decimal","label":"Salário Médio","valor":"17000"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Originação de deals, supervisão de processos de due diligence, gestão de empresas do portfolio, estruturação de operações financeiras"},{"modelo":"input_decimal","label":"Salário","valor":"19,8 - 32,4"},{"modelo":"input_decimal","label":"Salário Médio","valor":"26200"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Relacionamento com investidores, estruturação e captação de novos fundos, originação de deals"},{"modelo":"input_decimal","label":"Salário","valor":"35,2 - 46,4"},{"modelo":"input_decimal","label":"Salário Médio","valor":"40000"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Pesquisa de dados, montagem de apresentações, apoio aos consultores"},{"modelo":"input_decimal","label":"Salário","valor":"1,1 - 2,3"},{"modelo":"input_decimal","label":"Salário Médio","valor":"1600"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Análise de informações, entrevistas com cliente, montagem de material"},{"modelo":"input_decimal","label":"Salário","valor":"3,2 - 5,4"},{"modelo":"input_decimal","label":"Salário Médio","valor":"4300"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Análise de informações, entrevistas com cliente, montagem de material"},{"modelo":"input_decimal","label":"Salário","valor":"6,2 - 8,0"},{"modelo":"input_decimal","label":"Salário Médio","valor":"7100"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Análise de informações, entrevistas com cliente, desenvolvimento de soluções, revisão de material, apresentação de resultados"},{"modelo":"input_decimal","label":"Salário","valor":"7,0 - 19,2"},{"modelo":"input_decimal","label":"Salário Médio","valor":"13000"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Coordenação de equipe, relacionamento com clientes, desenvolvimento de soluções, revisão de material, apresentação de resultados"},{"modelo":"input_decimal","label":"Salário","valor":"9,0 - 21,0"},{"modelo":"input_decimal","label":"Salário Médio","valor":"14400"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Coordenação de equipe, relacionamento com clientes, coordenação do desenvolvimento de soluções, revisão de material, apresentação de resultados"},{"modelo":"input_decimal","label":"Salário","valor":"16,5 - 24,0"},{"modelo":"input_decimal","label":"Salário Médio","valor":"19800"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Gestão de projetos, relacionamento com clientes, suporte em questões especificas, desenvolvimento de consultores mais juniores"},{"modelo":"input_decimal","label":"Salário","valor":"27,0 - 32,6"},{"modelo":"input_decimal","label":"Salário Médio","valor":"30000"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Desenvolvimento de negócios, gestão do relacionamento com clientes, liderança junto a equipes em clientes, suporte em assuntos específicos"},{"modelo":"input_decimal","label":"Salário","valor":"27,0 - 32,6"},{"modelo":"input_decimal","label":"Salário Médio","valor":"30000"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Coleta de informações de mercado"},{"modelo":"input_decimal","label":"Salário","valor":"1,0 - 1,8"},{"modelo":"input_decimal","label":"Salário Médio","valor":"1400"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Pesquisas de mercado, análises e interpretação de dados, "},{"modelo":"input_decimal","label":"Salário","valor":"2,9 - 5,1"},{"modelo":"input_decimal","label":"Salário Médio","valor":"4000"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Definição das estratégias de marketing e de desenvolvimento de produtos, desenvolvimento de pesquisas e estudos mercadológicos"},{"modelo":"input_decimal","label":"Salário","valor":"3,5 - 7,2"},{"modelo":"input_decimal","label":"Salário Médio","valor":"5000"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Gestão de equipes e criação de estratégias corporativas  de marketing"},{"modelo":"input_decimal","label":"Salário","valor":"8,0 - 23,7"},{"modelo":"input_decimal","label":"Salário Médio","valor":"14400"},{"modelo":"input_select","label":"Função","valor":"",;' +
+		'"label":"Descrição Rotina Básica","valor":"Gestão do departamento de marketing e responsável pelas metas de marketing da empresa"},{"modelo":"input_decimal","label":"Salário","valor":"21,0 - 33,0"},{"modelo":"input_decimal","label":"Salário Médio","valor":"27000"},{"modelo":"input_select","label":"Função","valor":"",;';
+	
+
+	var arrayDoc_part_4 = doc_part_4.split(";");
+		
+	var doc_part_5 = 
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};' +
+		'"opcoes":[{"label":"Comercial"},{"label":"Consultoria"},{"label":"Finanças"},{"label":"Marketing"},{"label":"Produto"},{"label":"Ética"}]}]}]}};';
+	
+	var arrayDoc_part_5 = doc_part_5.split(";");
+	
+	var part_diagrama_2 = 
+		'Estagiário - finanças,Matemática financeira;' +
+		'Estagiário - finanças,Teoria financeira;' +
+		'Estagiário - finanças,Princípios de contabilidade;' +
+		'Analista financeiro (jr. a sr.),Matemática financeira;' +
+		'Analista financeiro (jr. a sr.),Teoria financeira;' +
+		'Analista financeiro (jr. a sr.),Análise de índices financeiros;' +
+		'Analista financeiro (jr. a sr.),Análise de demonstrativos financeiros;' +
+		'Analista financeiro (jr. a sr.),Contabilidade empresarial;' +
+		'Especialista financeiro,Matemática financeira;' +
+		'Especialista financeiro,Teoria financeira;' +
+		'Especialista financeiro,Análise de índices financeiros;' +
+		'Especialista financeiro,Análise de demonstrativos financeiros;' +
+		'Especialista financeiro,Contabilidade empresarial;' +
+		'Coordenador financeiro,Matemática financeira;' +
+		'Coordenador financeiro,Teoria financeira;' +
+		'Coordenador financeiro,Análise de índices financeiros;' +
+		'Coordenador financeiro,Análise de demonstrativos financeiros;' +
+		'Coordenador financeiro,Contabilidade empresarial;' +
+		'Coordenador financeiro,Coaching;' +
+		'Gerente financeiro,Matemática financeira;' +
+		'Gerente financeiro,Finanças corporativas;' +
+		'Gerente financeiro,Contratação de funcionários;' +
+		'Gerente financeiro,Coaching;' +
+		'Gerente financeiro,Criação de estratégias de recursos humanos;' +
+		'Gerente financeiro,Comercial;' +
+		'Gerente financeiro,Planejamento operacional;' +
+		'Gerente financeiro,Contabilidade empresarial;' +
+		'Superintendente financeiro,Matemática financeira;' +
+		'Superintendente financeiro,Finanças corporativas;' +
+		'Superintendente financeiro,Contratação de funcionários;' +
+		'Superintendente financeiro,Coaching;' +
+		'Superintendente financeiro,Criação de estratégias de recursos humanos;' +
+		'Superintendente financeiro,Comercial;' +
+		'Superintendente financeiro,Planejamento operacional;' +
+		'Superintendente financeiro,Contabilidade empresarial;' +
+		'Superintendente financeiro,Trading;' +
+		'Diretor financeiro,Matemática financeira;' +
+		'Diretor financeiro,Finanças corporativas;' +
+		'Diretor financeiro,Contratação de funcionários;' +
+		'Diretor financeiro,Coaching;' +
+		'Diretor financeiro,Criação de estratégias de recursos humanos;' +
+		'Diretor financeiro,Comercial;' +
+		'Diretor financeiro,Planejamento operacional;' +
+		'Diretor financeiro,Contabilidade empresarial;' +
+		'Diretor financeiro,Trading;' +
+		'Diretor financeiro,Análises estratégicas;' +
+		'CFO,Matemática financeira;' +
+		'CFO,Finanças corporativas;' +
+		'CFO,Contratação de funcionários;' +
+		'CFO,Coaching;' +
+		'CFO,Criação de estratégias de recursos humanos;' +
+		'CFO,Comercial;' +
+		'CFO,Planejamento operacional;' +
+		'CFO,Contabilidade empresarial;' +
+		'CFO,Trading;' +
+		'CFO,Análises estratégicas;' +
+		'Analista IB,Matemática financeira;' +
+		'Analista IB,Finanças corporativas;' +
+		'Analista IB,Análise estrutural;' +
+		'Analista IB,Análise da concorrência;' +
+		'Analista IB,Fusões e aquisições;' +
+		'Analista IB,Emissões de títulos de dívida;' +
+		'Analista IB,Emissões de novas ações;' +
+		'Associate IB,Matemática financeira;' +
+		'Associate IB,Finanças corporativas;' +
+		'Associate IB,Análise estrutural;' +
+		'Associate IB,Análise da concorrência;' +
+		'Associate IB,Fusões e aquisições;' +
+		'Associate IB,Emissões de títulos de dívida;' +
+		'Associate IB,Emissões de novas ações;' +
+		'Associate IB,Negociação;' +
+		'Associate IB,Coaching;' +
+		'Vice presidente IB,Matemática financeira;' +
+		'Vice presidente IB,Finanças corporativas;' +
+		'Vice presidente IB,Análise estrutural;' +
+		'Vice presidente IB,Análise da concorrência;' +
+		'Vice presidente IB,Fusões e aquisições;' +
+		'Vice presidente IB,Emissões de títulos de dívida;' +
+		'Vice presidente IB,Emissões de novas ações;' +
+		'Vice presidente IB,Comercial;' +
+		'Vice presidente IB,Coaching;' +
+		'Vice presidente IB,Contratação de funcionários;' +
+		'Director IB,Matemática financeira;' +
+		'Director IB,Finanças corporativas;' +
+		'Director IB,Análises estratégicas;' +
+		'Director IB,Criação de estratégias de recursos humanos;' +
+		'Director IB,Fusões e aquisições;' +
+		'Director IB,Emissões de títulos de dívida;' +
+		'Director IB,Emissões de novas ações;' +
+		'Director IB,Comercial;' +
+		'Director IB,Coaching;' +
+		'Director IB,Contratação de funcionários;' +
+		'Director IB,Planejamento operacional;' +
+		'Director IB,Planejamento estratégico;' +
+		'Director IB,Contabilidade empresarial;' +
+		'Managing Director IB,Matemática financeira;' +
+		'Managing Director IB,Finanças corporativas;' +
+		'Managing Director IB,Análises estratégicas;' +
+		'Managing Director IB,Criação de estratégias de recursos humanos;' +
+		'Managing Director IB,Fusões e aquisições;' +
+		'Managing Director IB,Emissões de títulos de dívida;' +
+		'Managing Director IB,Emissões de novas ações;' +
+		'Managing Director IB,Comercial;' +
+		'Managing Director IB,Coaching;' +
+		'Managing Director IB,Contratação de funcionários;' +
+		'Managing Director IB,Planejamento operacional;' +
+		'Managing Director IB,Planejamento estratégico;' +
+		'Managing Director IB,Contabilidade empresarial;' +
+		'Analista Private Equity,Matemática financeira;' +
+		'Analista Private Equity,Finanças corporativas;' +
+		'Analista Private Equity,Análise estrutural;' +
+		'Analista Private Equity,Análise da concorrência;' +
+		'Analista Private Equity,Fusões e aquisições;' +
+		'Analista Private Equity,Análises estratégicas;' +
+		'Associate Private Equity,Matemática financeira;' +
+		'Associate Private Equity,Finanças corporativas;' +
+		'Associate Private Equity,Análise estrutural;' +
+		'Associate Private Equity,Análise da concorrência;' +
+		'Associate Private Equity,Fusões e aquisições;' +
+		'Associate Private Equity,Análises estratégicas;' +
+		'Associate Private Equity,Negociação;' +
+		'Associate Private Equity,Coaching;' +
+		'Vice presidente Private Equity,Matemática financeira;' +
+		'Vice presidente Private Equity,Finanças corporativas;' +
+		'Vice presidente Private Equity,Análise estrutural;' +
+		'Vice presidente Private Equity,Análise da concorrência;' +
+		'Vice presidente Private Equity,Fusões e aquisições;' +
+		'Vice presidente Private Equity,Emissões de títulos de dívida;' +
+		'Vice presidente Private Equity,Emissões de novas ações;' +
+		'Vice presidente Private Equity,Comercial;' +
+		'Vice presidente Private Equity,Coaching;' +
+		'Vice presidente Private Equity,Contratação de funcionários;' +
+		'Vice presidente Private Equity,Análises estratégicas;' +
+		'Diretor/ sócio Private Equity,Matemática financeira;' +
+		'Diretor/ sócio Private Equity,Finanças corporativas;' +
+		'Diretor/ sócio Private Equity,Análise estrutural;' +
+		'Diretor/ sócio Private Equity,Análise da concorrência;' +
+		'Diretor/ sócio Private Equity,Fusões e aquisições;' +
+		'Diretor/ sócio Private Equity,Emissões de títulos de dívida;' +
+		'Diretor/ sócio Private Equity,Emissões de novas ações;' +
+		'Diretor/ sócio Private Equity,Comercial;' +
+		'Diretor/ sócio Private Equity,Coaching;' +
+		'Diretor/ sócio Private Equity,Contratação de funcionários;' +
+		'Diretor/ sócio Private Equity,Análises estratégicas;' +
+		'Diretor/ sócio Private Equity,Criação de estratégias de recursos humanos;' +
+		'Diretor/ sócio Private Equity,Planejamento operacional;' +
+		'Diretor/ sócio Private Equity,Planejamento estratégico;' +
+		'Diretor/ sócio Private Equity,Contabilidade empresarial;' +
+		'Estagiário - Consultoria,Desconto de fluxo de caixa;' +
+		'Estagiário - Consultoria,Análises estratégicas;' +
+		'Estagiário - Consultoria,Análises mercadológicas;' +
+		'Analista - Consultoria,Desconto de fluxo de caixa;' +
+		'Analista - Consultoria,Análises estratégicas;' +
+		'Analista - Consultoria,Análises mercadológicas;' +
+		'Analista - Consultoria,Teoria financeira;' +
+		'Analista - Consultoria,Análise de demonstrativos financeiros;' +
+		'Analista - Consultoria,Análise de índices financeiros;' +
+		'Business analyst (sr.),Desconto de fluxo de caixa;' +
+		'Business analyst (sr.),Análises estratégicas;' +
+		'Business analyst (sr.),Análises mercadológicas;' +
+		'Business analyst (sr.),Teoria financeira;' +
+		'Business analyst (sr.),Análise de demonstrativos financeiros;' +
+		'Business analyst (sr.),Análise de índices financeiros;' +
+		'Associate/Consultor (sr.),Desconto de fluxo de caixa;' +
+		'Associate/Consultor (sr.),Análises estratégicas;' +
+		'Associate/Consultor (sr.),Análises mercadológicas;' +
+		'Associate/Consultor (sr.),Teoria financeira;' +
+		'Associate/Consultor (sr.),Análise de demonstrativos financeiros;' +
+		'Associate/Consultor (sr.),Análise de índices financeiros;' +
+		'Associate/Consultor (sr.),Estratégia;' +
+		'Associate/Consultor (sr.),Comercial;' +
+		'Associate/Consultor (sr.),Operações;' +
+		'Associate/Consultor (sr.),Coaching;' +
+		'Gerente (sr.) - Consultoria,Desconto de fluxo de caixa;' +
+		'Gerente (sr.) - Consultoria,Análises estratégicas;' +
+		'Gerente (sr.) - Consultoria,Análises mercadológicas;' +
+		'Gerente (sr.) - Consultoria,Teoria financeira;' +
+		'Gerente (sr.) - Consultoria,Análise de demonstrativos financeiros;' +
+		'Gerente (sr.) - Consultoria,Análise de índices financeiros;' +
+		'Gerente (sr.) - Consultoria,Estratégia;' +
+		'Gerente (sr.) - Consultoria,Comercial;' +
+		'Gerente (sr.) - Consultoria,Operações;' +
+		'Gerente (sr.) - Consultoria,Coaching;' +
+		'Project leader,Desconto de fluxo de caixa;' +
+		'Project leader,Análises estratégicas;' +
+		'Project leader,Análises mercadológicas;' +
+		'Project leader,Teoria financeira;' +
+		'Project leader,Análise de demonstrativos financeiros;' +
+		'Project leader,Análise de índices financeiros;' +
+		'Project leader,Estratégia;' +
+		'Project leader,Comercial;' +
+		'Project leader,Operações;' +
+		'Project leader,Coaching;' +
+		'Project leader,Contratação de funcionários;' +
+		'Engagement manager,Desconto de fluxo de caixa;' +
+		'Engagement manager,Análises estratégicas;' +
+		'Engagement manager,Análises mercadológicas;' +
+		'Engagement manager,Teoria financeira;' +
+		'Engagement manager,Análise de demonstrativos financeiros;' +
+		'Engagement manager,Análise de índices financeiros;' +
+		'Engagement manager,Estratégia;' +
+		'Engagement manager,Comercial;' +
+		'Engagement manager,Operações;' +
+		'Engagement manager,Coaching;' +
+		'Engagement manager,Contratação de funcionários;' +
+		'Principal,Desconto de fluxo de caixa;' +
+		'Principal,Análises estratégicas;' +
+		'Principal,Análises mercadológicas;' +
+		'Principal,Teoria financeira;' +
+		'Principal,Análise de demonstrativos financeiros;' +
+		'Principal,Análise de índices financeiros;' +
+		'Principal,Estratégia;' +
+		'Principal,Comercial;' +
+		'Principal,Operações;' +
+		'Principal,Coaching;' +
+		'Principal,Contratação de funcionários;' +
+		'Estagiário - Marketing,Análise mercadológica;' +
+		'Analista de mercado,Análise mercadológica;' +
+		'Analista de mercado,Segmentação de mercado;' +
+		'Analista de mercado,Precificação de produtos e serviços;' +
+		'Gerente de produtos,Gestão de Marketing;' +
+		'Gerente de produtos,Análises estratégicas;' +
+		'Gerente de marketing,Gestão de Marketing;' +
+		'Gerente de marketing,Análises estratégicas;' +
+		'Gerente de marketing,Coaching;' +
+		'Gerente de marketing,Contratação de funcionários;' +
+		'Gerente de marketing,Negociação;' +
+		'Gerente de marketing,Gestão de projetos;' +
+		'Diretor de marketing,Gestão de Marketing;' +
+		'Diretor de marketing,Análises estratégicas;' +
+		'Diretor de marketing,Coaching;' +
+		'Diretor de marketing,Contratação de funcionários;' +
+		'Diretor de marketing,Negociação;' +
+		'Diretor de marketing,Gestão de projetos;' +
+		'Diretor de marketing,Operações;';
+	
+	var arrayDoc_part_diagrama_2 = part_diagrama_2.split(";");
+	
+	
+	var i = 0;
+
+	while (i < arrayDoc_part_diagrama_2.length) {
+  		var valor = arrayDoc_part_diagrama_2[0].split(",")
+		$.ajax({
+	        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/obter/query?query=documento.header.valor&valor=" + valor[1],
+	        contentType: "application/json; charset=utf-8",
+	        dataType: 'json',
+	        async:false
+		})
+	  	.done(function( data ) {
+	  		arrayDoc_part_diagrama_2[i] = arrayDoc_part_diagrama_2[i] + "," + data.documento.id; 
+		})
+		.fail(function(data) {
+			console.log ("obter documento nome saiu por fail");
+		})
+		.always(function(data) {
+			console.log ("obter documento nome saiu por always");
+		});
+  		++i;
+	};
+	setTimeout('i=0',10000);
+	i = 0;
+	while (i < arrayDoc_part_2.length) {
+		var objJson = JSON.parse(doc_part_1 + arrayDoc_part_2[i]  + doc_part_3 + arrayDoc_part_4[i] + arrayDoc_part_5[i]);
+		objJson.documento.usuarioAtual = localStorage.usuario;
+		objJson.documento.tipo = "dados";
+		objJson.documento.situacao = "ativo";
+		objJson.documento.usuarios[0].codigo = localStorage.usuario;
+   		var objDiagrama = JSON.parse(localStorage.getItem("diagrama-" + idDiagrama));
+		$.ajax({
+			type: "POST",
+	        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/incluir",
+	        contentType: "application/json; charset=utf-8",
+	        dataType: 'json',
+	        data : JSON.stringify(objJson)
+		})
+	  	.done(function( data ) {
+	  		console.log ("inclusão documento saiu por done");
+	  	})
+	    .fail(function(data) {
+		   console.log ("inclusão documento saiu por fail");
+	    })
+	   	.always(function(data) {
+			$.ajax({
+	            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/obter?id=" + data.responseText,
+	            contentType: "application/json; charset=utf-8",
+	            dataType: 'json',
+	            async:false
+			})
+		  	.done(function( data ) {
+		  		var objDiagrama = JSON.parse ('{"documento":{"id":"","idDocPrincipal":"' + data.documento.id +'","tipo":"Carreira","label":"' + data.documento.header[0].valor + '","diagrama":{"nodeDataArray":[{"key":"' + data.documento.header[0].valor +'","text":"' + data.documento.header[0].valor +'","color":"aquamarine","principal":"true","id":"' + data.documento.id +'"}],"linkDataArray":[]}}}');	
+		  		var valor = arrayDoc_part_diagrama_2[0].split(",")
+		  		var j = 0;
+		  		while (valor[0] != data.documento.header[0].valor &&
+		  				j < arrayDoc_part_diagrama_2.length) {
+		  			++j
+		  			if (j < arrayDoc_part_diagrama_2.length) {
+				  		valor = arrayDoc_part_diagrama_2[j].split(",")
+				  		valor = arrayDoc_part_diagrama_2[j].split(",")
+		  			};
+		  		};
+		  		var temNo = false;
+		  		while (valor[0] == data.documento.header[0].valor &&
+		  				j < arrayDoc_part_diagrama_2.length) {
+			   		var node = JSON.parse(
+		   					'{' +
+				            '"key" : "' + valor [1] + '",' +
+				            '"text" : "' + valor [1] + '",' +
+				            '"color" : "aquamarine",' +
+				            '"id" : "' + valor [2] + '"' +
+		          			'}');
+			   		objDiagrama.documento.diagrama.nodeDataArray.push(node);
+			   		temNo = true;
+		  			++j
+			  		valor = arrayDoc_part_diagrama_2[j].split(",")
+		  		};
+		  		if (temNo){ 
+					$.ajax({
+						type: "POST",
+			            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/incluir",
+			            contentType: "application/json; charset=utf-8",
+			            dataType: 'json',
+			            async:false,
+			            data : JSON.stringify(objDiagrama)
+					})
+					.done(function( data ) {
+						console.log ("inclusão diagrama saiu por done");
+					})
+					.fail(function(data) {
+						console.log ("inclusão diagrama saiu por fail");
+					})
+					.always(function(data) {
+						console.log ("inclusão diagrama saiu por always");
+					});
+		  		};
+		  	})
+		    .fail(function(data) {
+		    	console.log ("obter documento saiu por fail");
+		    })
+		   	.always(function(data) {
+		   		console.log ("obter documento saiu por always");
+	    	});
+	   	});
 		i++;
 	};
 };
