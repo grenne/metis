@@ -251,7 +251,8 @@ function init(diagrama, panelReceive, idReceive, diagramaDesc) {
     // Create the Diagram's Model:
 
    if (diagramaDesc){
-	   myDiagram[panel].model = new go.GraphLinksModel(diagramaDesc.documento.diagrama.nodeDataArray, diagramaDesc.documento.diagrama.linkDataArray);
+   		newNodeDataArray = criarGruposPadrao (diagramaDesc.documento.diagrama.nodeDataArray);
+   		myDiagram[panel].model = new go.GraphLinksModel(diagramaDesc.documento.diagrama.nodeDataArray, diagramaDesc.documento.diagrama.linkDataArray);
    }else{
 	   jQuery.ajax({
 	        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/obter_com_categoria?id=" + id,
