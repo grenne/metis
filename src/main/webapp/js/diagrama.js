@@ -251,7 +251,6 @@ function init(diagrama, panelReceive, idReceive, diagramaDesc) {
     // Create the Diagram's Model:
 
    if (diagramaDesc){
-   		newNodeDataArray = criarGruposPadrao (diagramaDesc.documento.diagrama.nodeDataArray);
    		myDiagram[panel].model = new go.GraphLinksModel(diagramaDesc.documento.diagrama.nodeDataArray, diagramaDesc.documento.diagrama.linkDataArray);
    }else{
 	   jQuery.ajax({
@@ -667,98 +666,3 @@ function atualizaComparacao() {
 	};
 };
 
-function criarGruposPadrao(nodeDataArray) {
-	
-	var montagemGruposAreas = '[' +
-	'{"key" : "Administração de empresas","text" :"Administração de empresas","color" :"aqua","isGroup" : "true"},'  +
-	'{"key" : "Ciências contábeis","text" :"Ciências contábeis","color" :"aqua","isGroup" : "true"},'  +
-	'{"key" : "Direito","text" :"Direito","color" :"aqua","isGroup" : "true"},'  +
-	'{"key" : "Economia","text" :"Economia","color" :"aqua","isGroup" : "true"},'  +
-//	'{"key" : "Matemática ","text" :"Matemática ","color" :"aqua","isGroup" : "true"},'  +
-	'{"key" : "Tecnologia da informação","text" :"Tecnologia da informação","color" :"aqua","isGroup" : "true"},'  +
-//	'{"key" : "Estatística","text" :"Estatística","color" :"aqua","isGroup" : "true"},'  +
-//	'{"key" : "Psicologia","text" :"Psicologia","color" :"aqua","isGroup" : "true"},'  +
-//	'{"key" : "Academica","text" :"Academica","color" :"aqua","isGroup" : "true"},'  +
-//	'{"key" : "Ética ","text" :"Ética ","color" :"aqua","isGroup" : "true"},' +
-	//campos
-	'{"key" : "Finanças","text" :"Finanças","color" :"aquamarine","group":"Administração de empresas","isGroup" : "true"},'  +
-	'{"key" : "Recursos humanos","text" :"Recursos humanos","color" :"aquamarine","group":"Administração de empresas","isGroup" : "true"},'  +
-	'{"key" : "Marketing","text" :"Marketing","color" :"aquamarine","group":"Administração de empresas","isGroup" : "true"},'  +
-	'{"key" : "Empreendedorismo","text" :"Empreendedorismo","color" :"aquamarine","group":"Administração de empresas","isGroup" : "true"},'  +
-	'{"key" : "Estratégia","text" :"Estratégia","color" :"aquamarine","group":"Administração de empresas","isGroup" : "true"},'  +
-	'{"key" : "Comercial","text" :"Comercial","color" :"aquamarine","group":"Administração de empresas","isGroup" : "true"},'  +
-	'{"key" : "Administração geral","text" :"Administração geral","color" :"aquamarine","group":"Administração de empresas","isGroup" : "true"},'  +
-//	'{"key" : "Logística","text" :"Logística","color" :"aquamarine","group":"Administração de empresas","isGroup" : "true"},'  +
-	'{"key" : "Contabilidade","text" :"Contabilidade","color" :"aquamarine","group":"Ciências contábeis","isGroup" : "true"},'  +
-//	'{"key" : "Direito constitucional","text" :"Direito constitucional","color" :"aquamarine","group":"Direito","isGroup" : "true"},'  +
-	'{"key" : "Direito Civil","text" :"Direito Civil","color" :"aquamarine","group":"Direito","isGroup" : "true"},'  +
-//	'{"key" : "Direito trabalhista","text" :"Direito trabalhista","color" :"aquamarine","group":"Direito","isGroup" : "true"},'  +
-	'{"key" : "Direito tributário","text" :"Direito tributário","color" :"aquamarine","group":"Direito","isGroup" : "true"},'  +
-	'{"key" : "Direito Comercial","text" :"Direito Comercial","color" :"aquamarine","group":"Direito","isGroup" : "true"},'  +
-	'{"key" : "Análise economica","text" :"Análise economica","color" :"aquamarine","group":"Economia","isGroup" : "true"},'  +
-	'{"key" : "Economia comportamental","text" :"Economia comportamental","color" :"aquamarine","group":"Economia","isGroup" : "true"},'  +
-//	'{"key" : "Cálculo","text" :"Cálculo","color" :"aquamarine","group":"Matemática ","isGroup" : "true"},'  +
-	'{"key" : "Computação geral","text" :"Computação geral","color" :"aquamarine","group":"Tecnologia da informação","isGroup" : "true"},'  +
-//	'{"key" : "Psicologia Freudiana","text" :"Psicologia Freudiana","color" :"aquamarine","group":"Psicologia","isGroup" : "true"},'  +
-//	'{"key" : "Psicologia do trabalho","text" :"Psicologia do trabalho","color" :"aquamarine","group":"Psicologia","isGroup" : "true"},'  +
-//	'{"key" : "Academia","text" :"Academia","color" :"aquamarine","group":"Academica","isGroup" : "true"},'  +
-	// categoria
-	'{"key" : "Finanças corporativas","text" :"Finanças corporativas","color" :"greenyellow","group":"Finanças","isGroup" : "true"},'  +
-	'{"key" : "Matemática financeira","text" :"Matemática financeira","color" :"greenyellow","group":"Finanças","isGroup" : "true"},'  +
-	'{"key" : "Trading","text" :"Trading","color" :"greenyellow","group":"Finanças","isGroup" : "true"},'  +
-	'{"key" : "Investimentos","text" :"Investimentos","color" :"greenyellow","group":"Finanças","isGroup" : "true"},'  +
-	'{"key" : "Gestão de recursos humanos","text" :"Gestão de recursos humanos","color" :"greenyellow","group":"Recursos humanos","isGroup" : "true"},'  +
-	'{"key" : "Gestão de marketing","text" :"Gestão de marketing","color" :"greenyellow","group":"Marketing","isGroup" : "true"},'  +
-	'{"key" : "Inteligência competitiva","text" :"Inteligência competitiva","color" :"greenyellow","group":"Marketing","isGroup" : "true"},'  +
-	'{"key" : "Inovação","text" :"Inovação","color" :"greenyellow","group":"Empreendedorismo","isGroup" : "true"},'  +
-	'{"key" : "Novos negócios","text" :"Novos negócios","color" :"greenyellow","group":"Empreendedorismo","isGroup" : "true"},'  +
-	'{"key" : "Análises estratégicas","text" :"Análises estratégicas","color" :"greenyellow","group":"Estratégia","isGroup" : "true"},'  +
-	'{"key" : "Decisão estratégica","text" :"Decisão estratégica","color" :"greenyellow","group":"Estratégia","isGroup" : "true"},'  +
-	'{"key" : "Relacionamento com clientes","text" :"Relacionamento com clientes","color" :"greenyellow","group":"Comercial","isGroup" : "true"},'  +
-	'{"key" : "Negociação","text" :"Negociação","color" :"greenyellow","group":"Comercial","isGroup" : "true"},'  +
-	'{"key" : "Teoria da administração","text" :"Teoria da administração","color" :"greenyellow","group":"Administração geral","isGroup" : "true"},'  +
-	'{"key" : "Tomada de decisões","text" :"Tomada de decisões","color" :"greenyellow","group":"Administração geral","isGroup" : "true"},'  +
-	'{"key" : "Gestão de projetos","text" :"Gestão de projetos","color" :"greenyellow","group":"Administração geral","isGroup" : "true"},'  +
-	'{"key" : "Gestão de instituição financeira","text" :"Gestão de instituição financeira","color" :"greenyellow","group":"Administração geral","isGroup" : "true"},'  +
-	'{"key" : "Gestão hospitalar","text" :"Gestão hospitalar","color" :"greenyellow","group":"Administração geral","isGroup" : "true"},'  +
-	'{"key" : "Sustentabilidade","text" :"Sustentabilidade","color" :"greenyellow","group":"Administração geral","isGroup" : "true"},'  +
-	'{"key" : "Operações","text" :"Operações","color" :"greenyellow","group":"Administração geral","isGroup" : "true"},'  +
-	'{"key" : "Soft Skills","text" :"Soft Skills","color" :"greenyellow","group":"Administração geral","isGroup" : "true"},'  +
-	'{"key" : "Contabilidade empresarial","text" :"Contabilidade empresarial","color" :"greenyellow","group":"Contabilidade","isGroup" : "true"},'  +
-	'{"key" : "Contabilidade financeira","text" :"Contabilidade financeira","color" :"greenyellow","group":"Contabilidade","isGroup" : "true"},'  +
-	'{"key" : "Contabilidade Pessoal","text" :"Contabilidade Pessoal","color" :"greenyellow","group":"Contabilidade","isGroup" : "true"},'  +
-	'{"key" : "Contabilidade Bancária","text" :"Contabilidade Bancária","color" :"greenyellow","group":"Contabilidade","isGroup" : "true"},'  +
-	'{"key" : "Definição de pessoas","text" :"Definição de pessoas","color" :"greenyellow","group":"Direito Civil","isGroup" : "true"},'  +
-	'{"key" : "Tributação","text" :"Tributação","color" :"greenyellow","group":"Direito tributário","isGroup" : "true"},'  +
-	'{"key" : "Direito societário","text" :"Direito societário","color" :"greenyellow","group":"Direito Comercial","isGroup" : "true"},'  +
-	'{"key" : "Direito falimentar","text" :"Direito falimentar","color" :"greenyellow","group":"Direito Comercial","isGroup" : "true"},'  +
-	'{"key" : "Contratos","text" :"Contratos","color" :"greenyellow","group":"Direito Comercial","isGroup" : "true"},'  +
-	'{"key" : "Macro economia","text" :"Macro economia","color" :"greenyellow","group":"Análise economica","isGroup" : "true"},'  +
-	'{"key" : "Micro economia","text" :"Micro economia","color" :"greenyellow","group":"Análise economica","isGroup" : "true"},'  +
-	'{"key" : "Teoria do desenvolvimento econômico","text" :"Teoria do desenvolvimento econômico","color" :"greenyellow","group":"Análise economica","isGroup" : "true"},'  +
-	'{"key" : "Teoria dos jogos","text" :"Teoria dos jogos","color" :"greenyellow","group":"Análise economica","isGroup" : "true"},'  +
-	'{"key" : "Finanças comportamentais","text" :"Finanças comportamentais","color" :"greenyellow","group":"Economia comportamental","isGroup" : "true"},'  +
-	'{"key" : "Utilização MS Office","text" :"Utilização MS Office","color" :"greenyellow","group":"Computação geral","isGroup" : "true"}'  +
-//	'{"key" : "Psicologia comportamental","text" :"Psicologia comportamental","color" :"greenyellow","group":"Psicologia do trabalho","isGroup" : "true"}'  +
-//	'{"key" : "Monografias","text" :"Monografias","color" :"greenyellow","group":"Academia","isGroup" : "true"}'  +
-	']';
-	
-	var gruposAreas = JSON.parse(montagemGruposAreas);
-	
-	var i = 0;
-	while (i < gruposAreas.length) {
-		nodeDataArray.push	(gruposAreas[i]);
-		i++;
-	};
-	
-	
-	return nodeDataArray;
-	
-
-};
-
-
-function obterGrupo(id) {
-		
-
-};
