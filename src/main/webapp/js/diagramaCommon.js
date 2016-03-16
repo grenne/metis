@@ -82,3 +82,51 @@ function atualizaGroup (id, idDiagramaOriginal, panel, key) {
 	});
 	
 };
+
+function varreGrupo (nomeGrupo, excluirGrupo) {
+	var objJsonOriginal = JSON.parse(localStorage.getItem("diagrama-0"));
+
+	$.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
+		if (typeof objJsonOriginal.documento.diagrama.nodeDataArray[w].isGroup != 'undefined') {
+			if (objJsonOriginal.documento.diagrama.nodeDataArray[w].group == nomeGrupo){
+				if (objJsonOriginal.documento.diagrama.nodeDataArray[w].isGroup){
+					console.log ("trata grupo - grupo " + objJsonOriginal.documento.diagrama.nodeDataArray[w].group + 
+							 		" - texto " + objJsonOriginal.documento.diagrama.nodeDataArray[w].text
+								);
+					varreGrupo (objJsonOriginal.documento.diagrama.nodeDataArray[w].text, excluirGrupo);
+				};
+			};
+		}else{
+			if (objJsonOriginal.documento.diagrama.nodeDataArray[w].group == nomeGrupo){
+				var objJsonOriginal_1 = JSON.parse(localStorage.getItem("diagrama-0"));
+				var objJsonCompara_1 = JSON.parse(localStorage.getItem("diagrama-1"));
+	    		$.each(objJsonOriginal_1.documento.diagrama.nodeDataArray, function(y, nodeOriginal_1){
+					if (nodeOriginal_1.group == nomeGrupo && objJsonOriginal.documento.diagrama.nodeDataArray[w].id == nodeOriginal_1.id){
+		    			if (typeof nodeOriginal_1.id != 'undefined') {
+		    				if (excluirGrupo){
+		    					objJsonOriginal_1.documento.diagrama.nodeDataArray[y].color = "white";
+		    					$.each(objJsonCompara_1.documento.diagrama.nodeDataArray, function(z, nodeCompara_1){
+		    		    			if (typeof nodeCompara_1 != 'undefined' && typeof nodeCompara_1.id != 'undefined') {
+			    						if (nodeCompara_1.id == nodeOriginal_1.id) {
+			    							objJsonCompara_1.documento.diagrama.nodeDataArray.splice(z, 1);
+			    	    					localStorage.setItem("diagrama-1", JSON.stringify(objJsonCompara_1));
+			    						};
+		    						};
+		    					});
+		    				}else{
+		    					objJsonOriginal_1.documento.diagrama.nodeDataArray[y].color = localStorage.corComparacao;
+		    					var new_node = '{"loc":"50 50","key":"' + nodeOriginal_1.text + '","text":"' + nodeOriginal_1.text + '","color":"' + nodeOriginal_1.color + '","id":"' + nodeOriginal_1.id + '"}';
+		    					var objNode = JSON.parse(new_node);
+		    					objJsonCompara_1.documento.diagrama.nodeDataArray.push(objNode);
+		    					localStorage.setItem("diagrama-1", JSON.stringify(objJsonCompara_1));
+		    				};
+						};
+					};
+	    		});
+	        	localStorage.setItem("diagrama-0", JSON.stringify(objJsonOriginal_1));
+				atualizaComparacao();
+			};
+		};
+	});
+
+};

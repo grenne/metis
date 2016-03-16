@@ -175,10 +175,7 @@ function montaListasSkill(tipoLista) {
 				$.each(data, function(i, skills) {
 					var obj = JSON.stringify(skills);
 					var id = skills._id;
-					if (typeof skills.documento.id != 'undefined') {
-						var idDocumento = skills.documento.id;
-					};
-					montaLinhaSkill(i, skills, skills._id, skills.documento.id, tipoLista, skills.documento.label);
+					montaLinhaSkill(i, skills, skills._id, tipoLista, skills.label);
 				});
 				inicializaWindow();
 				$('ul').listview('refresh');
@@ -188,27 +185,13 @@ function montaListasSkill(tipoLista) {
 	});
 };
 
-function montaLinhaSkill(i, skills, id, idDocumento, tipoLista, nomeDiagrama) {
+function montaLinhaSkill(i, skills, id, tipoLista, nomeDiagrama) {
 	var labelId = skills.label.replace( /\s/g, '' ) + "-" + i;
 	var linha = 
         '<li class="ui-body linhasSkill">' +
 	    	'<a id="item-' + i + '"  data-transition="flip">' +
-	    		'<h2  class="ui-bar ui-bar-d ui-corner-all">'; 
-	if (skills.documento.header != null){
-		$.each(skills.documento.header, function(i, header) {
-			if (i == 0){
-				text = header.valor;
-			}else{
-				if (i == 1){
-					color = header.valor;					
-				};
-			};
-			if (header.label != "Cor"){
-				linha = linha +
-				'<p>' + header.valor + '</p>'
-			};
-		});
-	};
+	    		'<h2  class="ui-bar ui-bar-d ui-corner-all">' + 
+				'<p>' + nomeDiagrama + '</p>';
 	linha = linha +	
 				'</h2>' +
 			'</a>' +

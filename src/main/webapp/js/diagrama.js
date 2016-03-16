@@ -260,34 +260,37 @@ function init(diagrama, panelReceive, idReceive, diagramaDesc) {
 	        async: false,
 	        success: function(data) {
 	        	var i = 0;
-	        	var j = 3;
 	        	while (i < data.documento.diagrama.nodeDataArray.length) {
-	        		if (data.documento.diagrama.nodeDataArray[i].text == "") {
-	        			data.documento.diagrama.nodeDataArray.splice(i, 1);	
-	        			i = i - 1;
-	        		}else{
-		        		if (typeof data.documento.diagrama.nodeDataArray[i].isGroup != 'undefined') {
-			        		if (data.documento.diagrama.nodeDataArray[i].isGroup) {
-			        			data.documento.diagrama.nodeDataArray.splice(i, 1);	
-			        			i = i - 1;
-			        		};
-		        		}else{
-			        		if (typeof data.categorias[i] != 'undefined' &&
-			        			typeof data.categorias[i].panel[0] != 'undefined' &&
-			        			typeof data.categorias[i].panel[0].fields[4].valor != 'undefined') {
-			        			data.documento.diagrama.nodeDataArray[i].group = data.categorias[i].panel[0].fields[4].valor;
-			        		};
-		        		};
-	        		};
+	        		var j = 0;
+	        		var achouDocumento = false;
+	        		while (j < data.categorias.length && !achouDocumento) {
+		        		if (data.categorias[j].header[0].valor == data.documento.diagrama.nodeDataArray[i].text) {
+		        			console.log ("cagrupamentos - " + data.categorias[j].panel[0].fields[4].valor + " - " + data.categorias[j].panel[0].fields[3].valor + " - " + data.categorias[j].panel[0].fields[2].valor);
+		        			if (typeof data.categorias[j].panel[0].fields[4].valor != '') {
+		        				data.documento.diagrama.nodeDataArray[i].group = data.categorias[j].panel[0].fields[4].valor;
+		        				achouDocumento = true;
+		        			}else{
+		        				if (typeof data.categorias[j].panel[0].fields[3].valor != '') {
+		        					data.documento.diagrama.nodeDataArray[i].group = data.categorias[j].panel[0].fields[3].valor;
+		        					achouDocumento = true;
+		        				}else{
+		        					if (typeof data.categorias[j].panel[0].fields[2].valor != '') {
+		        						data.documento.diagrama.nodeDataArray[i].group = data.categorias[j].panel[0].fields[2].valor;
+		        						achouDocumento = true;
+		        					}
+		        				}
+		        			}
+		        		}
+		        		j++
+	        		}
 	        		i++;
 	        	};
 	        	delete data["categorias"];
 	        	localStorage.setItem("diagrama-" + panel, JSON.stringify(data));
-	        	newNodeDataArray = criarGruposPadrao (data.documento.diagrama.nodeDataArray);
 	        	myDiagram[panel].model = new go.GraphLinksModel(data.documento.diagrama.nodeDataArray, data.documento.diagrama.linkDataArray);
-	        	}
 	        }
-	   );
+	   });
+   
    };
 }
 
@@ -304,28 +307,26 @@ function nodeInfo(d) {  // Tooltip info for a node data object
   function singleClick(e, obj) {
   };
   
-  // when a node is double-clicked, add a child to it
+  // when a node is double-clicked
   function nodeDoubleClick(e, obj) {
 	  if (localStorage.comparacao == "false"){
 		  var node = e.diagram.selection.first();
-		  localStorage.setItem("diagrama-" + e.diagram.id, e.diagram.model.toJson());
-		  localStorage.setItem("panel", e.diagram.panel);
-		  montaNodeDocumento(e, node.data.id, "8080/metis/rest/documento/atualizar", node.data.key, e.diagram.id, e.diagram.panel);
-	//    var clicked = obj.part;
-	//    if (clicked !== null) {
-	//      var thisemp = clicked.data;
-	//        myDiagram[panel].startTransaction("add employee");
-	//        var nextkey = (myDiagram[panel].model.nodeDataArray.length + 1).toString();
-	//        var newemp = { key: nextkey, name: "(new person)", title: "", parent: thisemp.key };
-	//        myDiagram[panel].model.addNodeData(newemp);
-	//        myDiagram[panel].commitTransaction("add employee");
+		  if (!node.data.isGroup){
+			  localStorage.setItem("diagrama-" + e.diagram.id, e.diagram.model.toJson());
+			  localStorage.setItem("panel", e.diagram.panel);
+			  montaNodeDocumento(e, node.data.id, "8080/metis/rest/documento/atualizar", node.data.key, e.diagram.id, e.diagram.panel);
+		  };
 	  }else{
 		  var node = e.diagram.selection.first();
-		  montaNodeDocumento(e, node.data.id, "8080/metis/rest/diagrama/atualizar", node.data.key, e.diagram.id, e.diagram.panel);		  
+		  if (node.data.isGroup){
+			  montaIncluiExcluiGrupo(e, node.data.id, "8080/metis/rest/diagrama/atualizar", node.data.key, e.diagram.id, e.diagram.panel);
+		  }else{
+			  montaNodeDocumento(e, node.data.id, "8080/metis/rest/diagrama/atualizar", node.data.key, e.diagram.id, e.diagram.panel);
+		  }
 	  };
   };
   
-  // when a node is double-clicked, add a child to it
+  // when a node is double-clicked
   function partCreated(e, obj) {
 	  var node = e.diagram.selection.first();
 	  localStorage.setItem("diagrama-" + e.diagram.id, e.diagram.model.toJson());
@@ -435,13 +436,6 @@ function save(e) {
     		if (objJson.documento.diagrama.nodeDataArray[i].text == "") {
     			objJson.documento.diagrama.nodeDataArray.splice(i, 1);	
     			i = i - 1;
-//    		}else{
-//        		if (typeof objJson.documento.diagrama.nodeDataArray[i].isGroup != 'undefined') {
-//	        		if (objJson.documento.diagrama.nodeDataArray[i].isGroup) {
-//	        			objJson.documento.diagrama.nodeDataArray.splice(i, 1);	
-//	        			i = i - 1;
-//	        		};
-//        		};
     		};
 			i++;
 		};
@@ -582,7 +576,7 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
 	    				if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == localStorage.corComparacao){
 	    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "white";
 	    					$.each(objJsonCompara.documento.diagrama.nodeDataArray, function(z, nodeCompara){
-	    		    			if (typeof nodeCompara.id != 'undefined') {
+	    		    			if (nodeCompara != 'undefined' && nodeCompara.id != 'undefined') {
 		    						if (nodeCompara.id == id) {
 		    							objJsonCompara.documento.diagrama.nodeDataArray.splice(z, 1);
 		    	    					localStorage.setItem("diagrama-1", JSON.stringify(objJsonCompara));
@@ -605,6 +599,36 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
 			init("myDiagram-yggmap0", 0, 0, JSON.parse(localStorage.getItem("diagrama-0")) );
 		};
 	});	
+};
+
+function montaIncluiExcluiGrupo(e, id, acao, key, idDiagrama, panel){
+	
+	$('.cabecalho').remove();
+	$('.painel').remove();
+	
+	var node = e.diagram.selection.first();
+	$('.grupoPopup').html(node.data.text);
+
+	// setar acao para botao submit
+	$( "#incluiGrupo" ).unbind( "click");
+	$( "#incluiGrupo" ).bind( "click", function(event, ui) {
+		varreGrupo (node.data.text, false);
+		$("#popupGrupo" ).popup( "close" );
+		$("#skill-yggmap0").remove();
+		montaPanel("yggmap0", "YggMap");
+		init("myDiagram-yggmap0", 0, 0, JSON.parse(localStorage.getItem("diagrama-0")) );
+	});
+	$( "#excluiGrupo" ).unbind( "click");
+	$( "#excluiGrupo" ).bind( "click", function(event, ui) {
+		varreGrupo (node.data.text, true);
+		$("#popupGrupo" ).popup( "close" );
+		$("#skill-yggmap0").remove();
+		montaPanel("yggmap0", "YggMap");
+		init("myDiagram-yggmap0", 0, 0, JSON.parse(localStorage.getItem("diagrama-0")) );
+	});	
+
+	$("#popupGrupo").popup( "open" );
+	$('.line-button').button().trigger('create');
 };
 
 function montaModeloLista(key, idDiagrama, panel) {	
