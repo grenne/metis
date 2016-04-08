@@ -13,7 +13,10 @@ $(document).ready(function() {
 	if (deviceMobile){
 		localStorage.urlServidor = "52.27.128.28";
 	};
-	
+	//
+	//  inicializa cor com a cor do usuario
+	//
+	localStorage.corComparacao = "green";
 	//
 	// ** obter idModeloHabilidade
 	//
@@ -34,10 +37,31 @@ $(document).ready(function() {
 	.always(function(data) {
 		console.log ("obter idHabilidade saiu por fail");
 	});
+	//
+	// ** obter idDiagramaUsuario
+	//
+	$(function(){
+		$.ajax({
+            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/skill/obter?usuario=" + localStorage.usuario,
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json'
+		})
+	  	.done(function( data ) {
+			$.each(data.skill.skills, function(i, panel){
+				localStorage.idDiagramaUsuario = panel.id;
+			});			
+	  	})
+        .fail(function(data) {
+			console.info("ler skil saiu por fail");
+        })
+       	.always(function(data) {
+
+       	});
+	});
 
 	// ** monta paineis iniciais
 	//
-	skillInicial("YggMap");
+	skillInicial("YggMap", true);
 
 	//
 	//  ** inicializa campos da tela
@@ -49,10 +73,12 @@ $(document).ready(function() {
 		window.mySwipe.prev();
 	});
 	$("#telaInicial").bind( "click", function(event, ui) {
+		localStorage.corComparacao = "green";
 		$('.titulo-pagina').html("YggMap");
-		skillInicial("YggMap");
+		skillInicial("YggMap", false, false);
 	});
 	$("#listaCarreiras").bind( "click", function(event, ui) {
+		localStorage.corComparacao = "coral";
 		montaListasSkill("Carreira");
 		localStorage.modelo = "Carreira";
 	});
@@ -65,13 +91,14 @@ $(document).ready(function() {
 		localStorage.modelo = "Cursos";
 	});
 	$("#listaPessoal").bind( "click", function(event, ui) {
-		montaListasSkill("Pessoal");
-		localStorage.modelo = "Pessoal";
+		localStorage.corComparacao = "green"
+		$('.titulo-pagina').html("YggMap");
+		skillInicial("YggMap", true, true);
 	});
 	$("#volta-documento").bind( "click", function(event, ui) {
     	$("#popupDetalhes").popup( "close" );
 	});
-	$("#volta-inlcui-painel").bind( "click", function(event, ui) {
+	$("#volta-inclui-painel").bind( "click", function(event, ui) {
     	$("#popupIncluiPainel").popup( "close" );
 	});
 	$("#volta-carreira").bind( "click", function(event, ui) {
@@ -99,12 +126,11 @@ $(document).ready(function() {
 	});
 });
 
-function skillInicial(skillInicial) {
+function skillInicial(skillInicial, efetuaComparacao, comparaDiagramaUsuario) {
 		
 	$(".paineis").remove();
 	localStorage.paineis = 0;
-	localStorage.comparacao = "false";
-	localStorage.corComparacao = "";
+	localStorage.comparacao = "true";
 	
 	$(function(){
 		$.ajax({
@@ -139,12 +165,11 @@ function skillInicial(skillInicial) {
 
 				var panelLabel = panel.label;
 				var id = panel.id;
-				if (i != 0 ){
-					if (panelLabel.search(" x ") < 0) {
-						montaComparacao(panelId, panelLabel, i, panel, id, panelLabelList);
-					};
+				if(efetuaComparacao){
+					montaComparacao(localStorage.idDiagramaUsuario, comparaDiagramaUsuario, "green");
+				}else{
+					init("myDiagram-" + panelId, i, id);
 				};
-				init("myDiagram-" + panelId, i, id )
 			});
 			$('ul').listview('refresh');
         	var panel = localStorage.getItem("panel");
@@ -202,47 +227,78 @@ function montaLinhaSkill(i, skills, id, tipoLista, nomeDiagrama) {
 	$("#item-" + i).bind( "click", function(event, ui) {
 		$("#skill-yggmap0").remove();
 		montaPanel("yggmap0", "YggMap");
-		montaComparacao(id);
+		montaComparacao(id, true, "coral", "green");
 	});
 	$("#item-descricao" + i).bind( "click", function(event, ui) {
 		telaDescricao(idDocumento, tipoLista, nomeDiagrama, id);
 	});
 };
 
-function montaComparacao(id) {
+function montaComparacao(id, comparaDiagramaUsuario, colorComparacaoPrimaria, colocarComparacaoSecundaria) {
 
 	var objJsonOriginal = JSON.parse(localStorage.getItem("diagrama-0"));
+	var objJsonOriginalSalva = JSON.parse(localStorage.getItem("diagrama-0"));
 	jQuery.ajax({
         url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/obter?id=" + id,
         contentType: "application/json; charset=utf-8",
         dataType: 'json',
         async: false,
         success: function(data) {
-        	if (localStorage.corComparacao == ""){
-        		localStorage.corComparacao = "coral"
-        	}else{
-        		if (localStorage.corComparacao == "coral"){
-        			localStorage.corComparacao = "green"	
-        		}else{
-        			localStorage.corComparacao = "yellow"
-        		};
-        	};
         	var objJsonComparar = data.documento.diagrama.nodeDataArray
         	$.each(objJsonComparar, function(j, nodeComparar){
         		$.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
         			if (nodeOriginal.id == nodeComparar.id) {
-        				objJsonOriginal.documento.diagrama.nodeDataArray[w].color = localStorage.corComparacao;		
+        				if (colorComparacaoPrimaria){
+        					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = colorComparacaoPrimaria;	
+        				}else{
+        					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "coral";
+        				}
         			};
         		});
         	});		
-        	localStorage.setItem("diagrama-0", JSON.stringify(objJsonOriginal));
-        	localStorage.setItem("diagrama-1", JSON.stringify(data));
-//        	$(".paineis").remove();       	
-    		init("myDiagram-yggmap0", 0, 0, JSON.parse(localStorage.getItem("diagrama-0")) );
-    		localStorage.comparacao = "true";
-    		localStorage.labelComparacao = data.documento.label;
-    		$('.titulo-pagina').html("YggMap (comparação com " + data.documento.label + ")");
-    		$("#popupSkills").popup( "close" );
+        	if (comparaDiagramaUsuario){
+        		$('.titulo-pagina').html("YggMap (comparação com " + data.documento.label + ")");
+	    		jQuery.ajax({
+	    	        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/obter?id=" + localStorage.idDiagramaUsuario,
+	    	        contentType: "application/json; charset=utf-8",
+	    	        dataType: 'json',
+	    	        async: false,
+	    	        success: function(data) {
+	    	        	var objJsonComparar = data.documento.diagrama.nodeDataArray
+	    	        	$.each(objJsonComparar, function(j, nodeComparar){
+	    	        		$.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
+	    	        			if (nodeOriginal.id == nodeComparar.id) {
+	    	        				if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "coral"){
+	    	        					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "green"
+	    	        				}else{
+	    	        					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "yellow"
+	    	        				}
+	    	        			};
+	    	        		});
+	    	        	});		
+	    	        	localStorage.setItem("diagrama-0", JSON.stringify(objJsonOriginal));
+	    	        	localStorage.setItem("diagrama-1", JSON.stringify(data));
+	//    	        	$(".paineis").remove();       	
+	    	    		init("myDiagram-yggmap0", 0, 0, JSON.parse(localStorage.getItem("diagrama-0")) );
+	    	    		localStorage.comparacao = "true";
+	    	    		localStorage.labelComparacao = data.documento.label;
+	    	    		$("#popupSkills").popup( "close" );
+	    	    		localStorage.setItem("diagrama-2", JSON.stringify(objJsonOriginal));
+	    	    		localStorage.setItem("diagrama-0", JSON.stringify(objJsonOriginalSalva));
+	    	       }
+	    		})
+        	}else{
+	        	localStorage.setItem("diagrama-0", JSON.stringify(objJsonOriginal));
+	        	localStorage.setItem("diagrama-1", JSON.stringify(data));
+//    	        	$(".paineis").remove();       	
+	    		init("myDiagram-yggmap0", 0, 0, JSON.parse(localStorage.getItem("diagrama-0")) );
+	    		localStorage.comparacao = "true";
+	    		localStorage.labelComparacao = data.documento.label;
+	    		$('.titulo-pagina').html("YggMap (comparação com " + data.documento.label + ")");
+	    		$("#popupSkills").popup( "close" );
+	    		localStorage.setItem("diagrama-2", JSON.stringify(objJsonOriginal));
+	    		localStorage.setItem("diagrama-0", JSON.stringify(objJsonOriginalSalva));
+        	}
        }
 	});	
 	

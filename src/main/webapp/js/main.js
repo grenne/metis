@@ -85,7 +85,6 @@ function colocaPainelEsquerda() {
                     'data-transition="flip">Modelos</a></li>' +
                 '<li><a ' +
                 	'id="listaPessoal"' +
-                    'href="#popupSkills?Pessoal"' +
                     'rel="external"' +
                     'data-transition="flip">Seus skills</a></li>' +
                 '<li><a ' +
@@ -102,11 +101,6 @@ function colocaPainelEsquerda() {
                 	'href="#popupSkills?Badges"' +
                     'rel="external"' +
                     'data-transition="flip">Badges</a></li>' +
-                 '<li><a ' +
-                 	'id="listaCursos"' +
-                	'href="#popupSkills?Cursos"' +
-                    'rel="external"' +
-                    'data-transition="flip">Cursos</a></li>' +
                 '<li><a ' +
                     'href="config.html"' +
                     'rel="external"' +

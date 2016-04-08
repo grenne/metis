@@ -69,14 +69,12 @@ function incluiDiagrama(modelo, diagrama, novoSkill) {
 				console.log ("inclusão diagrama saiu por fail");
 			})
 			.always(function(data) {
-				telaDescricao(idDocumento)
-//         
-//		****  volta a precisar quando criamos varios paineis		
-//				if (novoSkill){
-//					criarSkill(diagrama, data.responseText);
+				if (novoSkill){
+					criarSkill(diagrama, data.responseText);
+//					****  volta a precisar quando criamos varios paineis		
 //				}else{
 //					incluiSkill (diagrama, data.responseText);
-//				};
+				};
 			});
        	});
 	});

@@ -467,7 +467,6 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
         dataType: 'json'
 	})
   	.done(function(data) {
-  	  console.log ("obter documento saiu por done");
       localStorage.setItem("dadosSaved", JSON.stringify(data));
       montaCabecalho(data.documento.header, id, "false", "");
       var heightCabecalho = $("#cabecalho-detalhes").height();
@@ -477,10 +476,11 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
     	  var panelLabel = panelDocumento.label;
     	  panelLabelList[i] = panelDocumento.label;
     	  inicioPanel(panelId, panelLabel, i, panelDocumento);
-    	  var objJsonOriginal = JSON.parse(localStorage.getItem("diagrama-0"));
+    	  var objJsonOriginal = JSON.parse(localStorage.getItem("diagrama-2"));
     	  $.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
     		  if (nodeOriginal.id == id) {
-    			  if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == localStorage.corComparacao){
+    			  if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == localStorage.corComparacao||
+	    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "white"){
     				  $('.titulo-documento').html("Exclui de " + localStorage.labelComparacao);
     			  }else{
     				  $('.titulo-documento').html("Incluir em " + localStorage.labelComparacao);
@@ -496,7 +496,6 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
       });
     })
 	.fail(function(data) {
-		console.log ("obter documento saiu por fail");
 		incluirDocumento("Habilidades", "perdeu documento");
 		data = JSON.parse(localStorage.getItem("dadosSaved"));
 		id = data.documento.id;
@@ -511,7 +510,8 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
 	    	var objJsonOriginal = JSON.parse(localStorage.getItem("diagrama-0"));
 	    	$.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
 	    		if (nodeOriginal.id == id) {
-	    			if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == localStorage.corComparacao){
+	    			if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == localStorage.corComparacao ||
+	    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "white"){
 	    				$('.titulo-documento').html("Exclui de " + localStorage.labelComparacao);
 	    			}else{
 	    				$('.titulo-documento').html("Incluir em " + localStorage.labelComparacao);
@@ -568,15 +568,15 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
 			$("#popupDetalhes" ).popup( "close" );
 			$("#skill-yggmap0").remove();
 			montaPanel("yggmap0", "YggMap");
-			var objJsonOriginal = JSON.parse(localStorage.getItem("diagrama-0"));
+			var objJsonOriginal = JSON.parse(localStorage.getItem("diagrama-2"));
 			var objJsonCompara = JSON.parse(localStorage.getItem("diagrama-1"));
     		$.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
     			if (typeof nodeOriginal.id != 'undefined') {
 	    			if (nodeOriginal.id == id) {
-	    				if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == localStorage.corComparacao){
-	    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "white";
+	    				if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == localStorage.corComparacao ||
+		    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "white"){
 	    					$.each(objJsonCompara.documento.diagrama.nodeDataArray, function(z, nodeCompara){
-	    		    			if (nodeCompara != 'undefined' && nodeCompara.id != 'undefined') {
+	    						if (typeof nodeCompara != 'undefined' && typeof nodeCompara.id != 'undefined') {	    						
 		    						if (nodeCompara.id == id) {
 		    							objJsonCompara.documento.diagrama.nodeDataArray.splice(z, 1);
 		    	    					localStorage.setItem("diagrama-1", JSON.stringify(objJsonCompara));
@@ -584,8 +584,9 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
 		    						};
 	    						};
 	    					});
+	    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "aquamarine";
 	    				}else{
-	    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = localStorage.corComparacao;
+	    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "white";
 	    					var new_node = '{"loc":"50 50","key":"1","text":"' + objJson.documento.header[0].valor + '","color":"' + objJson.documento.header[1].valor + '","id":"' + id + '"}';
 	    					var objNode = JSON.parse(new_node);
 	    					objJsonCompara.documento.diagrama.nodeDataArray.push(objNode);
@@ -596,6 +597,7 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
 				};
     		});
         	localStorage.setItem("diagrama-0", JSON.stringify(objJsonOriginal));
+        	localStorage.setItem("diagrama-2", JSON.stringify(objJsonOriginal));
 			init("myDiagram-yggmap0", 0, 0, JSON.parse(localStorage.getItem("diagrama-0")) );
 		};
 	});	

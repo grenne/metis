@@ -58,7 +58,7 @@ $(document).ready(function() {
 		if (objJson.documento.header[0].valor == "criaHabilidades"){
 			criaHabllidades(key, idDiagrama, panel)
 		}else{		
-			if (objJson.documento.header[0].valor == "crialink"){
+			if (objJson.documento.header[0].valor == "criaLink"){
 				criaLinkHabllidades(key, idDiagrama, panel)
 			}else{		
 				if (objJson.documento.header[0].valor == "criaCarreiras"){
