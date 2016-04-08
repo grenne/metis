@@ -479,8 +479,11 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
     	  var objJsonOriginal = JSON.parse(localStorage.getItem("diagrama-2"));
     	  $.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
     		  if (nodeOriginal.id == id) {
-    			  if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == localStorage.corComparacao||
-	    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "white"){
+    			  if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "green"||
+	    				objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "lightgreen" ||
+	    				objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "lightblue" ||
+	    				objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "yellow" ||
+	    				objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "white"){
     				  $('.titulo-documento').html("Exclui de " + localStorage.labelComparacao);
     			  }else{
     				  $('.titulo-documento').html("Incluir em " + localStorage.labelComparacao);
@@ -573,8 +576,11 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
     		$.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
     			if (typeof nodeOriginal.id != 'undefined') {
 	    			if (nodeOriginal.id == id) {
-	    				if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == localStorage.corComparacao ||
-		    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "white"){
+	    				if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "green" ||
+		    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "lightgreen"|| 
+		    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "lightblue" ||
+			    				objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "yellow" ||
+		    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "white" ){
 	    					$.each(objJsonCompara.documento.diagrama.nodeDataArray, function(z, nodeCompara){
 	    						if (typeof nodeCompara != 'undefined' && typeof nodeCompara.id != 'undefined') {	    						
 		    						if (nodeCompara.id == id) {
@@ -584,9 +590,18 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
 		    						};
 	    						};
 	    					});
-	    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "aquamarine";
+		    				if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "lightgreen" || 
+		    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "lightblue"){
+		    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "coral";
+		    				}else{
+		    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "aquamarine";
+		    				};
 	    				}else{
-	    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "white";
+		    				if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "coral"){
+		    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "lightblue";
+		    				}else{
+		    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "white";
+		    				};
 	    					var new_node = '{"loc":"50 50","key":"1","text":"' + objJson.documento.header[0].valor + '","color":"' + objJson.documento.header[1].valor + '","id":"' + id + '"}';
 	    					var objNode = JSON.parse(new_node);
 	    					objJsonCompara.documento.diagrama.nodeDataArray.push(objNode);

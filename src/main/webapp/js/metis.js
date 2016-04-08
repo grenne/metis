@@ -269,9 +269,9 @@ function montaComparacao(id, comparaDiagramaUsuario, colorComparacaoPrimaria, co
 	    	        		$.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
 	    	        			if (nodeOriginal.id == nodeComparar.id) {
 	    	        				if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "coral"){
-	    	        					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "green"
+	    	        					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "lightgreen"
 	    	        				}else{
-	    	        					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "yellow"
+	    	        					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "green"
 	    	        				}
 	    	        			};
 	    	        		});
