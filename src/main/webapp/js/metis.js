@@ -58,6 +58,35 @@ $(document).ready(function() {
 
        	});
 	});
+	//
+	// ** obter idDiagramaYggmap
+	//
+	$(function(){
+		$.ajax({
+            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/skill/obter?usuario=" + "YggMap",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json'
+		})
+	  	.done(function( data ) {
+			$.each(data.skill.skills, function(i, panel){
+				if (i = 0){
+					localStorage.idDiagramaYggMap = panel.id;
+					diagramaYggMap = acessaDiagrama(localStorage.idDiagramaYggMap);
+					if (diagramaYggMap){
+						localStorage.setItem("daigrama-0", diagramaYggMap);
+					}else{
+						alert ("YggMap não cadastrado");
+					};
+				};
+			});			
+	  	})
+        .fail(function(data) {
+			console.info("ler skil saiu por fail");
+        })
+       	.always(function(data) {
+
+       	});
+	});
 
 	// ** monta paineis iniciais
 	//
@@ -125,6 +154,25 @@ $(document).ready(function() {
 		}
 	});
 });
+
+function acessaDiagrama(id) {
+	$(function(){
+		$.ajax({
+			url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/obter?id=" + id,
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json'
+		})
+	  	.done(function( data ) {
+	  		return data;
+	  	})
+        .fail(function(data) {
+			return false;
+        })
+       	.always(function(data) {
+
+       	});
+	});
+};
 
 function skillInicial(skillInicial, efetuaComparacao, comparaDiagramaUsuario) {
 		
