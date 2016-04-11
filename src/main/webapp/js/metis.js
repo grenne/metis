@@ -58,39 +58,44 @@ $(document).ready(function() {
 
        	});
 	});
+
 	//
 	// ** obter idDiagramaYggmap
 	//
-	$(function(){
-		$.ajax({
-            url: "http://" + localStorage.urlServidor + ":8080/metis/rest/skill/obter?usuario=" + "YggMap",
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json'
-		})
-	  	.done(function( data ) {
-			$.each(data.skill.skills, function(i, panel){
-				if (i = 0){
-					localStorage.idDiagramaYggMap = panel.id;
-					diagramaYggMap = acessaDiagrama(localStorage.idDiagramaYggMap);
-					if (diagramaYggMap){
-						localStorage.setItem("daigrama-0", diagramaYggMap);
-					}else{
-						alert ("YggMap não cadastrado");
-					};
-				};
-			});			
-	  	})
-        .fail(function(data) {
-			console.info("ler skil saiu por fail");
-        })
-       	.always(function(data) {
+	$.ajax({
+        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/skill/obter?usuario=" + "YggMap",
+        contentType: "application/json; charset=utf-8",
+        dataType: 'json'
+	})
+  	.done(function( data ) {
+		$.each(data.skill.skills, function(i, panel){
+			id = panel.id;
+			if (i == 0){
+				$.ajax({
+					url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/obter?id=" + id,
+		            contentType: "application/json; charset=utf-8",
+		            dataType: 'json'
+				})
+			  	.done(function( dataDiagrama ) {
+			  		localStorage.setItem("diagrama-0", JSON.stringify(dataDiagrama));
+			  		skillInicial("YggMap", true);
+			  	})
+		        .fail(function(data) {
+		        	console.log ("sai fail diagrama")
+		        })
+		       	.always(function(data) {
+		       		console.log ("sai always diagrama")
+		       	});
+			};
+		});			
+  	})
+    .fail(function(data) {
+		console.info("ler skil saiu por fail");
+    })
+   	.always(function(data) {
 
-       	});
-	});
+   	});
 
-	// ** monta paineis iniciais
-	//
-	skillInicial("YggMap", true);
 
 	//
 	//  ** inicializa campos da tela
@@ -102,7 +107,7 @@ $(document).ready(function() {
 		window.mySwipe.prev();
 	});
 	$("#telaInicial").bind( "click", function(event, ui) {
-		localStorage.corComparacao = "green";
+		localStorage.comparacao = "false";
 		$('.titulo-pagina').html("YggMap");
 		skillInicial("YggMap", false, false);
 	});
@@ -155,30 +160,11 @@ $(document).ready(function() {
 	});
 });
 
-function acessaDiagrama(id) {
-	$(function(){
-		$.ajax({
-			url: "http://" + localStorage.urlServidor + ":8080/metis/rest/diagrama/obter?id=" + id,
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json'
-		})
-	  	.done(function( data ) {
-	  		return data;
-	  	})
-        .fail(function(data) {
-			return false;
-        })
-       	.always(function(data) {
-
-       	});
-	});
-};
 
 function skillInicial(skillInicial, efetuaComparacao, comparaDiagramaUsuario) {
 		
 	$(".paineis").remove();
 	localStorage.paineis = 0;
-	localStorage.comparacao = "true";
 	
 	$(function(){
 		$.ajax({
@@ -214,6 +200,7 @@ function skillInicial(skillInicial, efetuaComparacao, comparaDiagramaUsuario) {
 				var panelLabel = panel.label;
 				var id = panel.id;
 				if(efetuaComparacao){
+					localStorage.comparacao = "true";
 					montaComparacao(localStorage.idDiagramaUsuario, comparaDiagramaUsuario, "green");
 				}else{
 					init("myDiagram-" + panelId, i, id);

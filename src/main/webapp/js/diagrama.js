@@ -329,7 +329,6 @@ function nodeInfo(d) {  // Tooltip info for a node data object
   // when a node is double-clicked
   function partCreated(e, obj) {
 	  var node = e.diagram.selection.first();
-	  localStorage.setItem("diagrama-" + e.diagram.id, e.diagram.model.toJson());
 	  var linha = 
 			'<a id="nova_habilidade-' + localStorage.idModeloHabilidade + '" href="nova-habilidade.html?' + localStorage.idModeloHabilidade + '&' + localStorage.ModeloHabilidade + '&' + node.data.key + '&' + e.diagram.id + '&' + e.diagram.panel + '" rel="external" data-transition="flip">Nova Habilidade</a>';
 	  $("#div-incluirHabilidaddeButton").append(linha);
@@ -594,7 +593,7 @@ function montaNodeDocumento(e, id, acao, key, idDiagrama, panel){
 		    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "lightblue"){
 		    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "coral";
 		    				}else{
-		    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "aquamarine";
+		    					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "LightYellow";
 		    				};
 	    				}else{
 		    				if (objJsonOriginal.documento.diagrama.nodeDataArray[w].color == "coral"){
