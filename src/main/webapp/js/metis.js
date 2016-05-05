@@ -284,10 +284,18 @@ function montaComparacao(id, comparaDiagramaUsuario, colorComparacaoPrimaria, co
         		$.each(objJsonOriginal.documento.diagrama.nodeDataArray, function(w, nodeOriginal){
         			if (nodeOriginal.id == nodeComparar.id) {
         				if (colorComparacaoPrimaria){
-        					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = colorComparacaoPrimaria;	
+                			if (nodeComparar.color != "red") {
+                				objJsonOriginal.documento.diagrama.nodeDataArray[w].color = colorComparacaoPrimaria;
+                			}else{
+                				objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "bisque";
+                			};
         				}else{
-        					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "coral";
-        				}
+                			if (nodeComparar.color != "red") {
+                				objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "coral";
+                			}else{
+                				objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "bisque";
+                			};
+        				};
         			};
         		});
         	});		
@@ -307,7 +315,7 @@ function montaComparacao(id, comparaDiagramaUsuario, colorComparacaoPrimaria, co
 	    	        					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "lightgreen"
 	    	        				}else{
 	    	        					objJsonOriginal.documento.diagrama.nodeDataArray[w].color = "green"
-	    	        				}
+	    	        				};
 	    	        			};
 	    	        		});
 	    	        	});		

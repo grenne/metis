@@ -303,7 +303,7 @@ function criaHabllidades(key, idDiagrama, panel){
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Cálculo do custo de capital"},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Captação a mercado de dívida"},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Captação a mercado via ações"},;' +
-		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Coaching "},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Coaching"},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Comunicação"},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Consolidação das Leis do trabalho"},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Consolidação de resultados"},;' +
@@ -379,7 +379,7 @@ function criaHabllidades(key, idDiagrama, panel){
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Modelagem de jogos"},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Modelo de Solow"},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Montagem de demonstrativos financeiros"},;' +
-		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Negociação "},;' +
+		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Negociação"},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Negociação de ações"},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Negociação de commodities"},;' +
 		'"header":[{"modelo":"input_texto","label":"Nome","valor":"Negociação de juros"},;' +
@@ -1372,6 +1372,26 @@ function criaCarreiras(key, idDiagrama, panel){
 	var arrayDoc_part_diagrama_2 = part_diagrama_2.split(";");
 
 	var part_diagrama_3 = 
+		'Estagiário - finanças,Matemática financeira;' +
+		'Analista financeiro (jr. a sr.),Matemática financeira;' +
+		'Analista financeiro (jr. a sr.),Contabilidade empresarial;' +
+		'Especialista financeiro,Matemática financeira;' +
+		'Especialista financeiro,Contabilidade empresarial;' +
+		'Coordenador financeiro,Matemática financeira;' +
+		'Coordenador financeiro,Teoria financeira;' +
+		'Coordenador financeiro,Contabilidade empresarial;' +
+		'Gerente financeiro,Matemática financeira;' +
+		'Gerente financeiro,Comercial;' +
+		'Gerente financeiro,Contabilidade empresarial;' +
+		'Superintendente financeiro,Matemática financeira;' +
+		'Superintendente financeiro,Finanças corporativas;' +
+		'Superintendente financeiro,Comercial;' +
+		'Superintendente financeiro,Contabilidade empresarial;' +
+		'Superintendente financeiro,Trading;' +
+		'Diretor financeiro,Matemática financeira;' +
+		'Diretor financeiro,Finanças corporativas;' +
+		'Diretor financeiro,Comercial;' +
+		'Diretor financeiro,Contabilidade empresarial;' +
 		'Diretor financeiro,Trading;' +
 		'Diretor financeiro,Análises estratégicas;' +
 		'CFO,Matemática financeira;' +
@@ -1446,9 +1466,104 @@ function criaCarreiras(key, idDiagrama, panel){
 		'Diretor de marketing,Operações;';
 	
 	var arrayDoc_part_diagrama_3 = part_diagrama_3.split(";");
+
+	var part_diagrama_4 = 
+		'Estagiário - finanças,Análise de índices financeiros;' +
+		'Estagiário - finanças,Análise de demonstrativos financeiros;' +
+		'Especialista financeiro,Negociação ;' +
+		'Coordenador financeiro,Negociação ;' +
+		'Coordenador financeiro,Contratação de funcionários;' +
+		'Gerente financeiro,Planejamento estratégico;' +
+		'Superintendente financeiro,Planejamento estratégico;' +
+		'Analista IB,Negociação ;' +
+		'Associate IB,Contratação de funcionários;' +
+		'Analista Private Equity,Negociação ;' +
+		'Associate Private Equity,Contratação de funcionários;' +
+		'Associate Private Equity,Planejamento estratégico;' +
+		'Associate Private Equity,Planejamento operacional;' +
+		'Vice presidente Private Equity,Planejamento estratégico;' +
+		'Vice presidente Private Equity,Planejamento operacional;' +
+		'Estagiário - consultoria,Teoria financeira;' +
+		'Estagiário - consultoria,Análise de demonstrativos financeiros;' +
+		'Estagiário - consultoria,Análise de índices financeiros;' +
+		'Analista - consultoria,Negociação ;' +
+		'Business analyst (sr.),Negociação ;' +
+		'Associate/Consultor (sr.),Reestruturação de empresas;' +
+		'Gerente (sr.),Reestruturação de empresas;' +
+		'Project leader,Reestruturação de empresas;' +
+		'Engagement manager,Contabilidade empresarial;' +
+		'Engagement manager,Reestruturação de empresas;' +
+		'Principal,Contabilidade empresarial;' +
+		'Principal,Reestruturação de empresas;' +
+		'Estagiário - Marketing,Segmentação de mercado;' +
+		'Gerente de marketing,Planejamento operacional;' +
+		'Diretor de marketing,Desconto de fluxo de caixas;' +
+		'Diretor de marketing,Análise de empresas;'
+
+		
+		var arrayDoc_part_diagrama_4 = part_diagrama_4.split(";");
+	
+	var part_diagrama_5 = 
+		'Analista financeiro (jr. a sr.),Finanças corporativas;' +
+		'Especialista financeiro,Finanças corporativas;' +
+		'Coordenador financeiro,Finanças corporativas;' +
+		'Gerente financeiro,Finanças;' +
+		'Gerente financeiro,Contabilidade;' +
+		'Gerente financeiro,Análise econômica;' +
+		'Superintendente financeiro,Finanças;' +
+		'Superintendente financeiro,Contabilidade;' +
+		'Superintendente financeiro,Análise econômica;' +
+		'Superintendente financeiro,Análises Estratégicas;' +
+		'Diretor financeiro,Finanças;' +
+		'Diretor financeiro,Contabilidade;' +
+		'Diretor financeiro,Análise econômica;' +
+		'Diretor financeiro,Direito societário;' +
+		'CFO,Finanças;' +
+		'CFO,Contabilidade;' +
+		'CFO,Análise econômica;' +
+		'CFO,Direito societário;' +
+		'Analista IB,Análise econômica;' +
+		'Associate IB,Análise econômica;' +
+		'Vice presidente IB,Análise econômica;' +
+		'Vice presidente IB,Análises Estratégicas;' +
+		'Director IB,Finanças;' +
+		'Director IB,Contabilidade;' +
+		'Director IB,Direito societário;' +
+		'Director IB,Análise econômica;' +
+		'Director IB,Estratégia;' +
+		'Managing Director IB,Finanças;' +
+		'Managing Director IB,Contabilidade;' +
+		'Managing Director IB,Direito societário;' +
+		'Managing Director IB,Análise econômica;' +
+		'Managing Director IB,Estratégia;' +
+		'Analista Private Equity,Análise econômica;' +
+		'Associate Private Equity,Análise econômica;' +
+		'Vice presidente Private Equity,Análise econômica;' +
+		'Diretor/ sócio Private Equity,Finanças;' +
+		'Diretor/ sócio Private Equity,Contabilidade;' +
+		'Diretor/ sócio Private Equity,Direito societário;' +
+		'Diretor/ sócio Private Equity,Análise econômica;' +
+		'Diretor/ sócio Private Equity,Estratégia;' +
+		'Analista - consultoria,Estratégia;' +
+		'Analista - consultoria,Operações;' +
+		'Business analyst (sr.),Estratégia;' +
+		'Business analyst (sr.),Operações;' +
+		'Associate/Consultor (sr.),Finanças corporativas;' +
+		'Associate/Consultor (sr.),Contabilidade empresarial;' +
+		'Gerente (sr.),Finanças corporativas;' +
+		'Gerente (sr.),Contabilidade empresarial;' +
+		'Project leader,Finanças corporativas;' +
+		'Project leader,Contabilidade empresarial;' +
+		'Engagement manager,Finanças corporativas;' +
+		'Engagement manager,Contabilidade empresarial;' +
+		'Principal,Finanças corporativas;' +
+		'Principal,Contabilidade empresarial;' +
+		'Estagiário - Marketing,Segmentação de mercado;' +
+		'Analista de mercado,Gestão de Marketing;'
+
+		var arrayDoc_part_diagrama_5 = part_diagrama_5.split(";");
 	
 	var i = 0;
-
 	while (i < arrayDoc_part_diagrama_2.length) {
   		var valor = arrayDoc_part_diagrama_2[i].split(",")
 		$.ajax({
@@ -1461,7 +1576,27 @@ function criaCarreiras(key, idDiagrama, panel){
 	  		arrayDoc_part_diagrama_2[i] = arrayDoc_part_diagrama_2[i] + "," + data.documento.id; 
 		})
 		.fail(function(data) {
-			console.log ("obter documento nome saiu por fail");
+			console.log ("obter documento nome saiu por fail - " + valor[1]);
+		})
+		.always(function(data) {
+			console.log ("obter documento nome saiu por always");
+		});
+  		++i;
+	};
+	var i = 0;
+	while (i < arrayDoc_part_diagrama_4.length) {
+  		var valor = arrayDoc_part_diagrama_4[i].split(",")
+		$.ajax({
+	        url: "http://" + localStorage.urlServidor + ":8080/metis/rest/documento/obter/query?query=documento.header.valor&valor=" + valor[1],
+	        contentType: "application/json; charset=utf-8",
+	        dataType: 'json',
+	        async:false
+		})
+	  	.done(function( data ) {
+	  		arrayDoc_part_diagrama_4[i] = arrayDoc_part_diagrama_4[i] + "," + data.documento.id; 
+		})
+		.fail(function(data) {
+			console.log ("obter documento nome saiu por fail - " + valor[1]);
 		})
 		.always(function(data) {
 			console.log ("obter documento nome saiu por always");
@@ -1470,7 +1605,7 @@ function criaCarreiras(key, idDiagrama, panel){
 	};
 	setTimeout('i=0',10000);
 	i = 0;
-	while (i < arrayDoc_part_2.length) {
+	while (i < (arrayDoc_part_2.length - 1)) {
 		var objJson = JSON.parse(doc_part_1 + arrayDoc_part_2[i]  + doc_part_3 + arrayDoc_part_4[i] + arrayDoc_part_5[i]);
 		objJson.documento.usuarioAtual = localStorage.usuario;
 		objJson.documento.tipo = "dados";
@@ -1498,31 +1633,83 @@ function criaCarreiras(key, idDiagrama, panel){
 			})
 		  	.done(function( data ) {
 		  		var objDiagrama = JSON.parse ('{"documento":{"id":"","idDocPrincipal":"' + data.documento.id +'","tipo":"Carreira","label":"' + data.documento.header[0].valor + '","diagrama":{"nodeDataArray":[{"key":"' + data.documento.header[0].valor +'","text":"' + data.documento.header[0].valor +'","color":"LightYellow","principal":"true","id":"' + data.documento.id +'"}],"linkDataArray":[]}}}');	
-		  		var valor = arrayDoc_part_diagrama_2[0].split(",")
-		  		var j = 0;
-		  		while (valor[0] != data.documento.header[0].valor &&
-		  				j < arrayDoc_part_diagrama_2.length) {
-		  			++j
-		  			if (j < arrayDoc_part_diagrama_2.length) {
-				  		valor = arrayDoc_part_diagrama_2[j].split(",")
-				  		valor = arrayDoc_part_diagrama_2[j].split(",")
-		  			};
-		  		};
 		  		var temNo = false;
-		  		while (valor[0] == data.documento.header[0].valor &&
-		  				j < arrayDoc_part_diagrama_2.length) {
-			   		var node = JSON.parse(
-		   					'{' +
-				            '"key" : "' + valor [1] + '",' +
-				            '"text" : "' + valor [1] + '",' +
-				            '"color" : "LightYellow",' +
-				            '"id" : "' + valor [2] + '"' +
-		          			'}');
-			   		objDiagrama.documento.diagrama.nodeDataArray.push(node);
+		        $.each(arrayDoc_part_diagrama_2, function(i, node){
+			  		valor = node.split(",");
+		  			if (valor[0] == data.documento.header[0].valor){
+				   		var nodeNovo = JSON.parse(
+			   					'{' +
+					            '"key" : "' + valor [1] + '",' +
+					            '"text" : "' + valor [1] + '",' +
+					            '"color" : "LightYellow",' +
+					            '"id" : "' + valor [2] + '"' +
+			          			'}');
+				   		objDiagrama.documento.diagrama.nodeDataArray.push(nodeNovo);
+		  			};
 			   		temNo = true;
-		  			++j
-			  		valor = arrayDoc_part_diagrama_2[j].split(",")
-		  		};
+		  		});
+		        $.each(arrayDoc_part_diagrama_3, function(i, nodeNovoDiagrama){
+			  		valor = nodeNovoDiagrama.split(",");
+			  		if (valor[0] == data.documento.header[0].valor){
+				  		var objJson = JSON.parse(localStorage.getItem("diagrama-0"));
+				        $.each(objJson.documento.diagrama.nodeDataArray, function(i, node){
+					  		if (typeof node.group != 'undefined') {
+					  			if (valor[0] == "Estagiário - finanças"){
+					  				console.log ("parou")
+					  			};
+					  			if (valor[1] == node.group){
+							   		var nodeNovo = JSON.parse(
+						   					'{' +
+								            '"key" : "' + node.key + '",' +
+								            '"text" : "' + node.text + '",' +
+								            '"color" : "LightYellow",' +
+								            '"id" : "' + node.id + '"' +
+						          			'}');
+							   		objDiagrama.documento.diagrama.nodeDataArray.push(nodeNovo);
+					  			};
+					  		};
+					   		temNo = true;
+				        });
+			  		};
+		  		});
+		        $.each(arrayDoc_part_diagrama_4, function(i, node){
+			  		valor = node.split(",");
+		  			if (valor[0] == data.documento.header[0].valor){
+				   		var nodeNovo = JSON.parse(
+			   					'{' +
+					            '"key" : "' + valor [1] + '",' +
+					            '"text" : "' + valor [1] + '",' +
+					            '"color" : "red",' +
+					            '"id" : "' + valor [2] + '"' +
+			          			'}');
+				   		objDiagrama.documento.diagrama.nodeDataArray.push(nodeNovo);
+		  			};
+			   		temNo = true;
+		  		});
+		        $.each(arrayDoc_part_diagrama_5, function(i, nodeNovoDiagrama){
+			  		valor = nodeNovoDiagrama.split(",");
+			  		if (valor[0] == data.documento.header[0].valor){
+				  		var objJson = JSON.parse(localStorage.getItem("diagrama-0"));
+				        $.each(objJson.documento.diagrama.nodeDataArray, function(i, node){
+					  		if (typeof node.group != 'undefined') {
+					  			if (valor[0] == "Estagiário - finanças"){
+					  				console.log ("parou")
+					  			};
+					  			if (valor[1] == node.group){
+							   		var nodeNovo = JSON.parse(
+						   					'{' +
+								            '"key" : "' + node.key + '",' +
+								            '"text" : "' + node.text + '",' +
+								            '"color" : "red",' +
+								            '"id" : "' + node.id + '"' +
+						          			'}');
+							   		objDiagrama.documento.diagrama.nodeDataArray.push(nodeNovo);
+					  			};
+					  		};
+					   		temNo = true;
+				        });
+			  		};
+		  		});
 		  		if (temNo){ 
 					$.ajax({
 						type: "POST",
